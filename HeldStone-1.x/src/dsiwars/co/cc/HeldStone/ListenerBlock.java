@@ -30,14 +30,8 @@ public class ListenerBlock implements Listener {
 		this.main = main;
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onSignChange(SignChangeEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
 		if (event.getBlock().getState() instanceof Sign) {
 			int i = 0;
 			for (String line : event.getLines()) {
@@ -61,11 +55,8 @@ public class ListenerBlock implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockRedstoneChange(BlockRedstoneEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
 		Location loc = event.getBlock().getLocation();
 
 		for (int x = -1; x <= 1; x++) {
@@ -83,30 +74,30 @@ public class ListenerBlock implements Listener {
 						if (world.getBlockAt(fireLoc).getTypeId() == 0 || world.getBlockAt(fireLoc).getTypeId() == 51) {
 
 							if (event.getNewCurrent() >= 1) {
-								world.getBlockAt(fireLoc).setTypeIdAndData(51, (byte) 15, false);
+								//world.getBlockAt(fireLoc).setTypeIdAndData(51, (byte) 15, false);
 							} else {
-								world.getBlockAt(fireLoc).setTypeIdAndData(0, (byte) 0, false);
+								//world.getBlockAt(fireLoc).setTypeIdAndData(0, (byte) 0, false);
 							}
 						}
 					}
 
 					if (world.getBlockAt(currentLoc).getTypeId() == 88 && event.getNewCurrent() >= 1) {
-						world.getBlockAt(currentLoc).setTypeIdAndData(89, (byte) 0, false);
+						//world.getBlockAt(currentLoc).setTypeIdAndData(89, (byte) 0, false);
 					} else if (world.getBlockAt(currentLoc).getTypeId() == 89 && event.getNewCurrent() == 0) {
-						world.getBlockAt(currentLoc).setTypeIdAndData(88, (byte) 0, false);
+						//world.getBlockAt(currentLoc).setTypeIdAndData(88, (byte) 0, false);
 					} else if (world.getBlockAt(currentLoc).getTypeId() == 86 && event.getNewCurrent() >= 1) {
-						world.getBlockAt(currentLoc).setTypeIdAndData(91, world.getBlockAt(currentLoc).getData(), false);
+						//world.getBlockAt(currentLoc).setTypeIdAndData(91, world.getBlockAt(currentLoc).getData(), false);
 					} else if (world.getBlockAt(currentLoc).getTypeId() == 91 && event.getNewCurrent() == 0) {
-						world.getBlockAt(currentLoc).setTypeIdAndData(86, world.getBlockAt(currentLoc).getData(), false);
+						//world.getBlockAt(currentLoc).setTypeIdAndData(86, world.getBlockAt(currentLoc).getData(), false);
 					} else if (world.getBlockAt(currentLoc).getTypeId() == 84 && event.getNewCurrent() >= 1) {
 						Jukebox jb = (Jukebox) world.getBlockAt(currentLoc).getState();
 						if (jb.getPlaying() != null) {
-							world.playEffect(event.getBlock().getLocation(), Effect.RECORD_PLAY, jb.getPlaying().getId());
+							world.playEffect(currentLoc, Effect.RECORD_PLAY, jb.getPlaying().getId());
 						} else {
-							world.playEffect(event.getBlock().getLocation(), Effect.RECORD_PLAY, 0);
+							world.playEffect(currentLoc, Effect.RECORD_PLAY, 0);
 						}
 					} else if (world.getBlockAt(currentLoc).getTypeId() == 84 && event.getNewCurrent() == 0) {
-						world.playEffect(event.getBlock().getLocation(), Effect.RECORD_PLAY, 0);
+						world.playEffect(currentLoc, Effect.RECORD_PLAY, 0);
 					}
 				}
 			}
@@ -115,27 +106,21 @@ public class ListenerBlock implements Listener {
 		this.main.sgc.trigger(TriggerType.REDSTONE_CHANGE, event);
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
-		if (!event.isCancelled()) {
+		Block block = event.getBlockPlaced();
+		
+		if ((block.getTypeId() == 78 || block.getTypeId() == 80)) {
 			HeldPlayer psp = this.main.players.safelyGet(event.getPlayer().getName(), this.main);
-
-			Block block = event.getBlockPlaced();
-
-			if ((block.getTypeId() == 78 || block.getTypeId() == 80) && psp.snow != 0) {
+			
+			if(psp.snow != 0){
 				block.setTypeIdAndData(78, (byte) psp.snow, false);
 			}
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	//@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
 		if (event.getBlock().getTypeId() == 18) {
 			if (main.rand.nextInt(100) <= main.cfgAppleDropChance) {
 				event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.APPLE, 1));
@@ -148,15 +133,8 @@ public class ListenerBlock implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	//@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onLeavesDecay(LeavesDecayEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
-
 		if (event.getBlock().getTypeId() == 18) {
 			if (main.rand.nextInt(100) <= main.cfgAppleDropChance) {
 				event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.APPLE, 1));
