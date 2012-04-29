@@ -237,56 +237,53 @@ public class Functions {
 
 	public static boolean isSafeToRemove(int blockID) {
 		switch (blockID) {
-		case 6: // Sapling
+		//case 6: // Sapling
 		case 12: // Sand
 		case 13: // Gravel
 		case 23: // Dispenser
 		case 25: // Note block
-		case 26: // bed block
-		case 27: // Powered rail
-		case 28: // Detector rail
-		case 31: // Tall grass
-		case 32: // Dead bush
+		//case 31: // Tall grass
+		//case 32: // Dead bush
 		case 36: // Block moved by piston
-		case 37: // Dandelion
-		case 38: // Rose
-		case 39: // Brown mushroom
-		case 40: // Red mushroom
+		//case 37: // Dandelion
+		//case 38: // Rose
+		//case 39: // Brown mushroom
+		//case 40: // Red mushroom
 		case 46: // TNT
-		case 50: // Torch
+		//case 50: // Torch
 		case 51: // Fire
 		case 52: // Monster spawner
 		case 54: // Chest
-		case 55: // Redstone wire
-		case 59: // Wheat block
+		//case 55: // Redstone wire
+		//case 59: // Wheat block
 		case 61: // Furnace
 		case 62: // Burning furnace
 		case 63: // Sign post
-		case 64: // Wood door
-		case 65: // Ladders
-		case 66: // Rails
+		//case 64: // Wood door
+		//case 65: // Ladders
+		//case 66: // Rails
 		case 68: // Wall sign
-		case 69: // Lever
-		case 70: // Stone pressure plate
-		case 71: // Iron door
-		case 72: // Wood pressure plate
-		case 75: // Redstone torch off
-		case 76: // Redstone torch on
-		case 77: // Stone button
-		case 78: // Snow cover
-		case 83: // Sugar cane block
+		//case 69: // Lever
+		//case 70: // Stone pressure plate
+		//case 71: // Iron door
+		//case 72: // Wood pressure plate
+		//case 75: // Redstone torch off
+		//case 76: // Redstone torch on
+		//case 77: // Stone button
+		//case 78: // Snow cover
+		//case 83: // Sugar cane block
 		case 84: // Jukebox
-		case 92: // Cake block
-		case 93: // Redstone repeater off
-		case 94: // Redstone repeater on
-		case 96: // Trapdoor
-		case 104: // Pumpkin stem
-		case 105: // Melon stem
-		case 111: // Lily pad
-		case 115: // Nether wart
-		case 116: // Enchantment table
+		//case 92: // Cake block
+		//case 93: // Redstone repeater off
+		//case 94: // Redstone repeater on
+		//case 96: // Trapdoor
+		//case 104: // Pumpkin stem
+		//case 105: // Melon stem
+		//case 111: // Lily pad
+		//case 115: // Nether wart
+		//case 116: // Enchantment table
 		case 117: // Brewing stand
-		case 118: // Cauldron
+		//case 118: // Cauldron
 		case 119: // End portal
 		case 120: // End portal frame
 		case 122: // Dragon egg
