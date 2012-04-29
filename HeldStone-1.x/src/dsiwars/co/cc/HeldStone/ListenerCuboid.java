@@ -12,6 +12,7 @@ import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
@@ -28,116 +29,67 @@ public class ListenerCuboid implements Listener {
 		this.main = main;
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
-
 		if (main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 			main.alert(event.getPlayer().getName(), "This block is part of a cuboid!", ChatColor.RED);
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockBurn(BlockBurnEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
-
 		if (main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockFade(BlockFadeEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
-
 		if (main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockForm(BlockFormEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
-
 		if (main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockFromTo(BlockFromToEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
-
 		if (main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		} else if (main.bcr.contains(event.getToBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
+	
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onBlockGrow(BlockGrowEvent event) {
+		if (main.bcr.contains(event.getBlock().getLocation())) {
+			event.setCancelled(true);
+		}
+	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockIgnite(BlockIgniteEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
-
 		if (main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPhysics(BlockPhysicsEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
-
 		if (main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
-
 		for (Block block : event.getBlocks()) {
 			if (main.bcr.contains(block.getLocation())) {
 				event.setCancelled(true);
@@ -146,15 +98,8 @@ public class ListenerCuboid implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
-
 		if (!event.isSticky()) {
 			return;
 		}
@@ -191,30 +136,16 @@ public class ListenerCuboid implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
-
 		if (main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 			main.alert(event.getPlayer().getName(), "This block is part of a cuboid!", ChatColor.RED);
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockSpread(BlockSpreadEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
-
 		if (main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		} else if (main.bcr.contains(event.getSource().getLocation())) {
@@ -222,15 +153,8 @@ public class ListenerCuboid implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onLeavesDecay(LeavesDecayEvent event) {
-		if (!this.main.enabled) {
-			return;
-		}
-		if (event.isCancelled()) {
-			return;
-		}
-
 		if (main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		}
