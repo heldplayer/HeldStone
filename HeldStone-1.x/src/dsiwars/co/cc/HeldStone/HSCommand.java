@@ -231,6 +231,52 @@ public class HSCommand implements CommandExecutor {
 					} catch (Exception ex) {
 						main.alert(p.getName(), "Unknown biome! Use \"/" + label + " biome list\" to get a list of available biomes", ChatColor.RED);
 					}
+				} else if (args.length == 4 && args[1].equalsIgnoreCase("replace")) {
+					HeldPlayer psp = this.main.players.safelyGet(p.getName(), this.main);
+
+					if (!psp.l1) {
+						main.alert(p.getName(), "Make a valid selection first!", ChatColor.RED);
+						return true;
+					}
+
+					int x1 = psp.loc1.getBlockX();
+					int z1 = psp.loc1.getBlockZ();
+					int x2 = psp.loc2.getBlockX();
+					int z2 = psp.loc2.getBlockZ();
+
+					if (x1 > x2) {
+						int x3 = x2;
+						x2 = x1;
+						x1 = x3;
+					}
+					if (z1 > z2) {
+						int z3 = z2;
+						z2 = z1;
+						z1 = z3;
+					}
+
+					try {
+						Biome biome1 = Biome.valueOf(args[2].toUpperCase());
+						Biome biome2 = Biome.valueOf(args[3].toUpperCase());
+
+						int counter = 0;
+						for (int x = x1; x <= x2; x++) {
+							for (int z = z1; z <= z2; z++) {
+								if(psp.loc1.getWorld().getBiome(x, z) == biome1){
+									psp.loc1.getWorld().setBiome(x, z, biome2);
+
+									counter++;
+								}
+							}
+						}
+
+						main.alert(p.getName(), "Biome replaced! Block update count: " + counter, ChatColor.GREEN);
+						main.alert(p.getName(), "To see the changes, relog", ChatColor.GRAY);
+
+						return true;
+					} catch (Exception ex) {
+						main.alert(p.getName(), "Unknown biome(s)! Use \"/" + label + " biome list\" to get a list of available biomes", ChatColor.RED);
+					}
 				}
 			} else if (args[0].equalsIgnoreCase("updatecheck")) {
 				final Player p = (Player) sender;
