@@ -149,7 +149,7 @@ public class HSCommand implements CommandExecutor {
 				if(args.length > 1){
 					Player target = main.getServer().getPlayer(args[1]);
 					
-					if(target != null){
+					if(target != null && !target.hasPermission("heldstone.command.ride.exempt")){
 						target.setPassenger(p);
 					}
 				} else {
