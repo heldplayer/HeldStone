@@ -14,6 +14,7 @@ public class VersionCommand extends HeldStoneSubCommand {
 
 	public void exectute(HeldStoneCommand parent, CommandSender sender, String label, String[] args) {
 		Functions.sendMessage(sender, "========== " + main.getDescription().getFullName() + " ==========", Constants.debug);
-		Functions.sendMessage(sender, "Author: " + Constants.debugVal + main.getDescription().getAuthors().get(0), Constants.debug);
+		//Functions.sendMessage(sender, "Author: " + Constants.debugVal + main.getDescription().getAuthors().get(0), Constants.debug);
+		Functions.sendMessage(sender, "Author: " + Constants.debugVal + "heldplayer", Constants.debug);
 	}
 }
