@@ -2,6 +2,7 @@ name: HeldStone
 main: me.heldplayer.HeldStone.HeldStone
 version: 2.00
 softdepend: [ Vault ]
+authors: [ heldplayer ]
 commands:
   heldstone:
     description: Main plugin command.
