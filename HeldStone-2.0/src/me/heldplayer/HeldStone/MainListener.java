@@ -1,5 +1,7 @@
 package me.heldplayer.HeldStone;
 
+import me.heldplayer.HeldStone.sign.HeldSign;
+import me.heldplayer.HeldStone.sign.TriggerType;
 import me.heldplayer.util.Direction;
 
 import org.bukkit.block.Sign;
@@ -7,9 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
-
-import me.heldplayer.HeldStone.sign.HeldSign;
-import me.heldplayer.HeldStone.sign.TriggerType;
 
 public class MainListener implements Listener {
 	private final HeldStone main;
