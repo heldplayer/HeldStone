@@ -1,17 +1,17 @@
 # Eclipse stuff
-/.classpath
-/.project
-/.settings
+./.classpath
+./.project
+./.settings
 
 # netbeans
-/nbproject
+./nbproject
 
 # maven
-/target
+./target
 
 # ant
-/bin
-/dist
+./bin
+./dist
 
 # vim
 .*.sw[a-p]
