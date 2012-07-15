@@ -5,8 +5,8 @@ import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Ocelot.Type;
@@ -76,14 +76,14 @@ public class SpawnSign extends HeldSign {
 						}
 					} else if (c instanceof Colorable) {
 						boolean flag = false;
-						if(c instanceof Sheep){
-							if(data.equalsIgnoreCase("sheared")){
+						if (c instanceof Sheep) {
+							if (data.equalsIgnoreCase("sheared")) {
 								flag = true;
 							}
 						}
-						if(flag){
+						if (flag) {
 							Sheep sheep = (Sheep) c;
-							
+
 							sheep.setSheared(true);
 						} else {
 							byte color = (byte) 0;
@@ -127,19 +127,19 @@ public class SpawnSign extends HeldSign {
 							PigZombie pigzombie = (PigZombie) c;
 							pigzombie.setAnger(level);
 						}
-					} else if(c instanceof Ageable){
-						if(data.equalsIgnoreCase("baby")){
+					} else if (c instanceof Ageable) {
+						if (data.equalsIgnoreCase("baby")) {
 							Ageable ageable = (Ageable) c;
-							
+
 							ageable.setBaby();
 						}
-					} else if(c instanceof Pig){
-						if(data.equalsIgnoreCase("saddled")){
+					} else if (c instanceof Pig) {
+						if (data.equalsIgnoreCase("saddled")) {
 							Pig pig = (Pig) c;
-							
+
 							pig.setSaddle(true);
 						}
-					} else if(data.equalsIgnoreCase("ignite")){
+					} else if (data.equalsIgnoreCase("ignite")) {
 						c.setFireTicks(100);
 					}
 				}
@@ -229,11 +229,11 @@ public class SpawnSign extends HeldSign {
 			this.clearArgLines();
 		}
 
-		String ncline = creature.getName();
+		String ncline = creature.getTypeId() + "";
 
 		if (!reload) {
 			this.setLine(1, ncline, event);
-			this.setLine(2, (Math.min(amount, 50) + " " + data).substring(0, Math.min(16, (Math.min(amount, 50) + " " + data).length())), event);
+			this.setLine(2, (amount + " " + data).substring(0, Math.min(16, (amount + " " + data).length())), event);
 			this.setLine(3, spawnDir.toString(), event);
 		}
 
