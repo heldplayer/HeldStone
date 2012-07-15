@@ -33,20 +33,21 @@ public class BoltSign extends HeldSign {
 
 	private boolean lastState = false;
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
 		if (is != InputState.HIGH) {
-			lastState = false;
+			this.lastState = false;
 			return;
 		} else {
-			if (lastState == true) {
+			if (this.lastState == true) {
 				return;
 			}
-			lastState = true;
+			this.lastState = true;
 		}
 
-		Location strikeTarget = this.getHostLocation().clone();
+		Location strikeTarget = getHostLocation().clone();
 		strikeTarget.setY(127);
 
 		for (int y = 127; y > 0; y--) {
@@ -56,10 +57,10 @@ public class BoltSign extends HeldSign {
 			strikeTarget.setY(y);
 		}
 
-		if (!isEffect) {
-			this.getWorld().strikeLightning(strikeTarget);
+		if (!this.isEffect) {
+			getWorld().strikeLightning(strikeTarget);
 		} else {
-			this.getWorld().strikeLightningEffect(strikeTarget);
+			getWorld().strikeLightningEffect(strikeTarget);
 		}
 	}
 
@@ -74,29 +75,30 @@ public class BoltSign extends HeldSign {
 
 	boolean isEffect = true;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 
 		String type = this.getLines(event)[1];
 
 		if (type.equalsIgnoreCase("REAL")) {
-			isEffect = false;
+			this.isEffect = false;
 		} else if (type.equalsIgnoreCase("FAKE")) {
-			isEffect = true;
+			this.isEffect = true;
 		} else {
 		}
 
 		if (!reload) {
 			this.clearArgLines(event);
-			if (isEffect) {
+			if (this.isEffect) {
 				this.setLine(1, "FAKE", event);
 			} else {
 				this.setLine(1, "REAL", event);
 			}
 		}
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("Bolt sign accepted.");
+			init("Bolt sign accepted.");
 		}
 		return true;
 	}

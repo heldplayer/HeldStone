@@ -28,43 +28,44 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class SpawnSign extends HeldSign {
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		if (args == null) {
 			return;
 		}
-		if (this.getInputId((BlockRedstoneEvent) args) != 1 || this.getInput(1, (BlockRedstoneEvent) args) != InputState.HIGH) {
+		if (getInputId((BlockRedstoneEvent) args) != 1 || this.getInput(1, (BlockRedstoneEvent) args) != InputState.HIGH) {
 			return;
 		}
 
 		Location spawnLoc = null;
 
 		for (int i = 1; i <= 10; i++) {
-			spawnLoc = Direction.shift(this.getHostLocation(), spawnDir, i);
-			if ((this.getWorld().getBlockAt(spawnLoc).getType() == Material.AIR) && (this.getWorld().isChunkLoaded(this.getWorld().getBlockAt(spawnLoc).getChunk()))) {
+			spawnLoc = Direction.shift(getHostLocation(), this.spawnDir, i);
+			if ((getWorld().getBlockAt(spawnLoc).getType() == Material.AIR) && (getWorld().isChunkLoaded(getWorld().getBlockAt(spawnLoc).getChunk()))) {
 
 				spawnLoc.setX(spawnLoc.getX() + .5);
 				spawnLoc.setZ(spawnLoc.getZ() + .5);
 
-				for (int i2 = 0; i2 < amount; i2++) {
-					Class<? extends Entity> entityClass = entityType.getEntityClass();
+				for (int i2 = 0; i2 < this.amount; i2++) {
+					Class<? extends Entity> entityClass = this.entityType.getEntityClass();
 
 					if (entityClass.equals(EntityType.MINECART.getEntityClass())) {
-						if (data.equalsIgnoreCase("chest")) {
+						if (this.data.equalsIgnoreCase("chest")) {
 							entityClass = StorageMinecart.class;
 						}
-						if (data.equalsIgnoreCase("furnace")) {
+						if (this.data.equalsIgnoreCase("furnace")) {
 							entityClass = PoweredMinecart.class;
 						}
 					}
 
-					Entity ent = this.getWorld().spawn(spawnLoc, entityClass);
+					Entity ent = getWorld().spawn(spawnLoc, entityClass);
 
 					if (ent instanceof LivingEntity) {
 						LivingEntity c = (LivingEntity) ent;
 						if (c instanceof Colorable) {
 							boolean flag = false;
 							if (c instanceof Sheep) {
-								if (data.equalsIgnoreCase("sheared")) {
+								if (this.data.equalsIgnoreCase("sheared")) {
 									flag = true;
 								}
 							}
@@ -77,7 +78,7 @@ public class SpawnSign extends HeldSign {
 							} else {
 								byte color = (byte) 0;
 								try {
-									color = (byte) Math.min(Integer.parseInt(data), 16);
+									color = (byte) Math.min(Integer.parseInt(this.data), 16);
 								} catch (Exception e) {
 									color = (byte) 0;
 								}
@@ -94,7 +95,7 @@ public class SpawnSign extends HeldSign {
 							Slime s = (Slime) c;
 							int size = 1;
 							try {
-								size = Math.min(Integer.parseInt(data), 16);
+								size = Math.min(Integer.parseInt(this.data), 16);
 							} catch (Exception e) {
 								size = 1;
 							}
@@ -105,7 +106,7 @@ public class SpawnSign extends HeldSign {
 							s.setSize(size);
 						}
 						if (c instanceof Creeper) {
-							if (data.equalsIgnoreCase("powered")) {
+							if (this.data.equalsIgnoreCase("powered")) {
 								Creeper creeper = (Creeper) c;
 
 								creeper.setPowered(true);
@@ -114,7 +115,7 @@ public class SpawnSign extends HeldSign {
 							}
 						}
 						if (c instanceof PigZombie) {
-							if (data.equalsIgnoreCase("angry")) {
+							if (this.data.equalsIgnoreCase("angry")) {
 								PigZombie pigzombie = (PigZombie) c;
 
 								pigzombie.setAngry(true);
@@ -123,7 +124,7 @@ public class SpawnSign extends HeldSign {
 							} else {
 								int level = 0;
 								try {
-									level = Integer.parseInt(data);
+									level = Integer.parseInt(this.data);
 								} catch (Exception e) {
 									level = 0;
 								}
@@ -136,7 +137,7 @@ public class SpawnSign extends HeldSign {
 							}
 						}
 						if (c instanceof Ageable) {
-							if (data.equalsIgnoreCase("baby")) {
+							if (this.data.equalsIgnoreCase("baby")) {
 								Ageable ageable = (Ageable) c;
 
 								ageable.setBaby();
@@ -145,7 +146,7 @@ public class SpawnSign extends HeldSign {
 							}
 						}
 						if (c instanceof Pig) {
-							if (data.equalsIgnoreCase("saddled")) {
+							if (this.data.equalsIgnoreCase("saddled")) {
 								Pig pig = (Pig) c;
 
 								pig.setSaddle(true);
@@ -154,7 +155,7 @@ public class SpawnSign extends HeldSign {
 							}
 						}
 					}
-					if (data.equalsIgnoreCase("ignite")) {
+					if (this.data.equalsIgnoreCase("ignite")) {
 						ent.setFireTicks(100);
 
 						continue;
@@ -179,6 +180,7 @@ public class SpawnSign extends HeldSign {
 	private Integer amount = 1;
 	private String data = "";
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 
 		boolean ctypeError = false;
@@ -188,18 +190,18 @@ public class SpawnSign extends HeldSign {
 		String[] dline = this.getLines(event)[2].split(" ");
 
 		try {
-			entityType = Functions.getCreature(cline);
+			this.entityType = Functions.getCreature(cline);
 		} catch (Exception e) {
 			ctypeError = true;
 			if (!reload) {
-				this.main.alert(this.getOwnerName(), "Unknown creature type. Please try again.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "Unknown creature type. Please try again.", ChatColor.RED);
 			}
 			return false;
 		}
 
-		if (ctypeError || (entityType == null)) {
+		if (ctypeError || (this.entityType == null)) {
 			if (!reload) {
-				this.main.alert(this.getOwnerName(), "Unknown creature type. Please try again.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "Unknown creature type. Please try again.", ChatColor.RED);
 			}
 			event.setCancelled(true);
 			return false;
@@ -208,37 +210,37 @@ public class SpawnSign extends HeldSign {
 		String amountLine = dline[0];
 
 		try {
-			amount = Integer.parseInt(amountLine);
+			this.amount = Integer.parseInt(amountLine);
 		} catch (Exception ex) {
-			amount = 1;
+			this.amount = 1;
 		}
 
-		if (amount <= 0) {
-			amount = 1;
+		if (this.amount <= 0) {
+			this.amount = 1;
 		}
 
-		if (amount >= 50) {
-			amount = 50;
+		if (this.amount >= 50) {
+			this.amount = 50;
 		}
 
 		if (dline.length < 2) {
-			data = "";
+			this.data = "";
 		} else {
-			data = dline[1];
+			this.data = dline[1];
 		}
 
-		if (data.equalsIgnoreCase("")) {
-			data = "0";
+		if (this.data.equalsIgnoreCase("")) {
+			this.data = "0";
 		}
 
 		String dirLine = this.getLines(event)[3];
 
 		if (dirLine.equals("") || (dirLine == null)) {
-			spawnDir = Direction.UP;
+			this.spawnDir = Direction.UP;
 		} else {
-			spawnDir = Direction.fromString(dirLine.toUpperCase());
-			if ((spawnDir == Direction.ERROR) || (spawnDir == null)) {
-				spawnDir = Direction.UP;
+			this.spawnDir = Direction.fromString(dirLine.toUpperCase());
+			if ((this.spawnDir == Direction.ERROR) || (this.spawnDir == null)) {
+				this.spawnDir = Direction.UP;
 			}
 		}
 
@@ -246,17 +248,17 @@ public class SpawnSign extends HeldSign {
 			this.clearArgLines();
 		}
 
-		String ncline = entityType.getTypeId() + "";
+		String ncline = this.entityType.getTypeId() + "";
 
 		if (!reload) {
 			this.setLine(1, ncline, event);
-			this.setLine(2, (amount + " " + data).substring(0, Math.min(16, (amount + " " + data).length())), event);
-			this.setLine(3, spawnDir.toString(), event);
+			this.setLine(2, (this.amount + " " + this.data).substring(0, Math.min(16, (this.amount + " " + this.data).length())), event);
+			this.setLine(3, this.spawnDir.toString(), event);
 		}
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("Spawn sign accepted.");
+			init("Spawn sign accepted.");
 		}
 
 		return true;

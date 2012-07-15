@@ -23,12 +23,12 @@ public class BlockControl {
 		int y = loc.getBlockY();
 		int z = loc.getBlockZ();
 
-		int x1 = location1.getBlockX();
-		int y1 = location1.getBlockY();
-		int z1 = location1.getBlockZ();
-		int x2 = location2.getBlockX();
-		int y2 = location2.getBlockY();
-		int z2 = location2.getBlockZ();
+		int x1 = this.location1.getBlockX();
+		int y1 = this.location1.getBlockY();
+		int z1 = this.location1.getBlockZ();
+		int x2 = this.location2.getBlockX();
+		int y2 = this.location2.getBlockY();
+		int z2 = this.location2.getBlockZ();
 
 		if (x1 > x2) {
 			int x3 = x1;
@@ -71,12 +71,12 @@ public class BlockControl {
 	}
 
 	public void restore() {
-		int x1 = location1.getBlockX();
-		int y1 = location1.getBlockY();
-		int z1 = location1.getBlockZ();
-		int x2 = location2.getBlockX();
-		int y2 = location2.getBlockY();
-		int z2 = location2.getBlockZ();
+		int x1 = this.location1.getBlockX();
+		int y1 = this.location1.getBlockY();
+		int z1 = this.location1.getBlockZ();
+		int x2 = this.location2.getBlockX();
+		int y2 = this.location2.getBlockY();
+		int z2 = this.location2.getBlockZ();
 
 		int ySize = Math.abs(y1 - y2) + 1;
 		int zSize = Math.abs(z1 - z2) + 1;
@@ -99,8 +99,8 @@ public class BlockControl {
 						try {
 							this.location1.getWorld().getBlockAt(x, y, z).setTypeIdAndData(this.blockData.getCompound("block" + ((tempX * zSize + tempZ) * ySize + tempY)).getInt("typeId"), this.blockData.getCompound("block" + ((tempX * zSize + tempZ) * ySize + tempY)).getByte("data"), false);
 						} catch (Exception ex) {
-							main.e("Error while restoring cuboid block (Corrupt data?): " + ex.getMessage());
-							main.e("  At (" + x + "; " + y + "; " + z + ") Chunk: (" + this.location1.getWorld().getBlockAt(x, y, z).getChunk().getX() + "; " + this.location1.getWorld().getBlockAt(x, y, z).getChunk().getZ() + ")");
+							this.main.e("Error while restoring cuboid block (Corrupt data?): " + ex.getMessage());
+							this.main.e("  At (" + x + "; " + y + "; " + z + ") Chunk: (" + this.location1.getWorld().getBlockAt(x, y, z).getChunk().getX() + "; " + this.location1.getWorld().getBlockAt(x, y, z).getChunk().getZ() + ")");
 						}
 					}
 					tempZ++;

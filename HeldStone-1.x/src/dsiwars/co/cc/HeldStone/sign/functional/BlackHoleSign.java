@@ -20,29 +20,30 @@ public class BlackHoleSign extends HeldSign {
 
 	private boolean lastState = false;
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
 		if (is != InputState.HIGH) {
-			lastState = false;
+			this.lastState = false;
 			return;
 		} else {
-			if (lastState == true) {
+			if (this.lastState == true) {
 				return;
 			}
-			lastState = true;
+			this.lastState = true;
 		}
 
-		List<Entity> entities = this.getWorld().getEntities();
+		List<Entity> entities = getWorld().getEntities();
 
 		Iterator<Entity> entityIterator = entities.iterator();
 
-		blockLocation.getBlock().setTypeIdAndData(0, (byte) 0, false);
+		this.blockLocation.getBlock().setTypeIdAndData(0, (byte) 0, false);
 
 		while (entityIterator.hasNext()) {
 			Entity currentEntity = entityIterator.next();
 
-			if (currentEntity.getLocation().getBlockX() == blockLocation.getBlockX() && currentEntity.getLocation().getBlockY() == blockLocation.getBlockY() && currentEntity.getLocation().getBlockZ() == blockLocation.getBlockZ()) {
+			if (currentEntity.getLocation().getBlockX() == this.blockLocation.getBlockX() && currentEntity.getLocation().getBlockY() == this.blockLocation.getBlockY() && currentEntity.getLocation().getBlockZ() == this.blockLocation.getBlockZ()) {
 				if (currentEntity instanceof LivingEntity) {
 					LivingEntity currentLivingEntity = (LivingEntity) currentEntity;
 
@@ -65,26 +66,27 @@ public class BlackHoleSign extends HeldSign {
 
 	Location blockLocation;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		int x = 0, y = 0, z = 0;
 
 		if (this.getLines(event)[1].equals("")) {
-			if (this.main.players.exists(this.getOwnerName())) {
-				HeldPlayer p = this.main.players.get(this.getOwnerName());
+			if (this.main.players.exists(getOwnerName())) {
+				HeldPlayer p = this.main.players.get(getOwnerName());
 
 				if (p.loc3 != null) {
-					x = p.loc3.getBlockX() - this.getHostLocation().getBlockX();
-					y = p.loc3.getBlockY() - this.getHostLocation().getBlockY();
-					z = p.loc3.getBlockZ() - this.getHostLocation().getBlockZ();
+					x = p.loc3.getBlockX() - getHostLocation().getBlockX();
+					y = p.loc3.getBlockY() - getHostLocation().getBlockY();
+					z = p.loc3.getBlockZ() - getHostLocation().getBlockZ();
 				} else {
-					this.main.alert(this.getOwnerName(), "You did not supply any arguments. You must either designate the block location on line two, or set the block by right clicking with a piece of gunpowder.", ChatColor.RED);
+					this.main.alert(getOwnerName(), "You did not supply any arguments. You must either designate the block location on line two, or set the block by right clicking with a piece of gunpowder.", ChatColor.RED);
 					if (!reload) {
 						event.setCancelled(true);
 					}
 					return false;
 				}
 			} else {
-				this.main.alert(this.getOwnerName(), "You did not supply any arguments. You must either designate the block location on line two, or set the block by right clicking with a piece of gunpowder.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "You did not supply any arguments. You must either designate the block location on line two, or set the block by right clicking with a piece of gunpowder.", ChatColor.RED);
 				if (!reload) {
 					event.setCancelled(true);
 				}
@@ -99,7 +101,7 @@ public class BlackHoleSign extends HeldSign {
 				y = Integer.parseInt(split[1]);
 				z = Integer.parseInt(split[2]);
 			} catch (Exception e) {
-				this.main.alert(this.getOwnerName(), "The coordinate you specified is either invalid or not formatted properly.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "The coordinate you specified is either invalid or not formatted properly.", ChatColor.RED);
 				if (!reload) {
 					event.setCancelled(true);
 				}
@@ -107,23 +109,23 @@ public class BlackHoleSign extends HeldSign {
 			}
 		}
 
-		x += this.getHostLocation().getBlockX();
-		y += this.getHostLocation().getBlockY();
-		z += this.getHostLocation().getBlockZ();
+		x += getHostLocation().getBlockX();
+		y += getHostLocation().getBlockY();
+		z += getHostLocation().getBlockZ();
 
-		blockLocation = new Location(this.getWorld(), x, y, z);
+		this.blockLocation = new Location(getWorld(), x, y, z);
 
-		x -= this.getHostLocation().getBlockX();
-		y -= this.getHostLocation().getBlockY();
-		z -= this.getHostLocation().getBlockZ();
+		x -= getHostLocation().getBlockX();
+		y -= getHostLocation().getBlockY();
+		z -= getHostLocation().getBlockZ();
 
 		if (!reload) {
 			this.setLine(1, x + " " + y + " " + z, event);
 		}
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("BlackHole sign accepted.");
+			init("BlackHole sign accepted.");
 		}
 		return true;
 	}

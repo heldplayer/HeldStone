@@ -34,57 +34,59 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class CuboidSign extends HeldSign {
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
-		int mat = lmat;
-		byte dat = ldat;
+		int mat = this.lmat;
+		byte dat = this.ldat;
 
 		BlockRedstoneEvent event = (BlockRedstoneEvent) args;
 		InputState is = this.getInput(1, event);
 
 		if (is == InputState.HIGH) {
-			mat = hmat;
-			dat = hdat;
+			mat = this.hmat;
+			dat = this.hdat;
 		}
 
-		Functions.drawSafeCuboid(mat, dat, this.getWorld(), x1, y1, z1, x2, y2, z2);
+		Functions.drawSafeCuboid(mat, dat, getWorld(), this.x1, this.y1, this.z1, this.x2, this.y2, this.z2);
 	}
 
 	@Override
 	protected void setNBTData(NBTBase tag) {
-		data = (NBTTagCompound) tag;
+		this.data = (NBTTagCompound) tag;
 	}
 
 	@Override
 	public NBTBase getNBTData() {
-		return data;
+		return this.data;
 	}
 
 	NBTTagCompound data;
 	int x1, y1, z1, x2, y2, z2, lmat, hmat = 0;
 	byte ldat, hdat = (byte) 0;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		if (this.getLines(event)[1].equals("") || this.getLines(event)[2].equals("")) {
-			if (this.main.players.exists(this.getOwnerName())) {
-				HeldPlayer p = this.main.players.get(this.getOwnerName());
+			if (this.main.players.exists(getOwnerName())) {
+				HeldPlayer p = this.main.players.get(getOwnerName());
 
 				if (p.l1 && (p.loc2 != null)) {
-					x1 = p.loc1.getBlockX() - this.getHostLocation().getBlockX();
-					y1 = p.loc1.getBlockY() - this.getHostLocation().getBlockY();
-					z1 = p.loc1.getBlockZ() - this.getHostLocation().getBlockZ();
+					this.x1 = p.loc1.getBlockX() - getHostLocation().getBlockX();
+					this.y1 = p.loc1.getBlockY() - getHostLocation().getBlockY();
+					this.z1 = p.loc1.getBlockZ() - getHostLocation().getBlockZ();
 
-					x2 = p.loc2.getBlockX() - this.getHostLocation().getBlockX();
-					y2 = p.loc2.getBlockY() - this.getHostLocation().getBlockY();
-					z2 = p.loc2.getBlockZ() - this.getHostLocation().getBlockZ();
+					this.x2 = p.loc2.getBlockX() - getHostLocation().getBlockX();
+					this.y2 = p.loc2.getBlockY() - getHostLocation().getBlockY();
+					this.z2 = p.loc2.getBlockZ() - getHostLocation().getBlockZ();
 				} else {
-					this.main.alert(this.getOwnerName(), "You did not supply any arguments. You must either designate the cuboid area on lines two and three, or set the cuboid area by right clicking with a piece of lightstone dust.", ChatColor.RED);
+					this.main.alert(getOwnerName(), "You did not supply any arguments. You must either designate the cuboid area on lines two and three, or set the cuboid area by right clicking with a piece of lightstone dust.", ChatColor.RED);
 					if (!reload) {
 						event.setCancelled(true);
 					}
 					return false;
 				}
 			} else {
-				this.main.alert(this.getOwnerName(), "You did not supply any arguments. You must either designate the cuboid area on lines two and three, or set the cuboid area by right clicking with a piece of lightstone dust.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "You did not supply any arguments. You must either designate the cuboid area on lines two and three, or set the cuboid area by right clicking with a piece of lightstone dust.", ChatColor.RED);
 				if (!reload) {
 					event.setCancelled(true);
 				}
@@ -96,15 +98,15 @@ public class CuboidSign extends HeldSign {
 			split2 = this.getLines(event)[2].split(" ");
 
 			try {
-				x1 = Integer.parseInt(split1[0]);
-				y1 = Integer.parseInt(split1[1]);
-				z1 = Integer.parseInt(split1[2]);
+				this.x1 = Integer.parseInt(split1[0]);
+				this.y1 = Integer.parseInt(split1[1]);
+				this.z1 = Integer.parseInt(split1[2]);
 
-				x2 = Integer.parseInt(split2[0]);
-				y2 = Integer.parseInt(split2[1]);
-				z2 = Integer.parseInt(split2[2]);
+				this.x2 = Integer.parseInt(split2[0]);
+				this.y2 = Integer.parseInt(split2[1]);
+				this.z2 = Integer.parseInt(split2[2]);
 			} catch (Exception e) {
-				this.main.alert(this.getOwnerName(), "The coordinates you specified are either invalid or not formatted properly.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "The coordinates you specified are either invalid or not formatted properly.", ChatColor.RED);
 				if (!reload) {
 					event.setCancelled(true);
 				}
@@ -113,23 +115,23 @@ public class CuboidSign extends HeldSign {
 		}
 
 		if (!reload) {
-			this.setLine(1, x1 + " " + y1 + " " + z1, event);
-			this.setLine(2, x2 + " " + y2 + " " + z2, event);
+			this.setLine(1, this.x1 + " " + this.y1 + " " + this.z1, event);
+			this.setLine(2, this.x2 + " " + this.y2 + " " + this.z2, event);
 		}
 
-		x1 += this.getHostLocation().getBlockX();
-		y1 += this.getHostLocation().getBlockY();
-		z1 += this.getHostLocation().getBlockZ();
+		this.x1 += getHostLocation().getBlockX();
+		this.y1 += getHostLocation().getBlockY();
+		this.z1 += getHostLocation().getBlockZ();
 
-		x2 += this.getHostLocation().getBlockX();
-		y2 += this.getHostLocation().getBlockY();
-		z2 += this.getHostLocation().getBlockZ();
+		this.x2 += getHostLocation().getBlockX();
+		this.y2 += getHostLocation().getBlockY();
+		this.z2 += getHostLocation().getBlockZ();
 
-		int csize = Math.abs((Math.abs(x1 - x2) + 1) * (Math.abs(y1 - y2) + 1) * (Math.abs(z1 - z2) + 1));
+		int csize = Math.abs((Math.abs(this.x1 - this.x2) + 1) * (Math.abs(this.y1 - this.y2) + 1) * (Math.abs(this.z1 - this.z2) + 1));
 
 		if (csize > this.main.cfgMaxCuboidBlocks) {
 			if (!reload) {
-				this.main.alert(this.getOwnerName(), "The cuboid you specified was " + csize + " blocks big. The maximum acceptable area is " + this.main.cfgMaxCuboidBlocks + " blocks.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "The cuboid you specified was " + csize + " blocks big. The maximum acceptable area is " + this.main.cfgMaxCuboidBlocks + " blocks.", ChatColor.RED);
 				event.setCancelled(true);
 			}
 			return false;
@@ -157,49 +159,49 @@ public class CuboidSign extends HeldSign {
 		}
 
 		try {
-			ldat = Byte.parseByte(matArgs[1].split(":")[1]);
+			this.ldat = Byte.parseByte(matArgs[1].split(":")[1]);
 		} catch (Exception e) {
-			ldat = -1;
+			this.ldat = -1;
 		}
 
 		try {
-			hdat = Byte.parseByte(matArgs[0].split(":")[1]);
+			this.hdat = Byte.parseByte(matArgs[0].split(":")[1]);
 		} catch (Exception e) {
-			hdat = -1;
+			this.hdat = -1;
 		}
 
-		lmat = matLow;
-		hmat = matHigh;
+		this.lmat = matLow;
+		this.hmat = matHigh;
 
 		if (!reload) {
-			if (!Functions.isSafeToRemove(lmat)) {
-				lmat = -1;
+			if (!Functions.isSafeToRemove(this.lmat)) {
+				this.lmat = -1;
 			}
 
-			if (!Functions.isSafeToRemove(hmat)) {
-				hmat = -1;
+			if (!Functions.isSafeToRemove(this.hmat)) {
+				this.hmat = -1;
 			}
 		}
 
-		matLine = "" + hmat + ":" + hdat + " " + lmat + ":" + ldat;
+		matLine = "" + this.hmat + ":" + this.hdat + " " + this.lmat + ":" + this.ldat;
 
 		if (!reload) {
 			this.setLine(3, matLine, event);
 		}
 
 		if (!reload) {
-			int ySize = Math.abs(y1 - y2) + 1;
-			int zSize = Math.abs(z1 - z2) + 1;
+			int ySize = Math.abs(this.y1 - this.y2) + 1;
+			int zSize = Math.abs(this.z1 - this.z2) + 1;
 
 			this.data = new NBTTagCompound();
 
-			int minX = Math.min(x1, x2);
-			int minY = Math.min(y1, y2);
-			int minZ = Math.min(z1, z2);
+			int minX = Math.min(this.x1, this.x2);
+			int minY = Math.min(this.y1, this.y2);
+			int minZ = Math.min(this.z1, this.z2);
 
-			int maxX = Math.max(x1, x2);
-			int maxY = Math.max(y1, y2);
-			int maxZ = Math.max(z1, z2);
+			int maxX = Math.max(this.x1, this.x2);
+			int maxY = Math.max(this.y1, this.y2);
+			int maxZ = Math.max(this.z1, this.z2);
 
 			int tempX = 0;
 			for (int x = minX; x <= maxX; x++) {
@@ -209,10 +211,10 @@ public class CuboidSign extends HeldSign {
 					for (int z = minZ; z <= maxZ; z++) {
 						NBTTagCompound currentBlock = (NBTTagCompound) new NBTTagCompound().setNameAndGet("block" + ((tempX * zSize + tempZ) * ySize + tempY));
 
-						currentBlock.insert("typeId", this.getWorld().getBlockAt(x, y, z).getTypeId());
-						currentBlock.insert("data", this.getWorld().getBlockAt(x, y, z).getData());
+						currentBlock.insert("typeId", getWorld().getBlockAt(x, y, z).getTypeId());
+						currentBlock.insert("data", getWorld().getBlockAt(x, y, z).getData());
 
-						data.insertCompound(currentBlock.getName(), currentBlock);
+						this.data.insertCompound(currentBlock.getName(), currentBlock);
 
 						tempZ++;
 					}
@@ -222,21 +224,21 @@ public class CuboidSign extends HeldSign {
 			}
 		}
 
-		Control = main.bcr.register(this.getWorld(), x1, y1, z1, x2, y2, z2, data);
+		this.Control = this.main.bcr.register(getWorld(), this.x1, this.y1, this.z1, this.x2, this.y2, this.z2, this.data);
 
-		if (Control == null) {
+		if (this.Control == null) {
 			if (!reload) {
 				event.setCancelled(true);
-				this.main.alert(this.getOwnerName(), "Cuboids can't overlap eachother!", ChatColor.RED);
+				this.main.alert(getOwnerName(), "Cuboids can't overlap eachother!", ChatColor.RED);
 			} else {
-				main.sgc.invalidate(this, "Cuboid is somehow overlapping with another cuboid.");
+				this.main.sgc.invalidate(this, "Cuboid is somehow overlapping with another cuboid.");
 			}
 			return false;
 		}
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("Cuboid sign accepted.");
+			init("Cuboid sign accepted.");
 		}
 
 		return true;
@@ -268,7 +270,7 @@ public class CuboidSign extends HeldSign {
 
 	@Override
 	public void invalidate() {
-		main.bcr.remove(Control);
+		this.main.bcr.remove(this.Control);
 	}
 
 	@Override

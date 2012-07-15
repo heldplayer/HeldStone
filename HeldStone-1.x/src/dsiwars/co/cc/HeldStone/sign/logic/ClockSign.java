@@ -33,6 +33,7 @@ public class ClockSign extends HeldSign {
 	private int clock = 0;
 	private boolean clockState = false;
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
@@ -40,32 +41,32 @@ public class ClockSign extends HeldSign {
 			startClock();
 		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED)) {
 			stopClock();
-			this.setOutput(false);
+			setOutput(false);
 		}
 	}
 
 	public void startClock() {
-		if (!ticking) {
-			this.startTicking();
-			ticking = true;
-			this.setOutput(true);
-			clockState = true;
-			clock = onTime;
+		if (!this.ticking) {
+			startTicking();
+			this.ticking = true;
+			setOutput(true);
+			this.clockState = true;
+			this.clock = this.onTime;
 		}
 	}
 
 	public void stopClock() {
-		ticking = false;
+		this.ticking = false;
 	}
 
 	@Override
 	public boolean tick() {
-		if (ticking) {
-			clock--;
-			if (clock <= 0) {
-				clock = clockState ? offTime : onTime;
-				clockState = !clockState;
-				this.setOutput(clockState);
+		if (this.ticking) {
+			this.clock--;
+			if (this.clock <= 0) {
+				this.clock = this.clockState ? this.offTime : this.onTime;
+				this.clockState = !this.clockState;
+				setOutput(this.clockState);
 			}
 			return true;
 		} else {
@@ -84,35 +85,36 @@ public class ClockSign extends HeldSign {
 
 	private int onTime, offTime;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 
 		String onLine = this.getLines(event)[1].trim();
 		String offLine = this.getLines(event)[2].trim();
 
 		try {
-			onTime = Integer.parseInt(onLine);
+			this.onTime = Integer.parseInt(onLine);
 		} catch (Exception e) {
-			onTime = 20;
+			this.onTime = 20;
 		}
 
 		try {
-			offTime = Integer.parseInt(offLine);
+			this.offTime = Integer.parseInt(offLine);
 		} catch (Exception e) {
-			offTime = onTime;
+			this.offTime = this.onTime;
 		}
 
-		onTime = (onTime > 0) ? onTime : 20;
-		offTime = (offTime > 0) ? offTime : 20;
+		this.onTime = (this.onTime > 0) ? this.onTime : 20;
+		this.offTime = (this.offTime > 0) ? this.offTime : 20;
 
 		if (!reload) {
 			this.clearArgLines(event);
-			this.setLine(1, Integer.toString(onTime), event);
-			this.setLine(2, Integer.toString(offTime), event);
+			this.setLine(1, Integer.toString(this.onTime), event);
+			this.setLine(2, Integer.toString(this.offTime), event);
 		}
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("Clock sign accepted.");
+			init("Clock sign accepted.");
 		}
 
 		return true;

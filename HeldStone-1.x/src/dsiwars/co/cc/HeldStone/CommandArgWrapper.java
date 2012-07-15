@@ -31,8 +31,8 @@ public class CommandArgWrapper {
 
 	public CommandArgWrapper(CommandSender arg0, Command arg1, String label, String[] args) {
 
-		commandSender = arg0;
-		command = arg1;
+		this.commandSender = arg0;
+		this.command = arg1;
 		this.label = label;
 		this.args = args;
 

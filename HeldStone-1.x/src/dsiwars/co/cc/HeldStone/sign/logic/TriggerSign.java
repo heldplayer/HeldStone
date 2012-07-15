@@ -31,6 +31,7 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class TriggerSign extends HeldSign {
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		if (type == TriggerType.TRIGGER_COMMAND) {
 			CommandArgWrapper command = (CommandArgWrapper) args;
@@ -39,20 +40,20 @@ public class TriggerSign extends HeldSign {
 				String id = command.args[0];
 				if (this.command.equalsIgnoreCase(id)) {
 					if (this.player.equalsIgnoreCase("@")) {
-						state = !state;
+						this.state = !this.state;
 					} else if (command.commandSender instanceof Player) {
 						Player p = (Player) command.commandSender;
 						boolean isNamed = this.player.equalsIgnoreCase(p.getName());
 						if (isNamed) {
-							state = !state;
+							this.state = !this.state;
 						}
 					}
 				}
 			}
 		}
 
-		if (this.isLoaded()) {
-			this.setOutput(state);
+		if (isLoaded()) {
+			setOutput(this.state);
 		}
 	}
 
@@ -71,7 +72,7 @@ public class TriggerSign extends HeldSign {
 
 	@Override
 	public NBTBase getNBTData() {
-		if (state) {
+		if (this.state) {
 			return new NBTTagString("H");
 		} else {
 			return new NBTTagString("L");
@@ -81,38 +82,39 @@ public class TriggerSign extends HeldSign {
 	boolean state = false;
 	String command, player;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
-		String nullCmd = this.getOwnerName().trim();
+		String nullCmd = getOwnerName().trim();
 
-		command = this.getLines(event)[1].replace("/", "");
-		player = this.getLines(event)[2];
+		this.command = this.getLines(event)[1].replace("/", "");
+		this.player = this.getLines(event)[2];
 
-		if (player == null || player.equals("")) {
-			player = "@";
+		if (this.player == null || this.player.equals("")) {
+			this.player = "@";
 			if (!reload) {
-				main.alert(this.getOwnerName(), "Player name defaulted to \"@\" because you did not specify a name.", ChatColor.AQUA);
-				main.alert(this.getOwnerName(), "This sign will be triggerable by anyone.", ChatColor.AQUA);
+				this.main.alert(getOwnerName(), "Player name defaulted to \"@\" because you did not specify a name.", ChatColor.AQUA);
+				this.main.alert(getOwnerName(), "This sign will be triggerable by anyone.", ChatColor.AQUA);
 			}
 		}
 
-		if (command == null || command.equals("")) {
-			command = nullCmd;
+		if (this.command == null || this.command.equals("")) {
+			this.command = nullCmd;
 			if (!reload) {
-				main.alert(this.getOwnerName(), "Trigger identifier defaulted to your name because you did not specify your own.", ChatColor.AQUA);
+				this.main.alert(getOwnerName(), "Trigger identifier defaulted to your name because you did not specify your own.", ChatColor.AQUA);
 			}
 		}
 
 		if (!reload) {
 			this.clearArgLines(event);
-			this.setLine(1, command, event);
-			this.setLine(2, player, event);
+			this.setLine(1, this.command, event);
+			this.setLine(2, this.player, event);
 		}
 
-		main.sgc.register(this, TriggerType.TRIGGER_COMMAND);
-		main.sgc.register(this, TriggerType.TIMER_SECOND);
+		this.main.sgc.register(this, TriggerType.TRIGGER_COMMAND);
+		this.main.sgc.register(this, TriggerType.TIMER_SECOND);
 
 		if (!reload) {
-			this.init("Trigger sign accepted.");
+			init("Trigger sign accepted.");
 		}
 
 		return true;

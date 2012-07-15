@@ -36,6 +36,6 @@ public class WirelessPacket {
 	}
 
 	public boolean getState() {
-		return state;
+		return this.state;
 	}
 }

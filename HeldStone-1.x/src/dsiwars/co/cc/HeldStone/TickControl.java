@@ -33,31 +33,32 @@ public class TickControl implements Runnable {
 	private final HeldStone main;
 
 	public TickControl(HeldStone main) {
-		nextTick = new ArrayList<HeldSign>();
-		kill = new ArrayList<HeldSign>();
+		this.nextTick = new ArrayList<HeldSign>();
+		this.kill = new ArrayList<HeldSign>();
 		this.main = main;
 	}
 
 	public void register(HeldSign sign) {
-		nextTick.add(sign);
+		this.nextTick.add(sign);
 	}
 
+	@Override
 	public void run() {
 
-		thisTick = nextTick;
-		nextTick = new ArrayList<HeldSign>();
+		this.thisTick = this.nextTick;
+		this.nextTick = new ArrayList<HeldSign>();
 
-		Iterator<HeldSign> i = thisTick.iterator();
+		Iterator<HeldSign> i = this.thisTick.iterator();
 		HeldSign csign = null;
 		while (i.hasNext()) {
 			csign = i.next();
-			if ((!kill.contains(csign)) && csign.tick()) {
-				this.register(csign);
+			if ((!this.kill.contains(csign)) && csign.tick()) {
+				register(csign);
 			}
 		}
 	}
 
 	public synchronized void purge(HeldSign sign) {
-		kill.add(sign);
+		this.kill.add(sign);
 	}
 }

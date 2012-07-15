@@ -5,12 +5,15 @@ import java.io.DataOutput;
 
 public class NBTTagEnd extends NBTBase {
 
+	@Override
 	void save(DataOutput Output) {
 	}
 
+	@Override
 	void load(DataInput Input) {
 	}
 
+	@Override
 	public byte getTypeID() {
 		return 0;
 	}

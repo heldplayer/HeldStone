@@ -18,8 +18,8 @@ public class BlockController {
 	}
 
 	public void insert(BlockControl Control) {
-		if (!Controllers.contains(Control)) {
-			Controllers.add(Control);
+		if (!this.Controllers.contains(Control)) {
+			this.Controllers.add(Control);
 		}
 	}
 
@@ -48,14 +48,14 @@ public class BlockController {
 				for (int z = z1; z <= z2; z++) {
 					Location blockLoc = new Location(world, x, y, z);
 
-					if (this.contains(blockLoc)) {
+					if (contains(blockLoc)) {
 						return null;
 					}
 				}
 			}
 		}
 
-		BlockControl Control = new BlockControl(loc1, loc2, main, blockData);
+		BlockControl Control = new BlockControl(loc1, loc2, this.main, blockData);
 
 		insert(Control);
 
@@ -63,16 +63,16 @@ public class BlockController {
 	}
 
 	public void remove(BlockControl Control) {
-		if (Controllers.contains(Control)) {
+		if (this.Controllers.contains(Control)) {
 			Control.restore();
-			Controllers.remove(Control);
+			this.Controllers.remove(Control);
 		}
 	}
 
 	public boolean contains(Location loc) {
 		boolean containsit = false;
 
-		Iterator<BlockControl> it = Controllers.iterator();
+		Iterator<BlockControl> it = this.Controllers.iterator();
 
 		while (it.hasNext()) {
 			BlockControl control = it.next();

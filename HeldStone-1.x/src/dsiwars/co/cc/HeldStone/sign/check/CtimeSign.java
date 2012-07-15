@@ -28,23 +28,24 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class CtimeSign extends HeldSign {
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
-		int ctime = (int) this.getWorld().getTime();
+		int ctime = (int) getWorld().getTime();
 
 		boolean ncurrent = false;
 
-		if (ctime <= highTime && ctime >= lowTime) {
-			ncurrent = betweenState;
+		if (ctime <= this.highTime && ctime >= this.lowTime) {
+			ncurrent = this.betweenState;
 		} else {
-			ncurrent = !betweenState;
+			ncurrent = !this.betweenState;
 		}
 
 		if (ncurrent) {
-			this.setOutput(true);
-			current = true;
+			setOutput(true);
+			this.current = true;
 		} else {
-			this.setOutput(false);
-			current = false;
+			setOutput(false);
+			this.current = false;
 		}
 	}
 
@@ -62,6 +63,7 @@ public class CtimeSign extends HeldSign {
 	boolean current = false;
 	boolean autoTrigger = false;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		int l1, l2;
 		String autoTriggerline;
@@ -71,33 +73,33 @@ public class CtimeSign extends HeldSign {
 		autoTriggerline = lines[3];
 
 		if (lines[1].equals("") && lines[2].equals("")) {
-			lowTime = 0;
-			l1 = lowTime;
-			highTime = 12000;
-			l2 = highTime;
-			betweenState = true;
+			this.lowTime = 0;
+			l1 = this.lowTime;
+			this.highTime = 12000;
+			l2 = this.highTime;
+			this.betweenState = true;
 		} else {
 			l1 = fixTime(parseTime(lines[1]));
 			l2 = fixTime(parseTime(lines[2]));
 
 			if (l1 <= l2) {
-				betweenState = true;
-				highTime = l2;
-				lowTime = l1;
+				this.betweenState = true;
+				this.highTime = l2;
+				this.lowTime = l1;
 			} else {
 
-				betweenState = false;
-				highTime = l1;
-				lowTime = l2;
+				this.betweenState = false;
+				this.highTime = l1;
+				this.lowTime = l2;
 			}
 		}
 
 		if (autoTriggerline.equalsIgnoreCase("FALSE")) {
 			autoTriggerline = "FALSE";
-			autoTrigger = false;
+			this.autoTrigger = false;
 		} else {
 			autoTriggerline = "TRUE";
-			autoTrigger = true;
+			this.autoTrigger = true;
 		}
 
 		if (!reload) {
@@ -107,17 +109,17 @@ public class CtimeSign extends HeldSign {
 			this.setLine(3, autoTriggerline, event);
 		}
 
-		if (autoTrigger) {
-			main.sgc.register(this, TriggerType.TIMER_SECOND);
+		if (this.autoTrigger) {
+			this.main.sgc.register(this, TriggerType.TIMER_SECOND);
 		} else {
-			main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+			this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		}
 
 		if (!reload) {
-			this.init("ctime sign accepted.");
+			init("ctime sign accepted.");
 		}
 
-		this.triggersign(null, null);
+		triggersign(null, null);
 
 		return true;
 	}
@@ -155,7 +157,7 @@ public class CtimeSign extends HeldSign {
 
 	@Override
 	public String getTriggerTypesString() {
-		if (autoTrigger) {
+		if (this.autoTrigger) {
 			return TriggerType.TIMER_SECOND.name();
 		} else {
 			return TriggerType.REDSTONE_CHANGE.name();

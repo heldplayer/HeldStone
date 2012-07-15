@@ -35,17 +35,18 @@ public class AnnounceSign extends HeldSign {
 
 	private boolean lastState = false;
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
 		if (is != InputState.HIGH) {
-			lastState = false;
+			this.lastState = false;
 			return;
 		} else {
-			if (lastState == true) {
+			if (this.lastState == true) {
 				return;
 			}
-			lastState = true;
+			this.lastState = true;
 		}
 
 		for (Player p : this.main.getServer().getOnlinePlayers()) {
@@ -53,12 +54,12 @@ public class AnnounceSign extends HeldSign {
 
 			boolean x, y, z;
 
-			x = (Math.min(x1, x2) <= l.getBlockX()) && (l.getBlockX() <= Math.max(x1, x2));
-			y = (Math.min(y1, y2) <= l.getBlockY()) && (l.getBlockY() <= Math.max(y1, y2));
-			z = (Math.min(z1, z2) <= l.getBlockZ()) && (l.getBlockZ() <= Math.max(z1, z2));
+			x = (Math.min(this.x1, this.x2) <= l.getBlockX()) && (l.getBlockX() <= Math.max(this.x1, this.x2));
+			y = (Math.min(this.y1, this.y2) <= l.getBlockY()) && (l.getBlockY() <= Math.max(this.y1, this.y2));
+			z = (Math.min(this.z1, this.z2) <= l.getBlockZ()) && (l.getBlockZ() <= Math.max(this.z1, this.z2));
 
 			if (x && y && z) {
-				this.main.alert(p.getName(), message, color);
+				this.main.alert(p.getName(), this.message, this.color);
 				break;
 			}
 		}
@@ -66,49 +67,50 @@ public class AnnounceSign extends HeldSign {
 
 	@Override
 	protected void setNBTData(NBTBase tag) {
-		message = ((NBTTagString) tag).value;
+		this.message = ((NBTTagString) tag).value;
 	}
 
 	@Override
 	public NBTBase getNBTData() {
-		return new NBTTagString(message);
+		return new NBTTagString(this.message);
 	}
 
 	private int x1, y1, z1, x2, y2, z2;
 	String message = null;
 	ChatColor color = ChatColor.WHITE;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 
 		if (!reload) {
-			message = this.main.players.safelyGet(this.getOwnerName(), this.main).message;
-			if (message == null) {
-				this.main.alert(this.getOwnerName(), "You must set a message first. " + ChatColor.AQUA + "/hs msg <message>", ChatColor.RED);
+			this.message = this.main.players.safelyGet(getOwnerName(), this.main).message;
+			if (this.message == null) {
+				this.main.alert(getOwnerName(), "You must set a message first. " + ChatColor.AQUA + "/hs msg <message>", ChatColor.RED);
 				return false;
 			}
 		}
 
 		if (this.getLines()[1].equals("") && this.getLines()[2].equals("")) {
-			if (this.main.players.exists(this.getOwnerName())) {
-				HeldPlayer p = this.main.players.get(this.getOwnerName());
+			if (this.main.players.exists(getOwnerName())) {
+				HeldPlayer p = this.main.players.get(getOwnerName());
 
 				if (p.l1 && (p.loc2 != null)) {
-					x1 = p.loc1.getBlockX() - this.getHostLocation().getBlockX();
-					y1 = p.loc1.getBlockY() - this.getHostLocation().getBlockY();
-					z1 = p.loc1.getBlockZ() - this.getHostLocation().getBlockZ();
+					this.x1 = p.loc1.getBlockX() - getHostLocation().getBlockX();
+					this.y1 = p.loc1.getBlockY() - getHostLocation().getBlockY();
+					this.z1 = p.loc1.getBlockZ() - getHostLocation().getBlockZ();
 
-					x2 = p.loc2.getBlockX() - this.getHostLocation().getBlockX();
-					y2 = p.loc2.getBlockY() - this.getHostLocation().getBlockY();
-					z2 = p.loc2.getBlockZ() - this.getHostLocation().getBlockZ();
+					this.x2 = p.loc2.getBlockX() - getHostLocation().getBlockX();
+					this.y2 = p.loc2.getBlockY() - getHostLocation().getBlockY();
+					this.z2 = p.loc2.getBlockZ() - getHostLocation().getBlockZ();
 				} else {
-					this.main.alert(this.getOwnerName(), "You did not supply any arguments. You must either designate the announce area on lines two and three, or set the cuboid area by right clicking with a piece of lightstone dust.", ChatColor.RED);
+					this.main.alert(getOwnerName(), "You did not supply any arguments. You must either designate the announce area on lines two and three, or set the cuboid area by right clicking with a piece of lightstone dust.", ChatColor.RED);
 					if (!reload) {
 						event.setCancelled(true);
 					}
 					return false;
 				}
 			} else {
-				this.main.alert(this.getOwnerName(), "You did not supply any arguments. You must either designate the announce area on lines two and three, or set the cuboid area by right clicking with a piece of lightstone dust.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "You did not supply any arguments. You must either designate the announce area on lines two and three, or set the cuboid area by right clicking with a piece of lightstone dust.", ChatColor.RED);
 				if (!reload) {
 					event.setCancelled(true);
 				}
@@ -121,15 +123,15 @@ public class AnnounceSign extends HeldSign {
 			split2 = this.getLines()[2].split(" ");
 
 			try {
-				x1 = Integer.parseInt(split1[0]);
-				y1 = Integer.parseInt(split1[1]);
-				z1 = Integer.parseInt(split1[2]);
+				this.x1 = Integer.parseInt(split1[0]);
+				this.y1 = Integer.parseInt(split1[1]);
+				this.z1 = Integer.parseInt(split1[2]);
 
-				x2 = Integer.parseInt(split2[0]);
-				y2 = Integer.parseInt(split2[1]);
-				z2 = Integer.parseInt(split2[2]);
+				this.x2 = Integer.parseInt(split2[0]);
+				this.y2 = Integer.parseInt(split2[1]);
+				this.z2 = Integer.parseInt(split2[2]);
 			} catch (Exception e) {
-				this.main.alert(this.getOwnerName(), "The coordinates you specified are either invalid or formatted incorrectly.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "The coordinates you specified are either invalid or formatted incorrectly.", ChatColor.RED);
 				if (!reload) {
 					event.setCancelled(true);
 				}
@@ -138,33 +140,33 @@ public class AnnounceSign extends HeldSign {
 		}
 
 		try {
-			color = ChatColor.valueOf(this.getLines()[3].toUpperCase());
+			this.color = ChatColor.valueOf(this.getLines()[3].toUpperCase());
 		} catch (Exception ex) {
 			try {
-				color = ChatColor.getByChar(this.getLines()[3].charAt(0));
+				this.color = ChatColor.getByChar(this.getLines()[3].charAt(0));
 			} catch (Exception ex2) {
-				color = ChatColor.WHITE;
+				this.color = ChatColor.WHITE;
 			}
 		}
 
 		if (!reload) {
 			this.clearArgLines(event);
-			this.setLine(1, x1 + " " + y1 + " " + z1, event);
-			this.setLine(2, x2 + " " + y2 + " " + z2, event);
-			this.setLine(3, color.name(), event);
+			this.setLine(1, this.x1 + " " + this.y1 + " " + this.z1, event);
+			this.setLine(2, this.x2 + " " + this.y2 + " " + this.z2, event);
+			this.setLine(3, this.color.name(), event);
 		}
 
-		x1 += this.getHostLocation().getBlockX();
-		y1 += this.getHostLocation().getBlockY();
-		z1 += this.getHostLocation().getBlockZ();
+		this.x1 += getHostLocation().getBlockX();
+		this.y1 += getHostLocation().getBlockY();
+		this.z1 += getHostLocation().getBlockZ();
 
-		x2 += this.getHostLocation().getBlockX();
-		y2 += this.getHostLocation().getBlockY();
-		z2 += this.getHostLocation().getBlockZ();
+		this.x2 += getHostLocation().getBlockX();
+		this.y2 += getHostLocation().getBlockY();
+		this.z2 += getHostLocation().getBlockZ();
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("Announce sign accepted.");
+			init("Announce sign accepted.");
 		}
 		return true;
 	}

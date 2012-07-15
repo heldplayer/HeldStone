@@ -35,20 +35,21 @@ public class RandSign extends HeldSign {
 	private boolean lastState = false;
 	private Random rnd = new Random();
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
-		if (is == InputState.HIGH && !lastState) {
-			lastState = true;
+		if (is == InputState.HIGH && !this.lastState) {
+			this.lastState = true;
 			randomize();
-		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && lastState) {
-			lastState = false;
-			this.setOutput(false);
+		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && this.lastState) {
+			this.lastState = false;
+			setOutput(false);
 		}
 	}
 
 	public void randomize() {
-		this.setOutput((rnd.nextInt(100) <= chance ? true : false));
+		setOutput((this.rnd.nextInt(100) <= this.chance ? true : false));
 	}
 
 	@Override
@@ -62,28 +63,29 @@ public class RandSign extends HeldSign {
 
 	int chance = 0;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		try {
-			chance = Integer.parseInt(this.getLines()[1]);
+			this.chance = Integer.parseInt(this.getLines()[1]);
 		} catch (Exception ex) {
 			if (!reload) {
-				this.main.alert(this.getOwnerName(), "The entered chance was not a number!", ChatColor.RED);
+				this.main.alert(getOwnerName(), "The entered chance was not a number!", ChatColor.RED);
 				event.setCancelled(true);
 			}
 			return false;
 		}
 
-		if (chance <= 0) {
+		if (this.chance <= 0) {
 			if (!reload) {
-				this.main.alert(this.getOwnerName(), "The entered chance was too small.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "The entered chance was too small.", ChatColor.RED);
 				event.setCancelled(true);
 			}
 			return false;
 		}
 
-		if (chance >= 100) {
+		if (this.chance >= 100) {
 			if (!reload) {
-				this.main.alert(this.getOwnerName(), "The entered chance was too big.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "The entered chance was too big.", ChatColor.RED);
 				event.setCancelled(true);
 			}
 			return false;
@@ -91,12 +93,12 @@ public class RandSign extends HeldSign {
 
 		if (!reload) {
 			this.clearArgLines();
-			this.setLine(1, chance + "", event);
+			this.setLine(1, this.chance + "", event);
 		}
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("Rand sign accepted.");
+			init("Rand sign accepted.");
 		}
 
 		return true;

@@ -26,88 +26,89 @@ public class CauldronSign extends HeldSign {
 
 	private boolean lastState = false;
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
 		if (is != InputState.HIGH) {
-			lastState = false;
+			this.lastState = false;
 			return;
 		} else {
-			if (lastState == true) {
+			if (this.lastState == true) {
 				return;
 			}
-			lastState = true;
+			this.lastState = true;
 		}
 
-		int x = glassLocation.getBlockX();
-		int y = glassLocation.getBlockY();
-		int z = glassLocation.getBlockZ();
+		int x = this.glassLocation.getBlockX();
+		int y = this.glassLocation.getBlockY();
+		int z = this.glassLocation.getBlockZ();
 
 		boolean error = false;
 
-		if (this.getWorld().getBlockAt(x, y, z).getTypeId() != 20) {
+		if (getWorld().getBlockAt(x, y, z).getTypeId() != 20) {
 			error = true;
 		}
-		if (this.getWorld().getBlockAt(x, y + 1, z).getTypeId() != 9) {
+		if (getWorld().getBlockAt(x, y + 1, z).getTypeId() != 9) {
 			error = true;
 		}
-		if (this.getWorld().getBlockAt(x, y - 1, z).getTypeId() != 11) {
-			error = true;
-		}
-
-		if (this.getWorld().getBlockAt(x + 1, y, z).getTypeId() != 1) {
-			error = true;
-		}
-		if (this.getWorld().getBlockAt(x + 1, y + 1, z).getTypeId() != 1) {
-			error = true;
-		}
-		if (this.getWorld().getBlockAt(x + 1, y - 1, z).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x, y - 1, z).getTypeId() != 11) {
 			error = true;
 		}
 
-		if (this.getWorld().getBlockAt(x - 1, y, z).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x + 1, y, z).getTypeId() != 1) {
 			error = true;
 		}
-		if (this.getWorld().getBlockAt(x - 1, y + 1, z).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x + 1, y + 1, z).getTypeId() != 1) {
 			error = true;
 		}
-		if (this.getWorld().getBlockAt(x - 1, y - 1, z).getTypeId() != 1) {
-			error = true;
-		}
-
-		if (this.getWorld().getBlockAt(x, y, z + 1).getTypeId() != 1) {
-			error = true;
-		}
-		if (this.getWorld().getBlockAt(x, y + 1, z + 1).getTypeId() != 1) {
-			error = true;
-		}
-		if (this.getWorld().getBlockAt(x, y - 1, z + 1).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x + 1, y - 1, z).getTypeId() != 1) {
 			error = true;
 		}
 
-		if (this.getWorld().getBlockAt(x, y, z - 1).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x - 1, y, z).getTypeId() != 1) {
 			error = true;
 		}
-		if (this.getWorld().getBlockAt(x, y + 1, z - 1).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x - 1, y + 1, z).getTypeId() != 1) {
 			error = true;
 		}
-		if (this.getWorld().getBlockAt(x, y - 1, z - 1).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x - 1, y - 1, z).getTypeId() != 1) {
+			error = true;
+		}
+
+		if (getWorld().getBlockAt(x, y, z + 1).getTypeId() != 1) {
+			error = true;
+		}
+		if (getWorld().getBlockAt(x, y + 1, z + 1).getTypeId() != 1) {
+			error = true;
+		}
+		if (getWorld().getBlockAt(x, y - 1, z + 1).getTypeId() != 1) {
+			error = true;
+		}
+
+		if (getWorld().getBlockAt(x, y, z - 1).getTypeId() != 1) {
+			error = true;
+		}
+		if (getWorld().getBlockAt(x, y + 1, z - 1).getTypeId() != 1) {
+			error = true;
+		}
+		if (getWorld().getBlockAt(x, y - 1, z - 1).getTypeId() != 1) {
 			error = true;
 		}
 
 		if (error) {
-			main.sgc.invalidate(this, "Cauldron got damaged or removed.");
-			this.main.alert(this.getOwnerName(), "Your cauldron is no longer valid.", ChatColor.RED);
+			this.main.sgc.invalidate(this, "Cauldron got damaged or removed.");
+			this.main.alert(getOwnerName(), "Your cauldron is no longer valid.", ChatColor.RED);
 			return;
 		}
 
 		//main.d("=========== START ===========");
 
-		Location containerLocation = glassLocation.clone();
+		Location containerLocation = this.glassLocation.clone();
 
 		containerLocation.add(0, 1, 0);
 
-		List<Entity> entities = this.getWorld().getEntities();
+		List<Entity> entities = getWorld().getEntities();
 
 		HashSet<ItemStack> items = new HashSet<ItemStack>();
 
@@ -130,7 +131,7 @@ public class CauldronSign extends HeldSign {
 
 		//main.d("=========== INSERT ==========");
 
-		ArrayList<Recipe> recipies = main.recipes.keys;
+		ArrayList<Recipe> recipies = this.main.recipes.keys;
 
 		Iterator<Recipe> i = recipies.iterator();
 
@@ -164,10 +165,10 @@ public class CauldronSign extends HeldSign {
 
 				for (int j = 0; j < resultItems.items.size(); j++) {
 					dsiwars.co.cc.HeldStone.Items.Item resultItem = resultItems.items.get(j);
-					this.getWorld().dropItemNaturally(containerLocation, new ItemStack(resultItem.itemID, 1, resultItem.damage));
+					getWorld().dropItemNaturally(containerLocation, new ItemStack(resultItem.itemID, 1, resultItem.damage));
 				}
 
-				this.setOutput(false);
+				setOutput(false);
 
 				return;
 			} else {
@@ -177,7 +178,7 @@ public class CauldronSign extends HeldSign {
 
 		//main.d("============ END ============");
 
-		this.setOutput(true);
+		setOutput(true);
 		return;
 	}
 
@@ -192,26 +193,27 @@ public class CauldronSign extends HeldSign {
 
 	Location glassLocation;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		int x = 0, y = 0, z = 0;
 
 		if (this.getLines(event)[1].equals("")) {
-			if (this.main.players.exists(this.getOwnerName())) {
-				HeldPlayer p = this.main.players.get(this.getOwnerName());
+			if (this.main.players.exists(getOwnerName())) {
+				HeldPlayer p = this.main.players.get(getOwnerName());
 
 				if (p.loc3 != null) {
-					x = p.loc3.getBlockX() - this.getHostLocation().getBlockX();
-					y = p.loc3.getBlockY() - this.getHostLocation().getBlockY();
-					z = p.loc3.getBlockZ() - this.getHostLocation().getBlockZ();
+					x = p.loc3.getBlockX() - getHostLocation().getBlockX();
+					y = p.loc3.getBlockY() - getHostLocation().getBlockY();
+					z = p.loc3.getBlockZ() - getHostLocation().getBlockZ();
 				} else {
-					this.main.alert(this.getOwnerName(), "You did not supply any arguments. You must either designate the cauldron glass block on line two, or set the block by right clicking with a piece of gunpowder.", ChatColor.RED);
+					this.main.alert(getOwnerName(), "You did not supply any arguments. You must either designate the cauldron glass block on line two, or set the block by right clicking with a piece of gunpowder.", ChatColor.RED);
 					if (!reload) {
 						event.setCancelled(true);
 					}
 					return false;
 				}
 			} else {
-				this.main.alert(this.getOwnerName(), "You did not supply any arguments. You must either designate the cauldron glass block on line two, or set the block by right clicking with a piece of gunpowder.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "You did not supply any arguments. You must either designate the cauldron glass block on line two, or set the block by right clicking with a piece of gunpowder.", ChatColor.RED);
 				if (!reload) {
 					event.setCancelled(true);
 				}
@@ -226,7 +228,7 @@ public class CauldronSign extends HeldSign {
 				y = Integer.parseInt(split[1]);
 				z = Integer.parseInt(split[2]);
 			} catch (Exception e) {
-				this.main.alert(this.getOwnerName(), "The coordinates you specified are either invalid or not formatted properly.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "The coordinates you specified are either invalid or not formatted properly.", ChatColor.RED);
 				if (!reload) {
 					event.setCancelled(true);
 				}
@@ -234,83 +236,83 @@ public class CauldronSign extends HeldSign {
 			}
 		}
 
-		x += this.getHostLocation().getBlockX();
-		y += this.getHostLocation().getBlockY();
-		z += this.getHostLocation().getBlockZ();
+		x += getHostLocation().getBlockX();
+		y += getHostLocation().getBlockY();
+		z += getHostLocation().getBlockZ();
 
-		glassLocation = this.getWorld().getBlockAt(x, y, z).getLocation();
+		this.glassLocation = getWorld().getBlockAt(x, y, z).getLocation();
 
 		boolean error = false;
 
-		if (this.getWorld().getBlockAt(x, y, z).getTypeId() != 20) {
+		if (getWorld().getBlockAt(x, y, z).getTypeId() != 20) {
 			error = true;
 		}
-		if (this.getWorld().getBlockAt(x, y + 1, z).getTypeId() != 9) {
+		if (getWorld().getBlockAt(x, y + 1, z).getTypeId() != 9) {
 			error = true;
 		}
-		if (this.getWorld().getBlockAt(x, y - 1, z).getTypeId() != 11) {
-			error = true;
-		}
-
-		if (this.getWorld().getBlockAt(x + 1, y, z).getTypeId() != 1) {
-			error = true;
-		}
-		if (this.getWorld().getBlockAt(x + 1, y + 1, z).getTypeId() != 1) {
-			error = true;
-		}
-		if (this.getWorld().getBlockAt(x + 1, y - 1, z).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x, y - 1, z).getTypeId() != 11) {
 			error = true;
 		}
 
-		if (this.getWorld().getBlockAt(x - 1, y, z).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x + 1, y, z).getTypeId() != 1) {
 			error = true;
 		}
-		if (this.getWorld().getBlockAt(x - 1, y + 1, z).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x + 1, y + 1, z).getTypeId() != 1) {
 			error = true;
 		}
-		if (this.getWorld().getBlockAt(x - 1, y - 1, z).getTypeId() != 1) {
-			error = true;
-		}
-
-		if (this.getWorld().getBlockAt(x, y, z + 1).getTypeId() != 1) {
-			error = true;
-		}
-		if (this.getWorld().getBlockAt(x, y + 1, z + 1).getTypeId() != 1) {
-			error = true;
-		}
-		if (this.getWorld().getBlockAt(x, y - 1, z + 1).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x + 1, y - 1, z).getTypeId() != 1) {
 			error = true;
 		}
 
-		if (this.getWorld().getBlockAt(x, y, z - 1).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x - 1, y, z).getTypeId() != 1) {
 			error = true;
 		}
-		if (this.getWorld().getBlockAt(x, y + 1, z - 1).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x - 1, y + 1, z).getTypeId() != 1) {
 			error = true;
 		}
-		if (this.getWorld().getBlockAt(x, y - 1, z - 1).getTypeId() != 1) {
+		if (getWorld().getBlockAt(x - 1, y - 1, z).getTypeId() != 1) {
 			error = true;
 		}
 
-		x -= this.getHostLocation().getBlockX();
-		y -= this.getHostLocation().getBlockY();
-		z -= this.getHostLocation().getBlockZ();
+		if (getWorld().getBlockAt(x, y, z + 1).getTypeId() != 1) {
+			error = true;
+		}
+		if (getWorld().getBlockAt(x, y + 1, z + 1).getTypeId() != 1) {
+			error = true;
+		}
+		if (getWorld().getBlockAt(x, y - 1, z + 1).getTypeId() != 1) {
+			error = true;
+		}
+
+		if (getWorld().getBlockAt(x, y, z - 1).getTypeId() != 1) {
+			error = true;
+		}
+		if (getWorld().getBlockAt(x, y + 1, z - 1).getTypeId() != 1) {
+			error = true;
+		}
+		if (getWorld().getBlockAt(x, y - 1, z - 1).getTypeId() != 1) {
+			error = true;
+		}
+
+		x -= getHostLocation().getBlockX();
+		y -= getHostLocation().getBlockY();
+		z -= getHostLocation().getBlockZ();
 
 		if (!reload) {
 			this.setLine(1, x + " " + y + " " + z, event);
 		}
 
 		if (error) {
-			this.main.alert(this.getOwnerName(), "Your cauldron was not created properly.", ChatColor.RED);
+			this.main.alert(getOwnerName(), "Your cauldron was not created properly.", ChatColor.RED);
 			if (!reload) {
 				event.setCancelled(true);
 			}
 			return false;
 		}
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("Cauldron sign accepted.");
+			init("Cauldron sign accepted.");
 		}
 		return true;
 	}

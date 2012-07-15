@@ -39,11 +39,11 @@ public class HeldPlayer {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public Player getPlayer() {
-		return this.main.getServer().getPlayer(name);
+		return this.main.getServer().getPlayer(this.name);
 	}
 
 	public boolean isOnline() {
@@ -51,19 +51,19 @@ public class HeldPlayer {
 	}
 
 	public void setLoc1(Location l) {
-		this.main.alert(this.getName(), "Set point one.", ChatColor.GREEN);
-		loc1 = l;
-		l1 = false;
+		this.main.alert(getName(), "Set point one.", ChatColor.GREEN);
+		this.loc1 = l;
+		this.l1 = false;
 	}
 
 	public void setLoc2(Location l) {
-		this.main.alert(this.getName(), "Set point two.", ChatColor.GREEN);
-		loc2 = l;
-		l1 = true;
+		this.main.alert(getName(), "Set point two.", ChatColor.GREEN);
+		this.loc2 = l;
+		this.l1 = true;
 	}
 
 	public void setLoc(Location l) {
-		if (l1) {
+		if (this.l1) {
 			setLoc1(l);
 		} else {
 			setLoc2(l);
@@ -71,8 +71,8 @@ public class HeldPlayer {
 	}
 
 	public void setLoc3(Location l) {
-		this.main.alert(this.getName(), "Set block location.", ChatColor.GREEN);
-		loc3 = l;
+		this.main.alert(getName(), "Set block location.", ChatColor.GREEN);
+		this.loc3 = l;
 	}
 
 	public void setMessage(String message) {

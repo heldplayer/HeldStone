@@ -13,30 +13,31 @@ public class SweatherSign extends HeldSign {
 
 	private boolean lastState = false;
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
 		if (is != InputState.HIGH) {
-			lastState = false;
+			this.lastState = false;
 			return;
 		} else {
-			if (lastState == true) {
+			if (this.lastState == true) {
 				return;
 			}
-			lastState = true;
+			this.lastState = true;
 		}
 
-		World w = this.getWorld();
+		World w = getWorld();
 		switch (this.type) {
 		case SUNNY:
 		case CLEAR:
 			w.setStorm(false);
-		break;
+			break;
 		case RAINY:
 		case SNOWY:
 		case STORMY:
 			w.setStorm(true);
-		break;
+			break;
 		}
 	}
 
@@ -56,23 +57,24 @@ public class SweatherSign extends HeldSign {
 
 	private WeatherType type = WeatherType.STORMY;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		String typeLine = this.getLines(event)[1];
 
 		for (WeatherType t : WeatherType.values()) {
 			if (t.name().toUpperCase().equals(typeLine.toUpperCase())) {
-				type = t;
+				this.type = t;
 			}
 		}
 
 		if (!reload) {
 			this.clearArgLines();
-			this.setLine(1, type.name(), event);
+			this.setLine(1, this.type.name(), event);
 		}
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("cweather sign accepted.");
+			init("cweather sign accepted.");
 		}
 
 		return true;

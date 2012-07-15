@@ -15,9 +15,9 @@ public class Items {
 	static final Logger log = Logger.getLogger("HeldStone");
 
 	public Items(HashSet<ItemStack> items) {
-		itemStackReference = items;
+		this.itemStackReference = items;
 
-		Iterator<ItemStack> i = itemStackReference.iterator();
+		Iterator<ItemStack> i = this.itemStackReference.iterator();
 
 		while (i.hasNext()) {
 			ItemStack stack = i.next();
@@ -26,23 +26,23 @@ public class Items {
 
 			for (int j = 0; j < stack.getAmount(); j++) {
 				//log.log(Level.INFO, "[HeldStone] [DEBUG] [Items] J is " + j);
-				this.items.put(size, new Item(stack.getTypeId(), stack.getDurability()));
+				this.items.put(this.size, new Item(stack.getTypeId(), stack.getDurability()));
 
-				size++;
+				this.size++;
 			}
 		}
 	}
 
 	public void add(ItemStack stack) {
 		for (int j = 0; j < stack.getAmount(); j++) {
-			this.items.put(size, new Item(stack.getTypeId(), stack.getDurability()));
+			this.items.put(this.size, new Item(stack.getTypeId(), stack.getDurability()));
 
-			size++;
+			this.size++;
 		}
 	}
 
 	public void destroyAll() {
-		Iterator<ItemStack> i = itemStackReference.iterator();
+		Iterator<ItemStack> i = this.itemStackReference.iterator();
 
 		while (i.hasNext()) {
 			ItemStack stack = i.next();

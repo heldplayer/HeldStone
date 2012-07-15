@@ -49,7 +49,7 @@ public class ListenerBlock implements Listener {
 			if (event.getLines().length > 0) {
 				this.main.sgc.trigger(TriggerType.PING, null);
 				Direction d = HeldSign.getDirection((Sign) (event.getBlock().getState()));
-				HeldSign.signFactory(event.getLines(), event.getPlayer().getName(), new NBTTagEnd(), event.getBlock().getWorld().getName(), event.getBlock().getLocation(), d, false, event, main);
+				HeldSign.signFactory(event.getLines(), event.getPlayer().getName(), new NBTTagEnd(), event.getBlock().getWorld().getName(), event.getBlock().getLocation(), d, false, event, this.main);
 			}
 		} else {
 			this.main.e("SignChangeEvent triggered on a non-sign block.");
@@ -123,7 +123,7 @@ public class ListenerBlock implements Listener {
 	//@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
 		if (event.getBlock().getTypeId() == 18) {
-			if (main.rand.nextInt(100) <= main.cfgAppleDropChance) {
+			if (this.main.rand.nextInt(100) <= this.main.cfgAppleDropChance) {
 				event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.APPLE, 1));
 			}
 		}
@@ -137,7 +137,7 @@ public class ListenerBlock implements Listener {
 	//@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onLeavesDecay(LeavesDecayEvent event) {
 		if (event.getBlock().getTypeId() == 18) {
-			if (main.rand.nextInt(100) <= main.cfgAppleDropChance) {
+			if (this.main.rand.nextInt(100) <= this.main.cfgAppleDropChance) {
 				event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.APPLE, 1));
 			}
 		}

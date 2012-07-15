@@ -12,20 +12,21 @@ public class StimeSign extends HeldSign {
 
 	private boolean lastState = false;
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
 		if (is != InputState.HIGH) {
-			lastState = false;
+			this.lastState = false;
 			return;
 		} else {
-			if (lastState == true) {
+			if (this.lastState == true) {
 				return;
 			}
-			lastState = true;
+			this.lastState = true;
 		}
 
-		this.getWorld().setTime(time);
+		getWorld().setTime(this.time);
 
 	}
 
@@ -40,6 +41,7 @@ public class StimeSign extends HeldSign {
 
 	int time;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		int l1;
 
@@ -47,10 +49,10 @@ public class StimeSign extends HeldSign {
 
 		if (lines[1].equals("")) {
 			l1 = 0;
-			time = l1;
+			this.time = l1;
 		} else {
 			l1 = fixTime(parseTime(lines[1]));
-			time = l1;
+			this.time = l1;
 		}
 
 		if (!reload) {
@@ -58,13 +60,13 @@ public class StimeSign extends HeldSign {
 			this.setLine(1, "" + l1, event);
 		}
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 
 		if (!reload) {
-			this.init("ctime sign accepted.");
+			init("ctime sign accepted.");
 		}
 
-		this.triggersign(null, null);
+		triggersign(null, null);
 
 		return true;
 	}

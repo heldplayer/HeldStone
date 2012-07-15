@@ -21,23 +21,23 @@ public class CraftingRecipeFile {
 	}
 
 	public void load() {
-		keys.clear();
+		this.keys.clear();
 
-		if (cfg.isDirectory()) {
-			cfg = new File(cfg.getAbsolutePath() + "craftingrecipes.txt");
+		if (this.cfg.isDirectory()) {
+			this.cfg = new File(this.cfg.getAbsolutePath() + "craftingrecipes.txt");
 		}
 
-		if (!cfg.exists()) {
+		if (!this.cfg.exists()) {
 			try {
-				cfg.createNewFile();
+				this.cfg.createNewFile();
 			} catch (IOException e) {
 				this.main.e("Error while creating crafting recipe file.");
-				this.main.e("File path: " + cfg.getAbsolutePath());
+				this.main.e("File path: " + this.cfg.getAbsolutePath());
 				e.printStackTrace();
 			}
 		} else {
 			try {
-				BufferedReader in = new BufferedReader(new FileReader(cfg));
+				BufferedReader in = new BufferedReader(new FileReader(this.cfg));
 				String line;
 				while ((line = in.readLine()) != null) {
 					line = line.trim();
@@ -45,7 +45,7 @@ public class CraftingRecipeFile {
 						String[] args = line.split(":");
 						if (args.length == 3) {
 							this.main.d("Adding crafting recipe " + args[0]);
-							keys.add(new CraftingRecipe(args));
+							this.keys.add(new CraftingRecipe(args));
 						} else {
 							this.main.d("Error while adding " + args[0] + ": Invalid amount of parameters!");
 						}
@@ -90,16 +90,16 @@ public class CraftingRecipeFile {
 		private ItemType Result;
 
 		public CraftingRecipe(String[] args) {
-			name = args[0];
+			this.name = args[0];
 
 			String[] RequirementItems = args[1].split("~");
 
-			Requirements = new ItemType[RequirementItems.length];
+			this.Requirements = new ItemType[RequirementItems.length];
 
 			for (int i = 0; i < RequirementItems.length; i++) {
 				String[] item = RequirementItems[i].split(",");
 				try {
-					Requirements[i] = new ItemType(Integer.parseInt(item[0]), Short.parseShort(item[1]), Integer.parseInt(item[2]));
+					this.Requirements[i] = new ItemType(Integer.parseInt(item[0]), Short.parseShort(item[1]), Integer.parseInt(item[2]));
 				} catch (Exception ex) {
 				}
 			}
@@ -107,7 +107,7 @@ public class CraftingRecipeFile {
 			String[] item = args[2].split(",");
 
 			try {
-				Result = new ItemType(Integer.parseInt(item[0]), Short.parseShort(item[1]), Integer.parseInt(item[2]));
+				this.Result = new ItemType(Integer.parseInt(item[0]), Short.parseShort(item[1]), Integer.parseInt(item[2]));
 			} catch (Exception ex) {
 			}
 		}
@@ -117,30 +117,30 @@ public class CraftingRecipeFile {
 		}
 
 		public ItemType[] getRequirements() {
-			return Requirements;
+			return this.Requirements;
 		}
 
 		public ItemType getResults() {
-			return Result;
+			return this.Result;
 		}
 
 		public Items getResultItem() {
 			HashSet<ItemStack> items = new HashSet<ItemStack>();
 
-			items.add(new ItemStack(Result.getID(), Result.getAmount(), Result.getDamage()));
+			items.add(new ItemStack(this.Result.getID(), this.Result.getAmount(), this.Result.getDamage()));
 
 			return new Items(items);
 		}
 
 		public ItemStack getResultItemStack() {
-			return new ItemStack(Result.getID(), Result.getAmount(), Result.getDamage());
+			return new ItemStack(this.Result.getID(), this.Result.getAmount(), this.Result.getDamage());
 		}
 
 		public Items getItems() {
 			HashSet<ItemStack> items = new HashSet<ItemStack>();
 
 			for (int i = 0; i < this.Requirements.length; i++) {
-				ItemStack IS = new ItemStack(Requirements[i].getID(), Requirements[i].getAmount(), Requirements[i].getDamage());
+				ItemStack IS = new ItemStack(this.Requirements[i].getID(), this.Requirements[i].getAmount(), this.Requirements[i].getDamage());
 
 				items.add(IS);
 			}
@@ -154,7 +154,7 @@ public class CraftingRecipeFile {
 			HashSet<ItemStack> items = new HashSet<ItemStack>();
 
 			for (int i = 0; i < this.Requirements.length; i++) {
-				ItemStack IS = new ItemStack(Requirements[i].getID(), Requirements[i].getAmount(), Requirements[i].getDamage());
+				ItemStack IS = new ItemStack(this.Requirements[i].getID(), this.Requirements[i].getAmount(), this.Requirements[i].getDamage());
 
 				items.add(IS);
 			}

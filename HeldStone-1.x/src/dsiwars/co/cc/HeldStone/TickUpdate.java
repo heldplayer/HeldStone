@@ -32,7 +32,8 @@ public class TickUpdate implements Runnable {
 		this.handler = handler;
 	}
 
+	@Override
 	public void run() {
-		handler.trigger(type, null);
+		this.handler.trigger(this.type, null);
 	}
 }

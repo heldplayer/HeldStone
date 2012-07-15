@@ -13,23 +13,25 @@ public class NBTTagList extends NBTBase {
 	private List<NBTBase> values = new ArrayList<NBTBase>();
 	private byte type;
 
+	@Override
 	void save(DataOutput Output) {
 		try {
 			if (this.values.size() > 0) {
-				this.type = ((NBTBase) this.values.get(0)).getTypeID();
+				this.type = this.values.get(0).getTypeID();
 			} else {
 				this.type = 1;
 			}
 			Output.writeByte(this.type);
 			Output.writeInt(this.values.size());
 			for (int i = 0; i < this.values.size(); i++) {
-				((NBTBase) this.values.get(i)).save(Output);
+				this.values.get(i).save(Output);
 			}
 		} catch (IOException ex) {
 			Logger.getLogger(NBTTagList.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
+	@Override
 	void load(DataInput Input) {
 		try {
 			this.type = Input.readByte();
@@ -45,10 +47,12 @@ public class NBTTagList extends NBTBase {
 		}
 	}
 
+	@Override
 	public byte getTypeID() {
 		return 9;
 	}
 
+	@Override
 	public String toString() {
 		return "" + this.values.size() + " entries of type " + NBTBase.getNameByID(this.type);
 	}
@@ -59,7 +63,7 @@ public class NBTTagList extends NBTBase {
 	}
 
 	public NBTBase get(int number) {
-		return (NBTBase) this.values.get(number);
+		return this.values.get(number);
 	}
 
 	public int size() {

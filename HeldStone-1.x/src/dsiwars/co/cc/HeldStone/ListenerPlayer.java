@@ -14,8 +14,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import dsiwars.co.cc.HeldStone.NBT.NBTTagEnd;
 import dsiwars.co.cc.HeldStone.sign.HeldSign;
-import dsiwars.co.cc.HeldStone.sign.TriggerType;
 import dsiwars.co.cc.HeldStone.sign.HeldSign.InputState;
+import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class ListenerPlayer implements Listener {
 
@@ -35,18 +35,18 @@ public class ListenerPlayer implements Listener {
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if (event.getPlayer().getItemInHand().getType() == Material.GLOWSTONE_DUST) {
 				if (this.main.hasPermission(event.getPlayer(), "heldstone.select.cuboid")) {
-					if (players.exists(event.getPlayer().getName())) {
-						players.get(event.getPlayer().getName()).setLoc(event.getClickedBlock().getLocation());
+					if (this.players.exists(event.getPlayer().getName())) {
+						this.players.get(event.getPlayer().getName()).setLoc(event.getClickedBlock().getLocation());
 					} else {
-						players.safelyGet(event.getPlayer().getName(), this.main).setLoc(event.getClickedBlock().getLocation());
+						this.players.safelyGet(event.getPlayer().getName(), this.main).setLoc(event.getClickedBlock().getLocation());
 					}
 				}
 			} else if (event.getPlayer().getItemInHand().getType() == Material.SULPHUR) {
 				if (this.main.hasPermission(event.getPlayer(), "heldstone.select.single")) {
-					if (players.exists(event.getPlayer().getName())) {
-						players.get(event.getPlayer().getName()).setLoc3(event.getClickedBlock().getLocation());
+					if (this.players.exists(event.getPlayer().getName())) {
+						this.players.get(event.getPlayer().getName()).setLoc3(event.getClickedBlock().getLocation());
 					} else {
-						players.safelyGet(event.getPlayer().getName(), this.main).setLoc3(event.getClickedBlock().getLocation());
+						this.players.safelyGet(event.getPlayer().getName(), this.main).setLoc3(event.getClickedBlock().getLocation());
 					}
 				}
 			} else if (event.getPlayer().getItemInHand().getType() == Material.SLIME_BALL) {
@@ -95,7 +95,7 @@ public class ListenerPlayer implements Listener {
 
 					Direction d = HeldSign.getDirection(sign);
 
-					boolean result = HeldSign.signFactory(sign.getLines(), event.getPlayer().getName(), new NBTTagEnd(), sign.getWorld().getName(), sign.getLocation(), d, false, null, main);
+					boolean result = HeldSign.signFactory(sign.getLines(), event.getPlayer().getName(), new NBTTagEnd(), sign.getWorld().getName(), sign.getLocation(), d, false, null, this.main);
 					if (result) {
 						this.main.alert(event.getPlayer().getName(), "Initialized a new HeldStone sign instance!", ChatColor.GREEN);
 					} else {

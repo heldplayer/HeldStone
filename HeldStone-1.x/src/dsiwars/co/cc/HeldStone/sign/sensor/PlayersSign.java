@@ -13,14 +13,15 @@ public class PlayersSign extends HeldSign {
 	private boolean isNew = true;
 	private boolean lastState = false;
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
-		Integer loggedplayers = main.getServer().getOnlinePlayers().length;
-		boolean enough = loggedplayers >= playerAmount ? true : false;
+		Integer loggedplayers = this.main.getServer().getOnlinePlayers().length;
+		boolean enough = loggedplayers >= this.playerAmount ? true : false;
 
-		if (lastState != enough || isNew) {
-			isNew = false;
-			lastState = enough;
-			this.setOutput(enough);
+		if (this.lastState != enough || this.isNew) {
+			this.isNew = false;
+			this.lastState = enough;
+			setOutput(enough);
 		}
 	}
 
@@ -35,13 +36,14 @@ public class PlayersSign extends HeldSign {
 
 	private int playerAmount;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		Integer playerAmount = 10;
 
 		try {
 			playerAmount = Integer.parseInt(this.getLines(event)[1]);
 		} catch (Exception ex) {
-			main.alert(this.getOwnerName(), "Invalid player count", ChatColor.RED);
+			this.main.alert(getOwnerName(), "Invalid player count", ChatColor.RED);
 		}
 
 		if (playerAmount <= 0) {
@@ -55,10 +57,10 @@ public class PlayersSign extends HeldSign {
 
 		this.playerAmount = playerAmount;
 
-		main.sgc.register(this, TriggerType.TIMER_SECOND);
+		this.main.sgc.register(this, TriggerType.TIMER_SECOND);
 
 		if (!reload) {
-			this.init("Players sign accepted.");
+			init("Players sign accepted.");
 		}
 
 		return true;

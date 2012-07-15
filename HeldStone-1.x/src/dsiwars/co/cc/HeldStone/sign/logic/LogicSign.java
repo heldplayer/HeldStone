@@ -29,6 +29,7 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class LogicSign extends HeldSign {
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		if (true) {
 			int inputs = 0;
@@ -111,7 +112,7 @@ public class LogicSign extends HeldSign {
 							out = false;
 						}
 					}
-					this.setOutput(out);
+					setOutput(out);
 				}
 			}
 		}
@@ -126,10 +127,11 @@ public class LogicSign extends HeldSign {
 		return new NBTTagInt(0);
 	}
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("Logic sign accepted.");
+			init("Logic sign accepted.");
 		}
 
 		return true;
@@ -141,16 +143,22 @@ public class LogicSign extends HeldSign {
 	protected enum Type {
 
 		// REMEMBER TO ADD TYPES TO THE STATIC ARRAY!
-		NAND(new String[] { "nand", "no and", "!and", "!+", "!&", "-" }), AND(new String[] { "and", "+", "&", "&&" }), OR(new String[] { "or", "|", "||" }), NOR(new String[] { "nor", "!|", "x" }), XOR(new String[] { "xor", "eor", "exor", "!=", "<>", "#" }), XNOR(new String[] { "xnor", "enor", "exnor", "=", "==" }), ERROR(new String[0]);
+		NAND(new String[] { "nand", "no and", "!and", "!+", "!&", "-" }),
+		AND(new String[] { "and", "+", "&", "&&" }),
+		OR(new String[] { "or", "|", "||" }),
+		NOR(new String[] { "nor", "!|", "x" }),
+		XOR(new String[] { "xor", "eor", "exor", "!=", "<>", "#" }),
+		XNOR(new String[] { "xnor", "enor", "exnor", "=", "==" }),
+		ERROR(new String[0]);
 		final String aliases[];
 		static Type TYPES[] = new Type[] { NAND, AND, XNOR, XOR, OR, NOR };
 
 		Type(String[] a) {
-			aliases = a;
+			this.aliases = a;
 		}
 
 		String[] getAliases() {
-			return aliases;
+			return this.aliases;
 		}
 
 		static Type getType(String s) {

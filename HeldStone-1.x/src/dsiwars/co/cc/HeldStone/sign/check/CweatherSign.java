@@ -10,21 +10,22 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class CweatherSign extends HeldSign {
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		boolean state = false;
-		World w = this.getWorld();
+		World w = getWorld();
 		switch (this.type) {
 		case SUNNY:
 		case CLEAR:
 			state = !(w.hasStorm());
-		break;
+			break;
 		case RAINY:
 		case SNOWY:
 		case STORMY:
 			state = w.hasStorm();
-		break;
+			break;
 		}
-		this.setOutput(state);
+		setOutput(state);
 	}
 
 	boolean autoTrigger = false;
@@ -45,37 +46,38 @@ public class CweatherSign extends HeldSign {
 
 	private WeatherType type = WeatherType.SUNNY;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		String typeLine = this.getLines(event)[1];
 		String autoTriggerline = this.getLines(event)[2];
 
 		for (WeatherType t : WeatherType.values()) {
 			if (t.name().toUpperCase().equals(typeLine.toUpperCase())) {
-				type = t;
+				this.type = t;
 			}
 		}
 
 		if (autoTriggerline.equalsIgnoreCase("FALSE")) {
 			autoTriggerline = "FALSE";
-			autoTrigger = false;
+			this.autoTrigger = false;
 		} else {
 			autoTriggerline = "TRUE";
-			autoTrigger = true;
+			this.autoTrigger = true;
 		}
 
-		if (autoTrigger) {
-			main.sgc.register(this, TriggerType.TIMER_SECOND);
+		if (this.autoTrigger) {
+			this.main.sgc.register(this, TriggerType.TIMER_SECOND);
 		} else {
-			main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+			this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		}
 
 		if (!reload) {
-			this.setLine(1, type.name(), event);
+			this.setLine(1, this.type.name(), event);
 			this.setLine(2, autoTriggerline, event);
 		}
 
 		if (!reload) {
-			this.init("cweather sign accepted.");
+			init("cweather sign accepted.");
 		}
 
 		return true;
@@ -87,7 +89,7 @@ public class CweatherSign extends HeldSign {
 
 	@Override
 	public String getTriggerTypesString() {
-		if (autoTrigger) {
+		if (this.autoTrigger) {
 			return TriggerType.TIMER_SECOND.name();
 		} else {
 			return TriggerType.REDSTONE_CHANGE.name();

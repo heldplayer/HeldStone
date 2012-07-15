@@ -17,6 +17,7 @@ public class NBTTagByte extends NBTBase {
 		this.value = value;
 	}
 
+	@Override
 	void save(DataOutput Output) {
 		try {
 			Output.writeByte(this.value);
@@ -25,6 +26,7 @@ public class NBTTagByte extends NBTBase {
 		}
 	}
 
+	@Override
 	void load(DataInput Input) {
 		try {
 			this.value = Input.readByte();
@@ -33,6 +35,7 @@ public class NBTTagByte extends NBTBase {
 		}
 	}
 
+	@Override
 	public byte getTypeID() {
 		return 1;
 	}

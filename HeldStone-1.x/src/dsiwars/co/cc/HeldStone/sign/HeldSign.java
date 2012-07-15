@@ -92,9 +92,9 @@ public abstract class HeldSign {
 		this.leverLocation = Direction.shift(l, Direction.opposite(facing), 2);
 
 		if (!(data instanceof NBTTagEnd)) {
-			this.setNBTData(data);
+			setNBTData(data);
 		}
-		if (!this.declare(reload, event)) {
+		if (!declare(reload, event)) {
 			return false;
 		}
 		this.main.sgc.register(this, TriggerType.PING);
@@ -113,16 +113,16 @@ public abstract class HeldSign {
 	private SignType myType;
 
 	public SignType getType() {
-		return myType;
+		return this.myType;
 	}
 
 	public Direction getFacing() {
-		return facing;
+		return this.facing;
 	}
 
 	public InputState getInput(int direction, BlockRedstoneEvent event) {
 		if (event != null) {
-			Block iblock = this.getInputBlock(direction);
+			Block iblock = getInputBlock(direction);
 			if (!iblock.getLocation().equals(event.getBlock().getLocation())) {
 				return this.getInput(direction);
 			} else {
@@ -142,7 +142,7 @@ public abstract class HeldSign {
 	}
 
 	public InputState getInput(int direction) {
-		Block iblock = this.getInputBlock(direction);
+		Block iblock = getInputBlock(direction);
 		if (iblock.getType() == Material.REDSTONE_WIRE) {
 			if (iblock.getState().getRawData() > 0) {
 				return InputState.HIGH;
@@ -160,35 +160,35 @@ public abstract class HeldSign {
 	}
 
 	public Block getLeverBlock() {
-		return this.getWorld().getBlockAt(this.getLeverLocation());
+		return getWorld().getBlockAt(getLeverLocation());
 	}
 
 	public Location getLeverLocation() {
-		return leverLocation.clone();
+		return this.leverLocation.clone();
 	}
 
 	public Block getHostBlock() {
-		return this.getWorld().getBlockAt(this.getHostLocation());
+		return getWorld().getBlockAt(getHostLocation());
 	}
 
 	public Location getHostLocation() {
-		return hostblockLocation.clone();
+		return this.hostblockLocation.clone();
 	}
 
 	public Block getInputBlock(int direction) {
-		return this.getWorld().getBlockAt(getInputLocation(direction));
+		return getWorld().getBlockAt(getInputLocation(direction));
 	}
 
 	public Location getInputLocation(int direction) {
-		return inputLocation[direction];
+		return this.inputLocation[direction];
 	}
 
 	public Block getBlock() {
-		return main.getServer().getWorld(world).getBlockAt(location);
+		return this.main.getServer().getWorld(this.world).getBlockAt(this.location);
 	}
 
 	public Location getLocation() {
-		return location.clone();
+		return this.location.clone();
 	}
 
 	public World getWorld() {
@@ -196,7 +196,7 @@ public abstract class HeldSign {
 	}
 
 	public Player getOwner() {
-		return this.main.getServer().getPlayer(this.getOwnerName());
+		return this.main.getServer().getPlayer(getOwnerName());
 	}
 
 	public String getOwnerName() {
@@ -204,11 +204,11 @@ public abstract class HeldSign {
 	}
 
 	public boolean isLoaded() {
-		return this.getWorld().isChunkLoaded(this.getWorld().getChunkAt(this.getLocation()));
+		return getWorld().isChunkLoaded(getWorld().getChunkAt(getLocation()));
 	}
 
 	public boolean isOutputLever() {
-		return this.getLeverBlock().getType() == Material.LEVER;
+		return getLeverBlock().getType() == Material.LEVER;
 	}
 
 	public void clearArgLines() {
@@ -218,7 +218,7 @@ public abstract class HeldSign {
 	}
 
 	public void setLine(int line, String newLine) {
-		Sign mySign = (Sign) this.getBlock().getState();
+		Sign mySign = (Sign) getBlock().getState();
 		mySign.setLine(line, newLine);
 		mySign.update(true);
 		this.safeLines[line] = newLine;
@@ -247,7 +247,7 @@ public abstract class HeldSign {
 
 	public void setOutput(boolean out) {
 		if (isLoaded() && isOutputLever()) {
-			byte s = this.getLeverBlock().getState().getRawData();
+			byte s = getLeverBlock().getState().getRawData();
 
 			if (out) {
 				s = (byte) (s | 8);
@@ -255,22 +255,22 @@ public abstract class HeldSign {
 				s = (byte) (s & 7);
 			}
 
-			BlockState state = this.getLeverBlock().getState();
+			BlockState state = getLeverBlock().getState();
 			MaterialData stateData = state.getData();
 			stateData.setData(s);
 			state.update();
-			this.getLeverBlock().getState().update();
-			this.getHostBlock().getState().update();
-			this.getLeverBlock().getState().getData().setData(s);
+			getLeverBlock().getState().update();
+			getHostBlock().getState().update();
+			getLeverBlock().getState().getData().setData(s);
 		}
 	}
 
 	public InputState getOutput() {
-		if (this.getLeverBlock().getTypeId() != 69) {
+		if (getLeverBlock().getTypeId() != 69) {
 			return InputState.DISCONNECTED;
 		}
 
-		byte s = this.getLeverBlock().getState().getRawData();
+		byte s = getLeverBlock().getState().getRawData();
 
 		if (s >= 8) {
 			return InputState.HIGH;
@@ -280,8 +280,8 @@ public abstract class HeldSign {
 	}
 
 	public ValidationState isValid() {
-		if (this.isLoaded()) {
-			Block myBlock = this.getBlock();
+		if (isLoaded()) {
+			Block myBlock = getBlock();
 
 			if (myBlock.getTypeId() != 68) {
 				return ValidationState.INVALID;
@@ -291,7 +291,7 @@ public abstract class HeldSign {
 				boolean matches = true;
 				boolean hasText = false;
 				for (int i = 0; i < 4; i++) {
-					if (!safeLines[i].trim().equalsIgnoreCase(plines[i].trim())) {
+					if (!this.safeLines[i].trim().equalsIgnoreCase(plines[i].trim())) {
 						matches = false;
 						if ((!plines[i].trim().equals("")) && plines[i] != null) {
 							hasText = true;
@@ -359,10 +359,10 @@ public abstract class HeldSign {
 				return;
 			}
 
-			long ctime = this.getWorld().getFullTime();
+			long ctime = getWorld().getFullTime();
 
-			if ((ctime - lastTriggered[pos]) > delay || (lastTriggered[pos] > ctime)) {
-				lastTriggered[pos] = ctime;
+			if ((ctime - this.lastTriggered[pos]) > delay || (this.lastTriggered[pos] > ctime)) {
+				this.lastTriggered[pos] = ctime;
 				triggersign(type, args);
 				return;
 			} else {
@@ -395,7 +395,7 @@ public abstract class HeldSign {
 	public abstract void invalidate();
 
 	public String[] getLines() {
-		return safeLines;
+		return this.safeLines;
 	}
 
 	public String[] getLines(SignChangeEvent event) {

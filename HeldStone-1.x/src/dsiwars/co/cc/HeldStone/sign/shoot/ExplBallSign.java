@@ -15,19 +15,20 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class ExplBallSign extends HeldSign {
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		if (args == null) {
 			return;
 		}
-		if (this.getInputId((BlockRedstoneEvent) args) != 1 || this.getInput(1, (BlockRedstoneEvent) args) != InputState.HIGH) {
+		if (getInputId((BlockRedstoneEvent) args) != 1 || this.getInput(1, (BlockRedstoneEvent) args) != InputState.HIGH) {
 			return;
 		}
 
-		Location spawnLoc = new Location(this.getWorld(), x + 0.5, y + 0.5, z + 0.5);
+		Location spawnLoc = new Location(getWorld(), this.x + 0.5, this.y + 0.5, this.z + 0.5);
 
-		spawnLoc = Direction.getVelocityLocation(spawnDir, spawnLoc);
+		spawnLoc = Direction.getVelocityLocation(this.spawnDir, spawnLoc);
 
-		Fireball fireball = this.getWorld().spawn(spawnLoc, Fireball.class);
+		Fireball fireball = getWorld().spawn(spawnLoc, Fireball.class);
 
 		fireball.setIsIncendiary(false);
 
@@ -50,24 +51,25 @@ public class ExplBallSign extends HeldSign {
 	private Direction spawnDir;
 	int x, y, z = 0;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		if (this.getLines(event)[1].equals("")) {
-			if (this.main.players.exists(this.getOwnerName())) {
-				HeldPlayer p = this.main.players.get(this.getOwnerName());
+			if (this.main.players.exists(getOwnerName())) {
+				HeldPlayer p = this.main.players.get(getOwnerName());
 
 				if (p.loc3 != null) {
-					x = p.loc3.getBlockX() - this.getHostLocation().getBlockX();
-					y = p.loc3.getBlockY() - this.getHostLocation().getBlockY();
-					z = p.loc3.getBlockZ() - this.getHostLocation().getBlockZ();
+					this.x = p.loc3.getBlockX() - getHostLocation().getBlockX();
+					this.y = p.loc3.getBlockY() - getHostLocation().getBlockY();
+					this.z = p.loc3.getBlockZ() - getHostLocation().getBlockZ();
 				} else {
-					this.main.alert(this.getOwnerName(), "You did not supply any arguments. You must either designate the block location on line two, or set the block by right clicking with a piece of gunpowder.", ChatColor.RED);
+					this.main.alert(getOwnerName(), "You did not supply any arguments. You must either designate the block location on line two, or set the block by right clicking with a piece of gunpowder.", ChatColor.RED);
 					if (!reload) {
 						event.setCancelled(true);
 					}
 					return false;
 				}
 			} else {
-				this.main.alert(this.getOwnerName(), "You did not supply any arguments. You must either designate the block location on line two, or set the block by right clicking with a piece of gunpowder.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "You did not supply any arguments. You must either designate the block location on line two, or set the block by right clicking with a piece of gunpowder.", ChatColor.RED);
 				if (!reload) {
 					event.setCancelled(true);
 				}
@@ -78,11 +80,11 @@ public class ExplBallSign extends HeldSign {
 			split1 = this.getLines(event)[1].split(" ");
 
 			try {
-				x = Integer.parseInt(split1[0]);
-				y = Integer.parseInt(split1[1]);
-				z = Integer.parseInt(split1[2]);
+				this.x = Integer.parseInt(split1[0]);
+				this.y = Integer.parseInt(split1[1]);
+				this.z = Integer.parseInt(split1[2]);
 			} catch (Exception e) {
-				this.main.alert(this.getOwnerName(), "The coordinates you specified are either invalid or not formatted properly.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "The coordinates you specified are either invalid or not formatted properly.", ChatColor.RED);
 				if (!reload) {
 					event.setCancelled(true);
 				}
@@ -93,27 +95,27 @@ public class ExplBallSign extends HeldSign {
 		String dirLine = this.getLines(event)[2];
 
 		if (dirLine.equals("") || (dirLine == null)) {
-			spawnDir = Direction.UP;
+			this.spawnDir = Direction.UP;
 		} else {
-			spawnDir = Direction.fromString(dirLine.toUpperCase());
-			if ((spawnDir == Direction.ERROR) || (spawnDir == null)) {
-				spawnDir = Direction.UP;
+			this.spawnDir = Direction.fromString(dirLine.toUpperCase());
+			if ((this.spawnDir == Direction.ERROR) || (this.spawnDir == null)) {
+				this.spawnDir = Direction.UP;
 			}
 		}
 
 		if (!reload) {
 			this.clearArgLines();
-			this.setLine(1, x + " " + y + " " + z, event);
-			this.setLine(2, spawnDir.toString(), event);
+			this.setLine(1, this.x + " " + this.y + " " + this.z, event);
+			this.setLine(2, this.spawnDir.toString(), event);
 		}
 
-		x += this.getHostLocation().getBlockX();
-		y += this.getHostLocation().getBlockY();
-		z += this.getHostLocation().getBlockZ();
+		this.x += getHostLocation().getBlockX();
+		this.y += getHostLocation().getBlockY();
+		this.z += getHostLocation().getBlockZ();
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("ExplBall sign accepted.");
+			init("ExplBall sign accepted.");
 		}
 
 		return true;

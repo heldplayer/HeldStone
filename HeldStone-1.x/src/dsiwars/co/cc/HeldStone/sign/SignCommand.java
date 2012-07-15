@@ -37,9 +37,10 @@ public class SignCommand implements CommandExecutor {
 
 	}
 
+	@Override
 	public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
 
-		sh.trigger(t, new CommandArgWrapper(arg0, arg1, arg2, arg3));
+		this.sh.trigger(this.t, new CommandArgWrapper(arg0, arg1, arg2, arg3));
 
 		return true;
 	}

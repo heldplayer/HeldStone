@@ -31,7 +31,7 @@ public class HeldStone extends JavaPlugin {
 	private ListenerBlock blockListener = new ListenerBlock(this);
 	private ListenerCuboid cuboidListener = new ListenerCuboid(this);
 	private ListenerEntity entityListener = new ListenerEntity(this);
-	private ListenerPlayer playerListener = new ListenerPlayer(this, players);
+	private ListenerPlayer playerListener = new ListenerPlayer(this, this.players);
 	public String dataPath = "";
 	public File configFile = null;
 	public ConfigFile cfg;
@@ -58,25 +58,27 @@ public class HeldStone extends JavaPlugin {
 	public static String updatepath = "plugins" + File.separator + "HeldStone.jar";
 	public static String version;
 
+	@Override
 	public void onDisable() {
-		sgc.saveNBT();
-		cfg.save();
-		this.i("Heldstone is now disabled.");
-		enabled = false;
+		this.sgc.saveNBT();
+		this.cfg.save();
+		i("Heldstone is now disabled.");
+		this.enabled = false;
 	}
 
+	@Override
 	public void onEnable() {
 		ConsoleLogManager.init();
 
-		dataPath = getDataFolder().getAbsolutePath();
+		this.dataPath = getDataFolder().getAbsolutePath();
 
 		this.explodingList = new HashSet<Entity>();
 
-		pdf = this.getDescription();
+		this.pdf = getDescription();
 
-		this.i("Enabling " + pdf.getName());
+		i("Enabling " + this.pdf.getName());
 
-		this.pm = this.getServer().getPluginManager();
+		this.pm = getServer().getPluginManager();
 
 		File dataFolder = getDataFolder();
 
@@ -84,80 +86,80 @@ public class HeldStone extends JavaPlugin {
 			dataFolder.mkdir();
 		}
 
-		version = pdf.getVersion();
+		version = this.pdf.getVersion();
 
-		configFile = new File(dataPath + "/config.txt");
+		this.configFile = new File(this.dataPath + "/config.txt");
 
-		cfg = new ConfigFile(this, configFile);
-		cfg.load();
+		this.cfg = new ConfigFile(this, this.configFile);
+		this.cfg.load();
 
-		cfgWipeProtection = cfg.getBoolean("wipe-protection", true);
-		cfgAddsCraftingRecipes = cfg.getBoolean("add-crafting-recipes", true);
-		cfgMaxCuboidBlocks = cfg.getInt("max-cuboid-blocks", 200);
-		cfgAppleDropChance = cfg.getInt("apple-drop-chance", 1);
-		cfgDebug = cfg.getBoolean("debug", false);
-		cfgRedstoneCheck = cfg.getBoolean("enabke-redstone-toggles", false);
+		this.cfgWipeProtection = this.cfg.getBoolean("wipe-protection", true);
+		this.cfgAddsCraftingRecipes = this.cfg.getBoolean("add-crafting-recipes", true);
+		this.cfgMaxCuboidBlocks = this.cfg.getInt("max-cuboid-blocks", 200);
+		this.cfgAppleDropChance = this.cfg.getInt("apple-drop-chance", 1);
+		this.cfgDebug = this.cfg.getBoolean("debug", false);
+		this.cfgRedstoneCheck = this.cfg.getBoolean("enabke-redstone-toggles", false);
 
-		cfg.save();
+		this.cfg.save();
 
 		setupRecipes();
 
-		recipeFile = new File(dataPath + "/recipes.txt");
+		this.recipeFile = new File(this.dataPath + "/recipes.txt");
 
-		recipes = new RecipeFile(this, recipeFile);
-		recipes.load();
+		this.recipes = new RecipeFile(this, this.recipeFile);
+		this.recipes.load();
 
-		sgc = new SignController(this);
-		bcr = new BlockController(this);
-		tickctrl = new TickControl(this);
+		this.sgc = new SignController(this);
+		this.bcr = new BlockController(this);
+		this.tickctrl = new TickControl(this);
 
-		sgc.load();
-		getServer().getPluginManager().registerEvents(blockListener, this);
-		getServer().getPluginManager().registerEvents(cuboidListener, this);
-		getServer().getPluginManager().registerEvents(playerListener, this);
-		getServer().getPluginManager().registerEvents(entityListener, this);
+		this.sgc.load();
+		getServer().getPluginManager().registerEvents(this.blockListener, this);
+		getServer().getPluginManager().registerEvents(this.cuboidListener, this);
+		getServer().getPluginManager().registerEvents(this.playerListener, this);
+		getServer().getPluginManager().registerEvents(this.entityListener, this);
 
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TickUpdate(TriggerType.TIMER_SECOND, sgc), 10, 20);
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TickUpdate(TriggerType.TIMER_HALF_SECOND, sgc), 10, 10);
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TickUpdate(TriggerType.VALID_CHECK, sgc), 10, 600);
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, new TickUpdate(TriggerType.TIMER_SECOND, this.sgc), 10, 20);
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, new TickUpdate(TriggerType.TIMER_HALF_SECOND, this.sgc), 10, 10);
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, new TickUpdate(TriggerType.VALID_CHECK, this.sgc), 10, 600);
 
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, tickctrl, 10, 1);
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, this.tickctrl, 10, 1);
 
-		this.getCommand("trigger").setExecutor(new SignCommand(sgc, TriggerType.TRIGGER_COMMAND));
-		this.getCommand("t").setExecutor(new SignCommand(sgc, TriggerType.TRIGGER_COMMAND));
-		this.getCommand("heldstone").setExecutor(new HSCommand(this));
-		this.getCommand("hs").setExecutor(new HSCommand(this));
+		getCommand("trigger").setExecutor(new SignCommand(this.sgc, TriggerType.TRIGGER_COMMAND));
+		getCommand("t").setExecutor(new SignCommand(this.sgc, TriggerType.TRIGGER_COMMAND));
+		getCommand("heldstone").setExecutor(new HSCommand(this));
+		getCommand("hs").setExecutor(new HSCommand(this));
 
-		this.i(pdf.getName() + " version " + pdf.getVersion() + " is now enabled.");
+		i(this.pdf.getName() + " version " + this.pdf.getVersion() + " is now enabled.");
 
-		enabled = true;
+		this.enabled = true;
 	}
 
 	public void i(String message) {
-		log.log(Level.INFO, "[" + pdf.getName() + "] " + message);
+		log.log(Level.INFO, "[" + this.pdf.getName() + "] " + message);
 	}
 
 	public void e(String message) {
-		log.log(Level.WARNING, "[" + pdf.getName() + "] " + message);
+		log.log(Level.WARNING, "[" + this.pdf.getName() + "] " + message);
 	}
 
 	public void d(String message) {
-		if (cfgDebug) {
+		if (this.cfgDebug) {
 			i("[DEBUG] " + message);
 		}
 	}
 
 	public boolean alert(String playerName, String message, ChatColor color) {
-		Player p = this.getServer().getPlayer(playerName);
+		Player p = getServer().getPlayer(playerName);
 		if (p != null && p.isOnline()) {
-			p.sendMessage(color + "[" + pdf.getName() + "] " + message);
+			p.sendMessage(color + "[" + this.pdf.getName() + "] " + message);
 			return true;
 		}
 		return false;
 	}
 
 	public boolean alert(String playerName, String message, ChatColor color, String prefix) {
-		Player p = this.getServer().getPlayer(playerName);
+		Player p = getServer().getPlayer(playerName);
 		if (p != null && p.isOnline()) {
 			p.sendMessage(color + prefix + " " + message);
 			return true;
@@ -166,27 +168,27 @@ public class HeldStone extends JavaPlugin {
 	}
 
 	public void setupRecipes() {
-		if (cfgAddsCraftingRecipes) {
-			this.i("Loading crafting recipes...");
+		if (this.cfgAddsCraftingRecipes) {
+			i("Loading crafting recipes...");
 
-			File CraftingRecipeFileFile = new File(dataPath + "/craftingrecipes.txt");
+			File CraftingRecipeFileFile = new File(this.dataPath + "/craftingrecipes.txt");
 
 			if (!CraftingRecipeFileFile.exists()) {
 				try {
 					CraftingRecipeFileFile.createNewFile();
 				} catch (Exception ex) {
-					this.e("Unable to load cratfing recipes file:");
+					e("Unable to load cratfing recipes file:");
 
-					this.e(ex.getMessage());
+					e(ex.getMessage());
 
 					return;
 				}
 			}
 
-			craftingRecipes = new CraftingRecipeFile(this, CraftingRecipeFileFile);
-			craftingRecipes.load();
+			this.craftingRecipes = new CraftingRecipeFile(this, CraftingRecipeFileFile);
+			this.craftingRecipes.load();
 
-			Iterator<CraftingRecipe> keys = craftingRecipes.keys.iterator();
+			Iterator<CraftingRecipe> keys = this.craftingRecipes.keys.iterator();
 
 			while (keys.hasNext()) {
 				CraftingRecipe key = keys.next();
@@ -203,10 +205,10 @@ public class HeldStone extends JavaPlugin {
 					recipe.addIngredient(IS.getAmount(), Material.getMaterial(IS.getTypeId()), IS.getDurability());
 				}
 
-				this.getServer().addRecipe(recipe);
+				getServer().addRecipe(recipe);
 			}
 		} else {
-			this.i("No custom crafting recipes will be loaded!");
+			i("No custom crafting recipes will be loaded!");
 		}
 	}
 

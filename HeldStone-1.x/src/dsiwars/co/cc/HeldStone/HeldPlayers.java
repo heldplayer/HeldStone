@@ -26,18 +26,18 @@ public class HeldPlayers {
 	public final ArrayList<HeldPlayer> players;
 
 	public HeldPlayers() {
-		players = new ArrayList<HeldPlayer>();
+		this.players = new ArrayList<HeldPlayer>();
 	}
 
 	public void add(HeldPlayer p) {
 		if (!exists(p.getName())) {
-			players.add(p);
+			this.players.add(p);
 		}
 	}
 
 	public boolean exists(String name) {
-		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i).getName().equalsIgnoreCase(name)) {
+		for (int i = 0; i < this.players.size(); i++) {
+			if (this.players.get(i).getName().equalsIgnoreCase(name)) {
 				return true;
 			}
 		}
@@ -45,9 +45,9 @@ public class HeldPlayers {
 	}
 
 	public HeldPlayer get(String name) {
-		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i).getName().equalsIgnoreCase(name)) {
-				return players.get(i);
+		for (int i = 0; i < this.players.size(); i++) {
+			if (this.players.get(i).getName().equalsIgnoreCase(name)) {
+				return this.players.get(i);
 			}
 		}
 		return null;

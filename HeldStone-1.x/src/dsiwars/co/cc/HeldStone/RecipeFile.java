@@ -21,23 +21,23 @@ public class RecipeFile {
 	}
 
 	public void load() {
-		keys.clear();
+		this.keys.clear();
 
-		if (cfg.isDirectory()) {
-			cfg = new File(cfg.getAbsolutePath() + "recipes.txt");
+		if (this.cfg.isDirectory()) {
+			this.cfg = new File(this.cfg.getAbsolutePath() + "recipes.txt");
 		}
 
-		if (!cfg.exists()) {
+		if (!this.cfg.exists()) {
 			try {
-				cfg.createNewFile();
+				this.cfg.createNewFile();
 			} catch (IOException e) {
 				this.main.e("Error while creating recipe file.");
-				this.main.e("File path: " + cfg.getAbsolutePath());
+				this.main.e("File path: " + this.cfg.getAbsolutePath());
 				e.printStackTrace();
 			}
 		} else {
 			try {
-				BufferedReader in = new BufferedReader(new FileReader(cfg));
+				BufferedReader in = new BufferedReader(new FileReader(this.cfg));
 				String line;
 				while ((line = in.readLine()) != null) {
 					line = line.trim();
@@ -46,7 +46,7 @@ public class RecipeFile {
 							String[] args = line.split(":");
 							if (args.length == 3) {
 								this.main.d("Adding recipe " + args[0]);
-								keys.add(new Recipe(args));
+								this.keys.add(new Recipe(args));
 							}
 						}
 					}
@@ -90,16 +90,16 @@ public class RecipeFile {
 		private ItemType[] Results;
 
 		public Recipe(String[] args) {
-			name = args[0];
+			this.name = args[0];
 
 			String[] RequirementItems = args[1].split("~");
 
-			Requirements = new ItemType[RequirementItems.length];
+			this.Requirements = new ItemType[RequirementItems.length];
 
 			for (int i = 0; i < RequirementItems.length; i++) {
 				String[] item = RequirementItems[i].split(",");
 				try {
-					Requirements[i] = new ItemType(Integer.parseInt(item[0]), Short.parseShort(item[1]), Integer.parseInt(item[2]));
+					this.Requirements[i] = new ItemType(Integer.parseInt(item[0]), Short.parseShort(item[1]), Integer.parseInt(item[2]));
 				} catch (Exception ex) {
 				}
 
@@ -107,13 +107,13 @@ public class RecipeFile {
 
 			String[] ResultItems = args[2].split("~");
 
-			Results = new ItemType[ResultItems.length];
+			this.Results = new ItemType[ResultItems.length];
 
 			for (int i = 0; i < ResultItems.length; i++) {
 				String[] item = ResultItems[i].split(",");
 
 				try {
-					Results[i] = new ItemType(Integer.parseInt(item[0]), Short.parseShort(item[1]), Integer.parseInt(item[2]));
+					this.Results[i] = new ItemType(Integer.parseInt(item[0]), Short.parseShort(item[1]), Integer.parseInt(item[2]));
 				} catch (Exception ex) {
 				}
 			}
@@ -124,11 +124,11 @@ public class RecipeFile {
 		}
 
 		public ItemType[] getRequirements() {
-			return Requirements;
+			return this.Requirements;
 		}
 
 		public ItemType[] getResults() {
-			return Results;
+			return this.Results;
 		}
 
 		public Items getItems(boolean fromReqs) {
@@ -136,7 +136,7 @@ public class RecipeFile {
 				HashSet<ItemStack> items = new HashSet<ItemStack>();
 
 				for (int i = 0; i < this.Requirements.length; i++) {
-					ItemStack IS = new ItemStack(Requirements[i].getID(), Requirements[i].getAmount(), Requirements[i].getDamage());
+					ItemStack IS = new ItemStack(this.Requirements[i].getID(), this.Requirements[i].getAmount(), this.Requirements[i].getDamage());
 
 					items.add(IS);
 				}
@@ -148,7 +148,7 @@ public class RecipeFile {
 				HashSet<ItemStack> items = new HashSet<ItemStack>();
 
 				for (int i = 0; i < this.Results.length; i++) {
-					ItemStack IS = new ItemStack(Results[i].getID(), Results[i].getAmount(), Results[i].getDamage());
+					ItemStack IS = new ItemStack(this.Results[i].getID(), this.Results[i].getAmount(), this.Results[i].getDamage());
 
 					items.add(IS);
 				}

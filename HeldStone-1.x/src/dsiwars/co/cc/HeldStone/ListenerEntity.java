@@ -15,10 +15,10 @@ public class ListenerEntity implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityExplode(EntityExplodeEvent event) {
-		if (main.explodingList.contains(event.getEntity())) {
+		if (this.main.explodingList.contains(event.getEntity())) {
 			event.setYield(0);
 
-			main.explodingList.remove(event.getEntity());
+			this.main.explodingList.remove(event.getEntity());
 		}
 	}
 }

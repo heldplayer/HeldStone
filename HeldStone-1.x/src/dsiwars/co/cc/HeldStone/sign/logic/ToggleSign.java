@@ -32,23 +32,24 @@ public class ToggleSign extends HeldSign {
 	private boolean lastState = false;
 	private boolean out = false;
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
-		if (is == InputState.HIGH && !lastState) {
-			lastState = true;
+		if (is == InputState.HIGH && !this.lastState) {
+			this.lastState = true;
 
-			if (rise) {
-				this.setOutput(!out);
-				out = !out;
+			if (this.rise) {
+				setOutput(!this.out);
+				this.out = !this.out;
 			}
 
-		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && lastState) {
-			lastState = false;
+		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && this.lastState) {
+			this.lastState = false;
 
-			if (!rise) {
-				this.setOutput(!out);
-				out = !out;
+			if (!this.rise) {
+				setOutput(!this.out);
+				this.out = !this.out;
 			}
 
 		} else {
@@ -67,41 +68,42 @@ public class ToggleSign extends HeldSign {
 		}
 		String[] dataArgs = data.split("-");
 		if (dataArgs.length == 2) {
-			lastState = Boolean.parseBoolean(dataArgs[0]);
-			out = Boolean.parseBoolean(dataArgs[1]);
+			this.lastState = Boolean.parseBoolean(dataArgs[0]);
+			this.out = Boolean.parseBoolean(dataArgs[1]);
 		}
 	}
 
 	@Override
 	public NBTBase getNBTData() {
-		return new NBTTagString(Boolean.toString(lastState) + "-" + Boolean.toString(out));
+		return new NBTTagString(Boolean.toString(this.lastState) + "-" + Boolean.toString(this.out));
 	}
 
 	private boolean rise = true;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		String typeLine = this.getLines(event)[1].trim();
 
 		if (typeLine.equalsIgnoreCase("RISING")) {
-			rise = true;
+			this.rise = true;
 		} else if (typeLine.equalsIgnoreCase("ON")) {
-			rise = true;
+			this.rise = true;
 		} else if (typeLine.equalsIgnoreCase("FALLING")) {
-			rise = false;
+			this.rise = false;
 		} else if (typeLine.equalsIgnoreCase("OFF")) {
-			rise = false;
+			this.rise = false;
 		} else {
-			rise = true;
+			this.rise = true;
 		}
 
 		if (!reload) {
 			this.clearArgLines();
-			this.setLine(1, rise ? "RISING" : "FALLING", event);
+			this.setLine(1, this.rise ? "RISING" : "FALLING", event);
 		}
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("Toggle sign accepted.");
+			init("Toggle sign accepted.");
 		}
 
 		return true;

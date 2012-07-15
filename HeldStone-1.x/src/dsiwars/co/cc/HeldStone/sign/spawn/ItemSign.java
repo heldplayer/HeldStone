@@ -34,18 +34,19 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class ItemSign extends HeldSign {
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
-		if (this.getInputId((BlockRedstoneEvent) args) != 1 || this.getInput(1, (BlockRedstoneEvent) args) != InputState.HIGH) {
+		if (getInputId((BlockRedstoneEvent) args) != 1 || this.getInput(1, (BlockRedstoneEvent) args) != InputState.HIGH) {
 			return;
 		}
 
 		Location spawnLoc = null;
 
 		for (int i = 1; i <= 10; i++) {
-			spawnLoc = Direction.shift(this.getHostLocation(), spawnDir, i);
-			if ((this.getWorld().getBlockAt(spawnLoc).getType() == Material.AIR) && (this.getWorld().isChunkLoaded(this.getWorld().getBlockAt(spawnLoc).getChunk()))) {
-				ItemStack toSpawn = new ItemStack(itemId, amount, (short) damage);
-				this.getWorld().dropItemNaturally(spawnLoc, toSpawn);
+			spawnLoc = Direction.shift(getHostLocation(), this.spawnDir, i);
+			if ((getWorld().getBlockAt(spawnLoc).getType() == Material.AIR) && (getWorld().isChunkLoaded(getWorld().getBlockAt(spawnLoc).getChunk()))) {
+				ItemStack toSpawn = new ItemStack(this.itemId, this.amount, (short) this.damage);
+				getWorld().dropItemNaturally(spawnLoc, toSpawn);
 				return;
 			}
 		}
@@ -65,16 +66,17 @@ public class ItemSign extends HeldSign {
 	int damage;
 	int amount;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		String[] itemLine = this.getLines(event)[1].split(" ");
 
-		itemId = 1;
-		damage = 0;
-		amount = 1;
+		this.itemId = 1;
+		this.damage = 0;
+		this.amount = 1;
 
 		if (itemLine.length == 0) {
 			if (!reload) {
-				this.main.alert(this.getOwnerName(), "You MUST specify an Item ID.", ChatColor.RED);
+				this.main.alert(getOwnerName(), "You MUST specify an Item ID.", ChatColor.RED);
 				event.setCancelled(true);
 				return false;
 			}
@@ -82,22 +84,22 @@ public class ItemSign extends HeldSign {
 			if (itemLine[0].contains(":")) {
 				String[] itemData = itemLine[0].split(":");
 				try {
-					itemId = Integer.parseInt(itemData[0]);
-					damage = Integer.parseInt(itemData[1]);
+					this.itemId = Integer.parseInt(itemData[0]);
+					this.damage = Integer.parseInt(itemData[1]);
 				} catch (Exception e) {
 					if (!reload) {
-						this.main.alert(this.getOwnerName(), "Error parsing item or data value.", ChatColor.RED);
+						this.main.alert(getOwnerName(), "Error parsing item or data value.", ChatColor.RED);
 						event.setCancelled(true);
 					}
 					return false;
 				}
 			} else {
 				try {
-					itemId = Integer.parseInt(itemLine[0]);
-					damage = 0;
+					this.itemId = Integer.parseInt(itemLine[0]);
+					this.damage = 0;
 				} catch (Exception e) {
 					if (!reload) {
-						this.main.alert(this.getOwnerName(), "Error parsing item value.", ChatColor.RED);
+						this.main.alert(getOwnerName(), "Error parsing item value.", ChatColor.RED);
 						event.setCancelled(true);
 					}
 					return false;
@@ -106,10 +108,10 @@ public class ItemSign extends HeldSign {
 
 			if (itemLine.length == 2) {
 				try {
-					amount = Integer.parseInt(itemLine[1]);
+					this.amount = Integer.parseInt(itemLine[1]);
 				} catch (Exception e) {
 					if (!reload) {
-						this.main.alert(this.getOwnerName(), "Error parsing amount.", ChatColor.RED);
+						this.main.alert(getOwnerName(), "Error parsing amount.", ChatColor.RED);
 						event.setCancelled(true);
 					}
 					return false;
@@ -120,30 +122,30 @@ public class ItemSign extends HeldSign {
 		String dirLine = this.getLines(event)[2];
 
 		if (dirLine.equals("") || (dirLine == null)) {
-			spawnDir = Direction.UP;
+			this.spawnDir = Direction.UP;
 		} else {
-			spawnDir = Direction.fromString(dirLine.toUpperCase());
-			if ((spawnDir == Direction.ERROR) || (spawnDir == null)) {
-				spawnDir = Direction.UP;
+			this.spawnDir = Direction.fromString(dirLine.toUpperCase());
+			if ((this.spawnDir == Direction.ERROR) || (this.spawnDir == null)) {
+				this.spawnDir = Direction.UP;
 			}
 		}
 
 		if (!reload) {
 			this.clearArgLines();
-			this.setLine(2, spawnDir.toString(), event);
-			String newItemLine = "" + itemId;
-			if (damage != 0) {
-				newItemLine += ":" + damage;
+			this.setLine(2, this.spawnDir.toString(), event);
+			String newItemLine = "" + this.itemId;
+			if (this.damage != 0) {
+				newItemLine += ":" + this.damage;
 			}
-			if (amount != 1) {
-				newItemLine += " " + amount;
+			if (this.amount != 1) {
+				newItemLine += " " + this.amount;
 			}
 			this.setLine(1, newItemLine, event);
 		}
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("Item sign accepted.");
+			init("Item sign accepted.");
 		}
 
 		return true;

@@ -34,19 +34,20 @@ public class LoggedSign extends HeldSign {
 	private boolean isNew = true;
 	private boolean lastState = false;
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
-		Iterator<Player> i = this.getWorld().getPlayers().iterator();
+		Iterator<Player> i = getWorld().getPlayers().iterator();
 		boolean inWorld = false;
 		while (i.hasNext()) {
-			if (i.next().getName().equalsIgnoreCase(playerName)) {
+			if (i.next().getName().equalsIgnoreCase(this.playerName)) {
 				inWorld = true;
 			}
 		}
 
-		if (lastState != inWorld || isNew) {
-			isNew = false;
-			lastState = inWorld;
-			this.setOutput(inWorld);
+		if (this.lastState != inWorld || this.isNew) {
+			this.isNew = false;
+			this.lastState = inWorld;
+			setOutput(inWorld);
 		}
 	}
 
@@ -61,13 +62,14 @@ public class LoggedSign extends HeldSign {
 
 	private String playerName;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		String playerLine = this.getLines(event)[1];
 		playerLine = playerLine.trim();
 		playerLine = playerLine.substring(0, Math.min(16, playerLine.length()));
 
 		if (playerLine.length() < 1) {
-			playerLine = this.getOwnerName();
+			playerLine = getOwnerName();
 		}
 
 		if (!reload) {
@@ -77,10 +79,10 @@ public class LoggedSign extends HeldSign {
 
 		this.playerName = playerLine;
 
-		main.sgc.register(this, TriggerType.TIMER_SECOND);
+		this.main.sgc.register(this, TriggerType.TIMER_SECOND);
 
 		if (!reload) {
-			this.init("Logged sign accepted.");
+			init("Logged sign accepted.");
 		}
 
 		return true;

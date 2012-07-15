@@ -40,23 +40,23 @@ public class ConfigFile {
 	}
 
 	public void load() {
-		keys.clear();
+		this.keys.clear();
 
-		if (cfg.isDirectory()) {
-			cfg = new File(cfg.getAbsolutePath() + "config.txt");
+		if (this.cfg.isDirectory()) {
+			this.cfg = new File(this.cfg.getAbsolutePath() + "config.txt");
 		}
 
-		if (!cfg.exists()) {
+		if (!this.cfg.exists()) {
 			try {
-				cfg.createNewFile();
+				this.cfg.createNewFile();
 			} catch (IOException e) {
 				this.main.e("Error while creating config file.");
-				this.main.e("File path: " + cfg.getAbsolutePath());
+				this.main.e("File path: " + this.cfg.getAbsolutePath());
 				e.printStackTrace();
 			}
 		} else {
 			try {
-				BufferedReader in = new BufferedReader(new FileReader(cfg));
+				BufferedReader in = new BufferedReader(new FileReader(this.cfg));
 				String line;
 				while ((line = in.readLine()) != null) {
 					line = line.trim();
@@ -65,7 +65,7 @@ public class ConfigFile {
 							String[] args = line.split("=");
 							String key = args[0].trim();
 							String value = args[1].trim();
-							keys.add(new ConfigKey(key, value));
+							this.keys.add(new ConfigKey(key, value));
 						}
 					}
 				}
@@ -78,21 +78,21 @@ public class ConfigFile {
 
 	public void save() {
 		boolean changes = false;
-		for (int i = 0; i < keys.size(); i++) {
-			if (keys.get(i).isChanged()) {
+		for (int i = 0; i < this.keys.size(); i++) {
+			if (this.keys.get(i).isChanged()) {
 				changes = true;
 			}
 		}
 		if (changes) {
 			try {
-				PrintWriter out = new PrintWriter(new FileOutputStream(cfg));
-				for (int i = 0; i < keys.size(); i++) {
+				PrintWriter out = new PrintWriter(new FileOutputStream(this.cfg));
+				for (int i = 0; i < this.keys.size(); i++) {
 					String line = "";
-					ConfigKey cc = keys.get(i);
+					ConfigKey cc = this.keys.get(i);
 					line += cc.key;
 					line += " = ";
 					line += cc.value;
-					out.write(line + separator);
+					out.write(line + this.separator);
 				}
 				out.close();
 			} catch (Exception e) {
@@ -103,32 +103,32 @@ public class ConfigFile {
 	}
 
 	public void announce() {
-		for (int i = 0; i < keys.size(); i++) {
-			ConfigKey k = keys.get(i);
+		for (int i = 0; i < this.keys.size(); i++) {
+			ConfigKey k = this.keys.get(i);
 			this.main.d(k.getKey() + " is set to '" + k.getValue() + "'");
 		}
 	}
 
 	public String getString(String key, String defaultValue) {
-		for (int i = 0; i < keys.size(); i++) {
-			ConfigKey k = keys.get(i);
+		for (int i = 0; i < this.keys.size(); i++) {
+			ConfigKey k = this.keys.get(i);
 			if (key.equals(k.getKey())) {
 				return k.getValue();
 			}
 		}
 		ConfigKey nk = new ConfigKey(key, defaultValue);
 		nk.dirty();
-		keys.add(nk);
+		this.keys.add(nk);
 		return nk.getValue();
 	}
 
 	public boolean getBoolean(String key, boolean defaultValue) {
-		String val = this.getString(key, Boolean.toString(defaultValue));
+		String val = getString(key, Boolean.toString(defaultValue));
 		return Boolean.parseBoolean(val);
 	}
 
 	public int getInt(String key, int defaultValue) {
-		String val = this.getString(key, Integer.toString(defaultValue));
+		String val = getString(key, Integer.toString(defaultValue));
 		return Integer.parseInt(val);
 	}
 
@@ -141,23 +141,23 @@ public class ConfigFile {
 		public ConfigKey(String key, String value) {
 			this.key = key;
 			this.value = value;
-			changed = false;
+			this.changed = false;
 		}
 
 		public void dirty() {
-			changed = true;
+			this.changed = true;
 		}
 
 		public String getValue() {
-			return value;
+			return this.value;
 		}
 
 		public String getKey() {
-			return key;
+			return this.key;
 		}
 
 		public boolean isChanged() {
-			return changed;
+			return this.changed;
 		}
 	}
 }

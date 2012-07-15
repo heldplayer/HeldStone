@@ -20,6 +20,7 @@ public class NBTTagString extends NBTBase {
 		}
 	}
 
+	@Override
 	void save(DataOutput Output) {
 		try {
 			Output.writeUTF(this.value);
@@ -28,6 +29,7 @@ public class NBTTagString extends NBTBase {
 		}
 	}
 
+	@Override
 	void load(DataInput Input) {
 		try {
 			this.value = Input.readUTF();
@@ -36,6 +38,7 @@ public class NBTTagString extends NBTBase {
 		}
 	}
 
+	@Override
 	public byte getTypeID() {
 		return 8;
 	}

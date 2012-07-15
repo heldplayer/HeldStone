@@ -14,11 +14,12 @@ public class NBTTagCompound extends NBTBase {
 
 	private Map<String, NBTBase> values = new HashMap<String, NBTBase>();
 
+	@Override
 	void save(DataOutput Output) {
 		try {
 			Iterator<NBTBase> i = this.values.values().iterator();
 			while (i.hasNext()) {
-				NBTBase localNBTBase = (NBTBase) i.next();
+				NBTBase localNBTBase = i.next();
 				NBTBase.saveStructure(localNBTBase, Output);
 			}
 			Output.writeByte(0);
@@ -27,6 +28,7 @@ public class NBTTagCompound extends NBTBase {
 		}
 	}
 
+	@Override
 	void load(DataInput Input) {
 		this.values.clear();
 		NBTBase localNBTBase;
@@ -39,6 +41,7 @@ public class NBTTagCompound extends NBTBase {
 		return this.values.values();
 	}
 
+	@Override
 	public byte getTypeID() {
 		return 10;
 	}
@@ -165,7 +168,7 @@ public class NBTTagCompound extends NBTBase {
 		if (!this.values.containsKey(name)) {
 			return null;
 		}
-		return (NBTBase) this.values.get(name);
+		return this.values.get(name);
 	}
 
 	public boolean getBoolean(String name) {

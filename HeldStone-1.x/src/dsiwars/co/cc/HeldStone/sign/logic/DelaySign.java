@@ -34,21 +34,22 @@ public class DelaySign extends HeldSign {
 	private boolean out = false;
 	private boolean ticking = false;
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
-		if (is == InputState.HIGH && !lastState) {
-			lastState = true;
-			if (!ticking) {
-				this.startTicking();
+		if (is == InputState.HIGH && !this.lastState) {
+			this.lastState = true;
+			if (!this.ticking) {
+				startTicking();
 			}
-			ticking = true;
-		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && lastState) {
-			lastState = false;
-			if (!ticking) {
-				this.startTicking();
+			this.ticking = true;
+		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && this.lastState) {
+			this.lastState = false;
+			if (!this.ticking) {
+				startTicking();
 			}
-			ticking = true;
+			this.ticking = true;
 		} else {
 			return;
 		}
@@ -60,21 +61,21 @@ public class DelaySign extends HeldSign {
 	@Override
 	public boolean tick() {
 		short sum = 0;
-		for (int i = 0; i < (states.length - 1); i++) {
-			states[i] = states[i + 1];
-			sum += states[i] ? 1 : -1;
+		for (int i = 0; i < (this.states.length - 1); i++) {
+			this.states[i] = this.states[i + 1];
+			sum += this.states[i] ? 1 : -1;
 		}
 
-		states[states.length - 1] = this.lastState;
-		sum += lastState ? 1 : -1;
+		this.states[this.states.length - 1] = this.lastState;
+		sum += this.lastState ? 1 : -1;
 
-		if (out != states[0]) {
-			this.setOutput(states[0]);
-			out = states[0];
+		if (this.out != this.states[0]) {
+			setOutput(this.states[0]);
+			this.out = this.states[0];
 		}
 
-		if (Math.abs(sum) == period) {
-			ticking = false;
+		if (Math.abs(sum) == this.period) {
+			this.ticking = false;
 			return false;
 		}
 		return true;
@@ -91,41 +92,42 @@ public class DelaySign extends HeldSign {
 
 	private int period = 20;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		String periodLine = this.getLines(event)[1].trim();
 
 		if (periodLine.length() > 0) {
 			try {
-				period = Integer.parseInt(periodLine);
+				this.period = Integer.parseInt(periodLine);
 			} catch (Exception e) {
 				if (!reload) {
-					this.main.alert(this.getOwnerName(), "Could not understand period, defaulting to 20. (1sec)", ChatColor.RED);
+					this.main.alert(getOwnerName(), "Could not understand period, defaulting to 20. (1sec)", ChatColor.RED);
 				}
-				period = 20;
+				this.period = 20;
 			}
-			if (period > 500 || period <= 0) {
-				period = 20;
+			if (this.period > 500 || this.period <= 0) {
+				this.period = 20;
 				if (!reload) {
-					this.main.alert(this.getOwnerName(), "The period was either too long or too short. Allowed: 1-500", ChatColor.RED);
+					this.main.alert(getOwnerName(), "The period was either too long or too short. Allowed: 1-500", ChatColor.RED);
 				}
 			}
 		} else {
-			period = 20;
+			this.period = 20;
 		}
 
 		if (!reload) {
 			this.clearArgLines(event);
-			this.setLine(1, Integer.toString(period), event);
+			this.setLine(1, Integer.toString(this.period), event);
 		}
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("Delay sign accepted.");
+			init("Delay sign accepted.");
 		}
 
-		states = new boolean[period];
-		for (int i = 0; i < states.length; i++) {
-			states[i] = false;
+		this.states = new boolean[this.period];
+		for (int i = 0; i < this.states.length; i++) {
+			this.states[i] = false;
 		}
 
 		return true;

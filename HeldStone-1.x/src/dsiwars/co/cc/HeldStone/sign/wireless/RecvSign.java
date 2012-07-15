@@ -29,12 +29,13 @@ import dsiwars.co.cc.HeldStone.sign.WirelessPacket;
 
 public class RecvSign extends HeldSign {
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		if (type == TriggerType.SEND_DATA) {
 			WirelessPacket p = (WirelessPacket) args;
 
 			if (this.p.sameChannel(p)) {
-				this.setOutput(p.getState());
+				setOutput(p.getState());
 			}
 		}
 	}
@@ -50,6 +51,7 @@ public class RecvSign extends HeldSign {
 
 	private WirelessPacket p;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 
 		String band = this.getLines()[2];
@@ -58,8 +60,8 @@ public class RecvSign extends HeldSign {
 		if (!reload) {
 
 			if (band.trim().equals("")) {
-				band = this.getOwnerName();
-			} else if (!band.equalsIgnoreCase(this.getOwnerName())) {
+				band = getOwnerName();
+			} else if (!band.equalsIgnoreCase(getOwnerName())) {
 				if (band.charAt(0) == '$') {
 					// GOOD!
 				} else {
@@ -73,11 +75,11 @@ public class RecvSign extends HeldSign {
 
 		}
 
-		p = new WirelessPacket(band, channel, false);
+		this.p = new WirelessPacket(band, channel, false);
 
-		main.sgc.register(this, TriggerType.SEND_DATA);
+		this.main.sgc.register(this, TriggerType.SEND_DATA);
 		if (!reload) {
-			this.init("Recv sign accepted.");
+			init("Recv sign accepted.");
 		}
 
 		return true;

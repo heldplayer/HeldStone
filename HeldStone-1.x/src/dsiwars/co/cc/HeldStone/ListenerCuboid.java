@@ -31,59 +31,59 @@ public class ListenerCuboid implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
-		if (main.bcr.contains(event.getBlock().getLocation())) {
+		if (this.main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
-			main.alert(event.getPlayer().getName(), "This block is part of a cuboid!", ChatColor.RED);
+			this.main.alert(event.getPlayer().getName(), "This block is part of a cuboid!", ChatColor.RED);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockBurn(BlockBurnEvent event) {
-		if (main.bcr.contains(event.getBlock().getLocation())) {
+		if (this.main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockFade(BlockFadeEvent event) {
-		if (main.bcr.contains(event.getBlock().getLocation())) {
+		if (this.main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockForm(BlockFormEvent event) {
-		if (main.bcr.contains(event.getBlock().getLocation())) {
+		if (this.main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockFromTo(BlockFromToEvent event) {
-		if (main.bcr.contains(event.getBlock().getLocation())) {
+		if (this.main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
-		} else if (main.bcr.contains(event.getToBlock().getLocation())) {
+		} else if (this.main.bcr.contains(event.getToBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockGrow(BlockGrowEvent event) {
-		if (main.bcr.contains(event.getBlock().getLocation())) {
+		if (this.main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockIgnite(BlockIgniteEvent event) {
-		if (main.bcr.contains(event.getBlock().getLocation())) {
+		if (this.main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPhysics(BlockPhysicsEvent event) {
-		if (main.bcr.contains(event.getBlock().getLocation())) {
+		if (this.main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
@@ -91,7 +91,7 @@ public class ListenerCuboid implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
 		for (Block block : event.getBlocks()) {
-			if (main.bcr.contains(block.getLocation())) {
+			if (this.main.bcr.contains(block.getLocation())) {
 				event.setCancelled(true);
 				break;
 			}
@@ -111,51 +111,51 @@ public class ListenerCuboid implements Listener {
 		switch (face) {
 		case NORTH:
 			tempPos.add(-2, 0, 0);
-		break;
+			break;
 		case EAST:
 			tempPos.add(0, 0, -2);
-		break;
+			break;
 		case SOUTH:
 			tempPos.add(2, 0, 0);
-		break;
+			break;
 		case WEST:
 			tempPos.add(0, 0, 2);
-		break;
+			break;
 		case UP:
 			tempPos.add(0, 2, 0);
-		break;
+			break;
 		case DOWN:
 			tempPos.add(0, -2, 0);
-		break;
+			break;
 		default:
 			this.main.e("Unexpected direction from a sticky piston!");
 		}
 
-		if (main.bcr.contains(tempPos)) {
+		if (this.main.bcr.contains(tempPos)) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
-		if (main.bcr.contains(event.getBlock().getLocation())) {
+		if (this.main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
-			main.alert(event.getPlayer().getName(), "This block is part of a cuboid!", ChatColor.RED);
+			this.main.alert(event.getPlayer().getName(), "This block is part of a cuboid!", ChatColor.RED);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockSpread(BlockSpreadEvent event) {
-		if (main.bcr.contains(event.getBlock().getLocation())) {
+		if (this.main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
-		} else if (main.bcr.contains(event.getSource().getLocation())) {
+		} else if (this.main.bcr.contains(event.getSource().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onLeavesDecay(LeavesDecayEvent event) {
-		if (main.bcr.contains(event.getBlock().getLocation())) {
+		if (this.main.bcr.contains(event.getBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}

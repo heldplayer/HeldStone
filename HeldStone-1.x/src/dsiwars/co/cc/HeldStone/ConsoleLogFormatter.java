@@ -13,12 +13,13 @@ final class ConsoleLogFormatter extends Formatter {
 	private final String separator = System.getProperty("line.separator");
 
 	ConsoleLogFormatter() {
-		dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		this.dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	}
 
+	@Override
 	public String format(LogRecord logrecord) {
 		StringBuilder stringbuilder = new StringBuilder();
-		stringbuilder.append(dateFormat.format(Long.valueOf(logrecord.getMillis())));
+		stringbuilder.append(this.dateFormat.format(Long.valueOf(logrecord.getMillis())));
 		Level level = logrecord.getLevel();
 		if (level == Level.FINEST) {
 			stringbuilder.append(" [FINEST] ");
@@ -36,7 +37,7 @@ final class ConsoleLogFormatter extends Formatter {
 			stringbuilder.append((new StringBuilder()).append(" [").append(level.getLocalizedName()).append("] ").toString());
 		}
 		stringbuilder.append(logrecord.getMessage());
-		stringbuilder.append(separator);
+		stringbuilder.append(this.separator);
 		Throwable throwable = logrecord.getThrown();
 		if (throwable != null) {
 			StringWriter stringwriter = new StringWriter();

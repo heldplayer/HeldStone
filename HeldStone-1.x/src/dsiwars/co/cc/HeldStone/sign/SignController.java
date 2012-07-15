@@ -27,12 +27,12 @@ public class SignController {
 	public SignController(HeldStone main) {
 		this.main = main;
 		for (int i = 0; i < TriggerType.values().length; i++) {
-			groups[i] = new SignGroup(TriggerType.values()[i], this.main);
+			this.groups[i] = new SignGroup(TriggerType.values()[i], this.main);
 		}
 	}
 
 	public void register(HeldSign sign, TriggerType type) {
-		for (SignGroup group : groups) {
+		for (SignGroup group : this.groups) {
 			if (group.isType(type)) {
 				group.add(sign);
 			}
@@ -49,7 +49,7 @@ public class SignController {
 		} catch (Exception ex) {
 			this.main.e("Error invalidating sign: " + ex.getMessage());
 		}
-		for (SignGroup group : groups) {
+		for (SignGroup group : this.groups) {
 			try {
 				group.invalidate(sign);
 			} catch (Exception ex) {
@@ -64,7 +64,7 @@ public class SignController {
 	}
 
 	public void trigger(TriggerType type, Object args) {
-		for (SignGroup s : groups) {
+		for (SignGroup s : this.groups) {
 			if (s.getType() == type) {
 				s.trigger(args);
 			}
@@ -79,20 +79,20 @@ public class SignController {
 		try {
 			FIS = new FileInputStream(new File(this.main.dataPath, signFile));
 		} catch (Exception e) {
-			main.i("[LOADING] No sign data file found.");
+			this.main.i("[LOADING] No sign data file found.");
 			return;
 		}
 
-		SignCompound = CompressedStreamTools.load(FIS);
+		this.SignCompound = CompressedStreamTools.load(FIS);
 
-		if (SignCompound == null) {
-			SignCompound = (NBTTagCompound) new NBTTagCompound().setNameAndGet("signs");
+		if (this.SignCompound == null) {
+			this.SignCompound = (NBTTagCompound) new NBTTagCompound().setNameAndGet("signs");
 		}
 
-		Iterator<NBTBase> i = SignCompound.getCollection().iterator();
+		Iterator<NBTBase> i = this.SignCompound.getCollection().iterator();
 
 		while (i.hasNext()) {
-			NBTBase base = (NBTBase) i.next();
+			NBTBase base = i.next();
 
 			if (base instanceof NBTTagCompound) {
 				NBTTagCompound signCompound = (NBTTagCompound) base;
@@ -117,10 +117,10 @@ public class SignController {
 
 				NBTBase data = signCompound.getTag("data");
 
-				HeldSign.signFactory(lines, owner, data, world, l, facing, true, null, main);
+				HeldSign.signFactory(lines, owner, data, world, l, facing, true, null, this.main);
 			}
 		}
-		main.i("[LOADING] Signs loaded");
+		this.main.i("[LOADING] Signs loaded");
 		try {
 			FIS.close();
 		} catch (IOException ex) {
@@ -129,13 +129,13 @@ public class SignController {
 	}
 
 	public void saveNBT() {
-		File dir = new File(main.dataPath);
+		File dir = new File(this.main.dataPath);
 
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
 
-		File sdat = new File(main.dataPath, signFile);
+		File sdat = new File(this.main.dataPath, signFile);
 
 		if (!sdat.exists()) {
 			try {
@@ -156,9 +156,9 @@ public class SignController {
 			return;
 		}
 
-		SignCompound = (NBTTagCompound) new NBTTagCompound().setNameAndGet("signs");
+		this.SignCompound = (NBTTagCompound) new NBTTagCompound().setNameAndGet("signs");
 
-		Iterator<HeldSign> signs = this.getAllSigns().iterator();
+		Iterator<HeldSign> signs = getAllSigns().iterator();
 
 		while (signs.hasNext()) {
 			HeldSign currentSign = signs.next();
@@ -177,12 +177,12 @@ public class SignController {
 			CurrentSingCompound.insert("line4", currentSign.getLines()[3]);
 			CurrentSingCompound.insert("data", currentSign.getNBTData());
 
-			SignCompound.insertCompound(currentSign.getWorld().getName() + ":" + currentSign.getLocation().getBlockX() + "," + currentSign.getLocation().getBlockY() + "," + currentSign.getLocation().getBlockZ(), CurrentSingCompound);
+			this.SignCompound.insertCompound(currentSign.getWorld().getName() + ":" + currentSign.getLocation().getBlockX() + "," + currentSign.getLocation().getBlockY() + "," + currentSign.getLocation().getBlockZ(), CurrentSingCompound);
 		}
 
-		CompressedStreamTools.save(SignCompound, FOS);
+		CompressedStreamTools.save(this.SignCompound, FOS);
 
-		main.i("[SAVING] Signs saved");
+		this.main.i("[SAVING] Signs saved");
 		try {
 			FOS.close();
 		} catch (IOException ex) {
@@ -195,7 +195,7 @@ public class SignController {
 
 		ArrayList<HeldSign> gsigns;
 
-		for (SignGroup g : groups) {
+		for (SignGroup g : this.groups) {
 			gsigns = g.getSigns();
 
 			for (int i = 0; i < gsigns.size(); i++) {

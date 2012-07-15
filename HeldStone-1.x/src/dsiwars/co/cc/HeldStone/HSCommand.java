@@ -111,7 +111,7 @@ public class HSCommand implements CommandExecutor {
 					return true;
 				}
 
-				main.sgc.trigger(TriggerType.PING, null);
+				this.main.sgc.trigger(TriggerType.PING, null);
 
 				return true;
 			} else if (args[0].equalsIgnoreCase("snow")) {
@@ -143,7 +143,7 @@ public class HSCommand implements CommandExecutor {
 				}
 
 				if (args.length > 1) {
-					Player target = main.getServer().getPlayer(args[1]);
+					Player target = this.main.getServer().getPlayer(args[1]);
 
 					if (target != null && !target.hasPermission("heldstone.command.ride.exempt")) {
 						target.setPassenger(p);
@@ -181,14 +181,14 @@ public class HSCommand implements CommandExecutor {
 						}
 					}
 
-					main.alert(p.getName(), "Available biomes: " + ChatColor.YELLOW + biomes, ChatColor.LIGHT_PURPLE);
+					this.main.alert(p.getName(), "Available biomes: " + ChatColor.YELLOW + biomes, ChatColor.LIGHT_PURPLE);
 
 					return true;
 				} else if (args.length == 3 && args[1].equalsIgnoreCase("set")) {
 					HeldPlayer psp = this.main.players.safelyGet(p.getName(), this.main);
 
 					if (!psp.l1) {
-						main.alert(p.getName(), "Make a valid selection first!", ChatColor.RED);
+						this.main.alert(p.getName(), "Make a valid selection first!", ChatColor.RED);
 						return true;
 					}
 
@@ -220,18 +220,18 @@ public class HSCommand implements CommandExecutor {
 							}
 						}
 
-						main.alert(p.getName(), "Biome set! Block update count: " + counter, ChatColor.GREEN);
-						main.alert(p.getName(), "To see the changes, relog", ChatColor.GRAY);
+						this.main.alert(p.getName(), "Biome set! Block update count: " + counter, ChatColor.GREEN);
+						this.main.alert(p.getName(), "To see the changes, relog", ChatColor.GRAY);
 
 						return true;
 					} catch (Exception ex) {
-						main.alert(p.getName(), "Unknown biome! Use \"/" + label + " biome list\" to get a list of available biomes", ChatColor.RED);
+						this.main.alert(p.getName(), "Unknown biome! Use \"/" + label + " biome list\" to get a list of available biomes", ChatColor.RED);
 					}
 				} else if (args.length == 4 && args[1].equalsIgnoreCase("replace")) {
 					HeldPlayer psp = this.main.players.safelyGet(p.getName(), this.main);
 
 					if (!psp.l1) {
-						main.alert(p.getName(), "Make a valid selection first!", ChatColor.RED);
+						this.main.alert(p.getName(), "Make a valid selection first!", ChatColor.RED);
 						return true;
 					}
 
@@ -266,12 +266,12 @@ public class HSCommand implements CommandExecutor {
 							}
 						}
 
-						main.alert(p.getName(), "Biome replaced! Block update count: " + counter, ChatColor.GREEN);
-						main.alert(p.getName(), "To see the changes, relog", ChatColor.GRAY);
+						this.main.alert(p.getName(), "Biome replaced! Block update count: " + counter, ChatColor.GREEN);
+						this.main.alert(p.getName(), "To see the changes, relog", ChatColor.GRAY);
 
 						return true;
 					} catch (Exception ex) {
-						main.alert(p.getName(), "Unknown biome(s)! Use \"/" + label + " biome list\" to get a list of available biomes", ChatColor.RED);
+						this.main.alert(p.getName(), "Unknown biome(s)! Use \"/" + label + " biome list\" to get a list of available biomes", ChatColor.RED);
 					}
 				}
 			} else if (args[0].equalsIgnoreCase("updatecheck")) {
@@ -281,31 +281,32 @@ public class HSCommand implements CommandExecutor {
 					return false;
 				}
 
-				if (main.address.equalsIgnoreCase("")) {
-					main.alert(p.getName(), "The update IP has yet to be specified!", ChatColor.LIGHT_PURPLE);
+				if (this.main.address.equalsIgnoreCase("")) {
+					this.main.alert(p.getName(), "The update IP has yet to be specified!", ChatColor.LIGHT_PURPLE);
 
 					return true;
 				}
 
-				main.alert(p.getName(), "Checking for updates...", ChatColor.LIGHT_PURPLE);
+				this.main.alert(p.getName(), "Checking for updates...", ChatColor.LIGHT_PURPLE);
 
-				main.getServer().getScheduler().scheduleAsyncDelayedTask(main, new Runnable() {
+				this.main.getServer().getScheduler().scheduleAsyncDelayedTask(this.main, new Runnable() {
+					@Override
 					public void run() {
 						try {
-							if (main.upd.updateCheck()) {
-								main.alert(p.getName(), "Updates available!", ChatColor.GREEN);
-								String[] reasons = Update.getUpdateReason(main.updatereasonaddress);
-								String version = Update.getLatestVersion(main.versionaddress);
+							if (HSCommand.this.main.upd.updateCheck()) {
+								HSCommand.this.main.alert(p.getName(), "Updates available!", ChatColor.GREEN);
+								String[] reasons = Update.getUpdateReason(HSCommand.this.main.updatereasonaddress);
+								String version = Update.getLatestVersion(HSCommand.this.main.versionaddress);
 
-								main.alert(p.getName(), "Current version: " + HeldStone.version + " New version: " + version, ChatColor.YELLOW);
+								HSCommand.this.main.alert(p.getName(), "Current version: " + HeldStone.version + " New version: " + version, ChatColor.YELLOW);
 								for (String reason : reasons) {
-									main.alert(p.getName(), reason, ChatColor.GOLD);
+									HSCommand.this.main.alert(p.getName(), reason, ChatColor.GOLD);
 								}
 							} else {
-								main.alert(p.getName(), "No updates available!", ChatColor.RED);
+								HSCommand.this.main.alert(p.getName(), "No updates available!", ChatColor.RED);
 							}
 						} catch (Exception ex) {
-							main.alert(p.getName(), "Error while checking for updates!", ChatColor.RED);
+							HSCommand.this.main.alert(p.getName(), "Error while checking for updates!", ChatColor.RED);
 						}
 					}
 				});
@@ -318,24 +319,25 @@ public class HSCommand implements CommandExecutor {
 					return false;
 				}
 
-				if (main.address.equalsIgnoreCase("")) {
-					main.alert(p.getName(), "The update IP has yet to be specified!", ChatColor.LIGHT_PURPLE);
+				if (this.main.address.equalsIgnoreCase("")) {
+					this.main.alert(p.getName(), "The update IP has yet to be specified!", ChatColor.LIGHT_PURPLE);
 
 					return true;
 				}
 
-				main.getServer().getScheduler().scheduleAsyncDelayedTask(main, new Runnable() {
+				this.main.getServer().getScheduler().scheduleAsyncDelayedTask(this.main, new Runnable() {
+					@Override
 					public void run() {
 						try {
-							if (main.upd.updateCheck()) {
-								main.alert(p.getName(), "Updates available! Downloading...", ChatColor.GREEN);
-								main.upd.download();
-								main.alert(p.getName(), "Download complete! Restart the server for the changes to take effect", ChatColor.GREEN);
+							if (HSCommand.this.main.upd.updateCheck()) {
+								HSCommand.this.main.alert(p.getName(), "Updates available! Downloading...", ChatColor.GREEN);
+								HSCommand.this.main.upd.download();
+								HSCommand.this.main.alert(p.getName(), "Download complete! Restart the server for the changes to take effect", ChatColor.GREEN);
 							} else {
-								main.alert(p.getName(), "No updates available!", ChatColor.RED);
+								HSCommand.this.main.alert(p.getName(), "No updates available!", ChatColor.RED);
 							}
 						} catch (Exception ex) {
-							main.alert(p.getName(), "Error while updating!", ChatColor.RED);
+							HSCommand.this.main.alert(p.getName(), "Error while updating!", ChatColor.RED);
 						}
 					}
 				});
@@ -348,9 +350,9 @@ public class HSCommand implements CommandExecutor {
 					return false;
 				}
 
-				main.address = "http://" + args[1] + "/jars/HeldStone/HeldStone.jar";
-				main.versionaddress = "http://" + args[1] + "/jars/HeldStone/version.txt";
-				main.updatereasonaddress = "http://" + args[1] + "/jars/HeldStone/reason.txt";
+				this.main.address = "http://" + args[1] + "/jars/HeldStone/HeldStone.jar";
+				this.main.versionaddress = "http://" + args[1] + "/jars/HeldStone/version.txt";
+				this.main.updatereasonaddress = "http://" + args[1] + "/jars/HeldStone/reason.txt";
 
 				return true;
 			}

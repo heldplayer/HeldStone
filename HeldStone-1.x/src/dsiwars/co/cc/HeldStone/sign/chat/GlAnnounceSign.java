@@ -32,63 +32,65 @@ public class GlAnnounceSign extends HeldSign {
 
 	private boolean lastState = false;
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
 		if (is != InputState.HIGH) {
-			lastState = false;
+			this.lastState = false;
 			return;
 		} else {
-			if (lastState == true) {
+			if (this.lastState == true) {
 				return;
 			}
-			lastState = true;
+			this.lastState = true;
 		}
 
-		this.main.getServer().broadcastMessage(color + "[HeldStone] " + message);
+		this.main.getServer().broadcastMessage(this.color + "[HeldStone] " + this.message);
 	}
 
 	@Override
 	protected void setNBTData(NBTBase tag) {
-		message = ((NBTTagString) tag).value;
+		this.message = ((NBTTagString) tag).value;
 	}
 
 	@Override
 	public NBTBase getNBTData() {
-		return new NBTTagString(message);
+		return new NBTTagString(this.message);
 	}
 
 	String message = null;
 	ChatColor color = ChatColor.WHITE;
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 
 		if (!reload) {
-			message = this.main.players.safelyGet(this.getOwnerName(), this.main).message;
-			if (message == null) {
-				this.main.alert(this.getOwnerName(), "You must set a message first. " + ChatColor.AQUA + "/hs msg <message>", ChatColor.RED);
+			this.message = this.main.players.safelyGet(getOwnerName(), this.main).message;
+			if (this.message == null) {
+				this.main.alert(getOwnerName(), "You must set a message first. " + ChatColor.AQUA + "/hs msg <message>", ChatColor.RED);
 				return false;
 			}
 		}
 
 		try {
-			color = ChatColor.valueOf(this.getLines()[1].toUpperCase());
+			this.color = ChatColor.valueOf(this.getLines()[1].toUpperCase());
 		} catch (Exception ex) {
 			try {
-				color = ChatColor.getByChar(this.getLines()[1].charAt(0));
+				this.color = ChatColor.getByChar(this.getLines()[1].charAt(0));
 			} catch (Exception ex2) {
-				color = ChatColor.WHITE;
+				this.color = ChatColor.WHITE;
 			}
 		}
 
 		if (!reload) {
 			this.clearArgLines(event);
-			this.setLine(1, color.name(), event);
+			this.setLine(1, this.color.name(), event);
 		}
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("GlAnnounce sign accepted.");
+			init("GlAnnounce sign accepted.");
 		}
 		return true;
 	}

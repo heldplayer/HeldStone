@@ -40,7 +40,7 @@ public class SignGroup {
 	}
 
 	public TriggerType getType() {
-		return type;
+		return this.type;
 	}
 
 	public boolean isType(TriggerType ctype) {
@@ -48,25 +48,25 @@ public class SignGroup {
 	}
 
 	public void add(HeldSign sign) {
-		signs.add(sign);
+		this.signs.add(sign);
 	}
 
 	public void invalidate(HeldSign sign) {
-		signs.remove(sign);
+		this.signs.remove(sign);
 	}
 
 	public ArrayList<HeldSign> getSigns() {
-		return signs;
+		return this.signs;
 	}
 
 	public void trigger(Object args) {
-		for (int i = 0; i < signs.size(); i++) {
-			HeldSign toTrigger = signs.get(i);
+		for (int i = 0; i < this.signs.size(); i++) {
+			HeldSign toTrigger = this.signs.get(i);
 			ValidationState valid = toTrigger.isValid();
 			if (valid == ValidationState.INVALID) {
-				main.sgc.invalidate(toTrigger, "Sign was either gone or had different text.");
+				this.main.sgc.invalidate(toTrigger, "Sign was either gone or had different text.");
 			} else if (valid == ValidationState.BLANK) {
-				if (main.cfgWipeProtection) {
+				if (this.main.cfgWipeProtection) {
 					if (this.type == TriggerType.PING) {
 						return;
 					}
@@ -83,7 +83,7 @@ public class SignGroup {
 					s.update();
 
 				} else {
-					main.sgc.invalidate(toTrigger, "Sign was blank. (wipe-protection is off)");
+					this.main.sgc.invalidate(toTrigger, "Sign was blank. (wipe-protection is off)");
 				}
 			} else if (valid == ValidationState.VALID) {
 				toTrigger.trigger(this.type, args);

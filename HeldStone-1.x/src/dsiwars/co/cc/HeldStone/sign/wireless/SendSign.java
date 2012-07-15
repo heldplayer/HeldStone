@@ -32,6 +32,7 @@ public class SendSign extends HeldSign {
 
 	private WirelessPacket p = null;
 
+	@Override
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
@@ -40,7 +41,7 @@ public class SendSign extends HeldSign {
 			isr = true;
 		}
 
-		this.main.sgc.trigger(TriggerType.SEND_DATA, new WirelessPacket(p.band, p.channel, isr));
+		this.main.sgc.trigger(TriggerType.SEND_DATA, new WirelessPacket(this.p.band, this.p.channel, isr));
 	}
 
 	@Override
@@ -52,14 +53,15 @@ public class SendSign extends HeldSign {
 		return new NBTTagInt(0);
 	}
 
+	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
 		String band = this.getLines()[2];
 		String channel = this.getLines()[1];
 
 		if (!reload) {
 			if (band.trim().equals("")) {
-				band = this.getOwnerName();
-			} else if (!band.equalsIgnoreCase(this.getOwnerName())) {
+				band = getOwnerName();
+			} else if (!band.equalsIgnoreCase(getOwnerName())) {
 				if (band.charAt(0) == '$') {
 					// GOOD!
 				} else {
@@ -72,11 +74,11 @@ public class SendSign extends HeldSign {
 			this.setLine(2, band, event);
 		}
 
-		p = new WirelessPacket(band, channel, false);
+		this.p = new WirelessPacket(band, channel, false);
 
-		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
-			this.init("Send sign accepted.");
+			init("Send sign accepted.");
 		}
 
 		return true;
