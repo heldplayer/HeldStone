@@ -22,6 +22,7 @@ permissions:
             heldstone.select.*: true
             heldstone.ic.*: true
             heldstone.debug: true
+            heldstone.colouredSigns: true
     heldstone.command.*:
         description: Gives access to all the HeldStone commands
         children:
@@ -245,4 +246,7 @@ permissions:
         true: op
     heldstone.debug:
         description: Allows you to get debug info
+        default: op
+    heldstone.colouredSigns:
+        description: Allows you to create coloured signs
         default: op

@@ -1,6 +1,5 @@
 package dsiwars.co.cc.HeldStone;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,17 +32,19 @@ public class ListenerBlock implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onSignChange(SignChangeEvent event) {
 		if (event.getBlock().getState() instanceof Sign) {
-			int i = 0;
-			for (String line : event.getLines()) {
-				char[] b = line.toCharArray();
-				for (int i2 = 0; i2 < b.length - 1; i2++) {
-					if (b[i2] == '&' && "0123456789AaBbCcDdEeFfKkLlMmNnOoRr".indexOf(b[i2 + 1]) > -1) {
-						b[i2] = ChatColor.COLOR_CHAR;
-						b[i2 + 1] = Character.toLowerCase(b[i2 + 1]);
+			if (event.getPlayer().hasPermission("heldstone.colouredSigns")) {
+				int i = 0;
+				for (String line : event.getLines()) {
+					char[] b = line.toCharArray();
+					for (int i2 = 0; i2 < b.length - 1; i2++) {
+						if ((b[i2] == '&') && ("0123456789AaBbCcDdEeFfKkLlMmNnOoRr".indexOf(b[(i2 + 1)]) > -1)) {
+							b[i2] = '\u00A7';
+							b[(i2 + 1)] = Character.toLowerCase(b[(i2 + 1)]);
+						}
 					}
+					event.setLine(i, new String(b));
+					i++;
 				}
-				event.setLine(i, new String(b));
-				i++;
 			}
 			if (event.getLines().length > 0) {
 				this.main.sgc.trigger(TriggerType.PING, null);
@@ -109,11 +110,11 @@ public class ListenerBlock implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		Block block = event.getBlockPlaced();
-		
+
 		if ((block.getTypeId() == 78 || block.getTypeId() == 80)) {
 			HeldPlayer psp = this.main.players.safelyGet(event.getPlayer().getName(), this.main);
-			
-			if(psp.snow != 0){
+
+			if (psp.snow != 0) {
 				block.setTypeIdAndData(78, (byte) psp.snow, false);
 			}
 		}
