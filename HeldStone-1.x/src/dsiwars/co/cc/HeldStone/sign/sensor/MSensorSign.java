@@ -156,7 +156,7 @@ public class MSensorSign extends HeldSign {
 			this.clearArgLines(event);
 			this.setLine(1, this.x1 + " " + this.y1 + " " + this.z1, event);
 			this.setLine(2, this.x2 + " " + this.y2 + " " + this.z2, event);
-			this.setLine(3, this.creature.getName(), event);
+			this.setLine(3, this.creature.getTypeId() + "", event);
 		}
 
 		this.x1 += getHostLocation().getBlockX();
