@@ -54,6 +54,7 @@ import dsiwars.co.cc.HeldStone.sign.logic.LogicSign;
 import dsiwars.co.cc.HeldStone.sign.logic.RandSign;
 import dsiwars.co.cc.HeldStone.sign.logic.ToggleSign;
 import dsiwars.co.cc.HeldStone.sign.logic.TriggerSign;
+import dsiwars.co.cc.HeldStone.sign.minecart.SpeedSign;
 import dsiwars.co.cc.HeldStone.sign.sensor.ISensorSign;
 import dsiwars.co.cc.HeldStone.sign.sensor.LaSensorSign;
 import dsiwars.co.cc.HeldStone.sign.sensor.LiSensorSign;
@@ -463,106 +464,103 @@ public abstract class HeldSign {
 		switch (type) {
 		case RAND:
 			newSign = new RandSign();
-		break;
+			break;
 		case LOGIC:
 			newSign = new LogicSign();
-		break;
+			break;
 		case DELAY:
 			newSign = new DelaySign();
-		break;
+			break;
 		case TOGGLE:
 			newSign = new ToggleSign();
-		break;
+			break;
 		case SEND:
 			newSign = new SendSign();
-		break;
+			break;
 		case RECV:
 			newSign = new RecvSign();
-		break;
+			break;
 		case TRIGGER:
 			newSign = new TriggerSign();
-		break;
+			break;
 		case CLOCK:
 			newSign = new ClockSign();
-		break;
+			break;
 		case CTIME:
 			newSign = new CtimeSign();
-		break;
+			break;
 		case CWEATHER:
 			newSign = new CweatherSign();
-		break;
+			break;
 		case LOGGED:
 			newSign = new LoggedSign();
-		break;
+			break;
 		case SENSOR:
 			newSign = new SensorSign();
-		break;
+			break;
 		case DISP:
 			newSign = new DispSign();
-		break;
+			break;
 		case ANNOUNCE:
 			newSign = new AnnounceSign();
-		break;
+			break;
 		case CUBOID:
 			newSign = new CuboidSign();
-		break;
+			break;
 		case SPAWN:
 			newSign = new SpawnSign();
-		break;
+			break;
 		case ITEM:
 			newSign = new ItemSign();
-		break;
+			break;
 		case BOLT:
 			newSign = new BoltSign();
-		break;
+			break;
 		case PLAYERS:
 			newSign = new PlayersSign();
-		break;
+			break;
 		case SWEATHER:
 			newSign = new SweatherSign();
-		break;
+			break;
 		case STIME:
 			newSign = new StimeSign();
-		break;
+			break;
 		case CAULDRON:
 			newSign = new CauldronSign();
-		break;
+			break;
 		case EFFECT:
 			newSign = new EffectSign();
-		break;
+			break;
 		case PSENSOR:
 			newSign = new PSensorSign();
-		break;
+			break;
 		case ISENSOR:
 			newSign = new ISensorSign();
-		break;
+			break;
 		case MSENSOR:
 			newSign = new MSensorSign();
-		break;
+			break;
 		case WaSENSOR:
 			newSign = new WaSensorSign();
-		break;
+			break;
 		case LaSENSOR:
 			newSign = new LaSensorSign();
-		break;
+			break;
 		case LiSENSOR:
 			newSign = new LiSensorSign();
-		break;
+			break;
 		case GlANNOUNCE:
 			newSign = new GlAnnounceSign();
-		break;
+			break;
 		case BLACKHOLE:
 			newSign = new BlackHoleSign();
-		break;
-		//case SNOWBALL: //XXX: removed
-		//	newSign = new SnowballSign();
-		//	break;
-		//case ExplBall: //XXX: removed
-		//	newSign = new ExplBallSign();
-		//	break;
+			break;
 		case AreaToggle:
 			newSign = new AreaToggleSign();
-		break;
+			break;
+		case SPEED:
+			newSign = new SpeedSign();
+			break;
 		}
 
 		if (newSign != null) {
