@@ -11,8 +11,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
+import org.bukkit.entity.PoweredMinecart;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Slime;
+import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.material.Colorable;
@@ -44,7 +46,18 @@ public class SpawnSign extends HeldSign {
 				spawnLoc.setZ(spawnLoc.getZ() + .5);
 
 				for (int i2 = 0; i2 < amount; i2++) {
-					Entity ent = this.getWorld().spawn(spawnLoc, entityType.getEntityClass());
+					Class<? extends Entity> entityClass = entityType.getEntityClass();
+
+					if (entityClass.equals(EntityType.MINECART.getEntityClass())) {
+						if (data.equalsIgnoreCase("chest")) {
+							entityClass = StorageMinecart.class;
+						}
+						if (data.equalsIgnoreCase("furnace")) {
+							entityClass = PoweredMinecart.class;
+						}
+					}
+
+					Entity ent = this.getWorld().spawn(spawnLoc, entityClass);
 
 					if (ent instanceof LivingEntity) {
 						LivingEntity c = (LivingEntity) ent;
@@ -143,6 +156,8 @@ public class SpawnSign extends HeldSign {
 					}
 					if (data.equalsIgnoreCase("ignite")) {
 						ent.setFireTicks(100);
+
+						continue;
 					}
 				}
 				break;
