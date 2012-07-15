@@ -6,15 +6,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.entity.Ocelot.Type;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Slime;
-import org.bukkit.entity.Wolf;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.material.Colorable;
@@ -46,101 +44,105 @@ public class SpawnSign extends HeldSign {
 				spawnLoc.setZ(spawnLoc.getZ() + .5);
 
 				for (int i2 = 0; i2 < amount; i2++) {
-					LivingEntity c = this.getWorld().spawnCreature(spawnLoc, creature);
+					Entity ent = this.getWorld().spawn(spawnLoc, entityType.getEntityClass());
 
-					if (c instanceof Wolf) {
-						if (data.equalsIgnoreCase("angry")) {
-							Wolf wolf = (Wolf) c;
-							wolf.setAngry(true);
-						}
-						if (data.startsWith("@")) {
-							Wolf wolf = (Wolf) c;
+					if (ent instanceof LivingEntity) {
+						LivingEntity c = (LivingEntity) ent;
+						if (c instanceof Colorable) {
+							boolean flag = false;
+							if (c instanceof Sheep) {
+								if (data.equalsIgnoreCase("sheared")) {
+									flag = true;
+								}
+							}
+							if (flag) {
+								Sheep sheep = (Sheep) c;
 
-							wolf.setOwner(main.getServer().getPlayer(data.substring(1)));
-						}
-					} else if (c instanceof Ocelot) {
-						if (data.startsWith("tabby@")) {
-							Ocelot ocelot = (Ocelot) c;
-							ocelot.setCatType(Type.RED_CAT);
-							ocelot.setOwner(main.getServer().getPlayer(data.substring(6)));
-						}
-						if (data.startsWith("tuxedo@")) {
-							Ocelot ocelot = (Ocelot) c;
-							ocelot.setCatType(Type.BLACK_CAT);
-							ocelot.setOwner(main.getServer().getPlayer(data.substring(7)));
-						}
-						if (data.startsWith("siamese@")) {
-							Ocelot ocelot = (Ocelot) c;
-							ocelot.setCatType(Type.SIAMESE_CAT);
-							ocelot.setOwner(main.getServer().getPlayer(data.substring(8)));
-						}
-					} else if (c instanceof Colorable) {
-						boolean flag = false;
-						if (c instanceof Sheep) {
-							if (data.equalsIgnoreCase("sheared")) {
-								flag = true;
+								sheep.setSheared(true);
+
+								continue;
+							} else {
+								byte color = (byte) 0;
+								try {
+									color = (byte) Math.min(Integer.parseInt(data), 16);
+								} catch (Exception e) {
+									color = (byte) 0;
+								}
+
+								if (color <= 0) {
+									continue;
+								}
+
+								Colorable cle = (Colorable) c;
+								cle.setColor(DyeColor.getByData(color));
 							}
 						}
-						if (flag) {
-							Sheep sheep = (Sheep) c;
-
-							sheep.setSheared(true);
-						} else {
-							byte color = (byte) 0;
+						if (c instanceof Slime) {
+							Slime s = (Slime) c;
+							int size = 1;
 							try {
-								color = (byte) Math.min(Integer.parseInt(data), 16);
+								size = Math.min(Integer.parseInt(data), 16);
 							} catch (Exception e) {
-								color = (byte) 0;
+								size = 1;
 							}
 
-							Colorable cle = (Colorable) c;
-							cle.setColor(DyeColor.getByData(color));
-						}
-					} else if (c instanceof Slime) {
-						Slime s = (Slime) c;
-						int size = 0;
-						try {
-							size = Math.min(Integer.parseInt(data), 16);
-						} catch (Exception e) {
-							size = 1;
-						}
-						s.setSize(size);
-					} else if (c instanceof Creeper) {
-						if (data.equalsIgnoreCase("powered")) {
-							Creeper creeper = (Creeper) c;
-
-							creeper.setPowered(true);
-						}
-					} else if (c instanceof PigZombie) {
-						if (data.equalsIgnoreCase("angry")) {
-							PigZombie pigzombie = (PigZombie) c;
-
-							pigzombie.setAngry(true);
-						} else {
-							int level = 0;
-							try {
-								level = Integer.parseInt(data);
-							} catch (Exception e) {
-								level = 0;
+							if (size <= 1) {
+								continue;
 							}
-
-							PigZombie pigzombie = (PigZombie) c;
-							pigzombie.setAnger(level);
+							s.setSize(size);
 						}
-					} else if (c instanceof Ageable) {
-						if (data.equalsIgnoreCase("baby")) {
-							Ageable ageable = (Ageable) c;
+						if (c instanceof Creeper) {
+							if (data.equalsIgnoreCase("powered")) {
+								Creeper creeper = (Creeper) c;
 
-							ageable.setBaby();
-						}
-					} else if (c instanceof Pig) {
-						if (data.equalsIgnoreCase("saddled")) {
-							Pig pig = (Pig) c;
+								creeper.setPowered(true);
 
-							pig.setSaddle(true);
+								continue;
+							}
 						}
-					} else if (data.equalsIgnoreCase("ignite")) {
-						c.setFireTicks(100);
+						if (c instanceof PigZombie) {
+							if (data.equalsIgnoreCase("angry")) {
+								PigZombie pigzombie = (PigZombie) c;
+
+								pigzombie.setAngry(true);
+
+								continue;
+							} else {
+								int level = 0;
+								try {
+									level = Integer.parseInt(data);
+								} catch (Exception e) {
+									level = 0;
+								}
+
+								if (level <= 0) {
+									continue;
+								}
+								PigZombie pigzombie = (PigZombie) c;
+								pigzombie.setAnger(level);
+							}
+						}
+						if (c instanceof Ageable) {
+							if (data.equalsIgnoreCase("baby")) {
+								Ageable ageable = (Ageable) c;
+
+								ageable.setBaby();
+
+								continue;
+							}
+						}
+						if (c instanceof Pig) {
+							if (data.equalsIgnoreCase("saddled")) {
+								Pig pig = (Pig) c;
+
+								pig.setSaddle(true);
+
+								continue;
+							}
+						}
+					}
+					if (data.equalsIgnoreCase("ignite")) {
+						ent.setFireTicks(100);
 					}
 				}
 				break;
@@ -157,7 +159,7 @@ public class SpawnSign extends HeldSign {
 		return new NBTTagInt(0);
 	}
 
-	private EntityType creature;
+	private EntityType entityType;
 	private Direction spawnDir;
 	private Integer amount = 1;
 	private String data = "";
@@ -171,7 +173,7 @@ public class SpawnSign extends HeldSign {
 		String[] dline = this.getLines(event)[2].split(" ");
 
 		try {
-			creature = Functions.getCreature(cline);
+			entityType = Functions.getCreature(cline);
 		} catch (Exception e) {
 			ctypeError = true;
 			if (!reload) {
@@ -180,7 +182,7 @@ public class SpawnSign extends HeldSign {
 			return false;
 		}
 
-		if (ctypeError || (creature == null)) {
+		if (ctypeError || (entityType == null)) {
 			if (!reload) {
 				this.main.alert(this.getOwnerName(), "Unknown creature type. Please try again.", ChatColor.RED);
 			}
@@ -229,7 +231,7 @@ public class SpawnSign extends HeldSign {
 			this.clearArgLines();
 		}
 
-		String ncline = creature.getTypeId() + "";
+		String ncline = entityType.getTypeId() + "";
 
 		if (!reload) {
 			this.setLine(1, ncline, event);
