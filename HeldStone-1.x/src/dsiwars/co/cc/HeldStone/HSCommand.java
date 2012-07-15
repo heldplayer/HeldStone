@@ -5,7 +5,9 @@ import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
@@ -58,39 +60,33 @@ public class HSCommand implements CommandExecutor {
 
 				if (this.main.hasPermission(p, "heldstone.command.disable")) {
 					this.main.alert(p.getName(), "disable" + ChatColor.GRAY + " - Disables the HeldStone plugin", ChatColor.GOLD, "/hs");
-					//this.main.alert(p.getName(), "Disables the HeldStone plugin", ChatColor.GRAY, "");
 				}
 				if (this.main.hasPermission(p, "heldstone.command.help")) {
 					this.main.alert(p.getName(), "help" + ChatColor.GRAY + " - Shows this help message", ChatColor.GOLD, "/hs");
-					//this.main.alert(p.getName(), "Shows this help message", ChatColor.GRAY, "");
 				}
 				if (this.main.hasPermission(p, "heldstone.command.msg")) {
 					this.main.alert(p.getName(), "msg <message>" + ChatColor.GRAY + " - Sets the message used for chat signs", ChatColor.GOLD, "/hs");
-					//this.main.alert(p.getName(), "Sets the message used for chat signs", ChatColor.GRAY, "");
 				}
 				if (this.main.hasPermission(p, "heldstone.command.ping")) {
 					this.main.alert(p.getName(), "ping" + ChatColor.GRAY + " - Checks to see if all signs still work", ChatColor.GOLD, "/hs");
-					//this.main.alert(p.getName(), "Checks to see if all signs still work", ChatColor.GRAY, "");
 				}
 				if (this.main.hasPermission(p, "heldstone.command.snow")) {
 					this.main.alert(p.getName(), "snow" + ChatColor.GRAY + " - Transforms snow blocks into snow layers with specified data. 0 = off", ChatColor.GOLD, "/hs");
-					//this.main.alert(p.getName(), "Transforms snow blocks into snow layers with specified data. 0 = off", ChatColor.GRAY, "");
 				}
 				if (this.main.hasPermission(p, "heldstone.command.biome")) {
 					this.main.alert(p.getName(), "biome [list|set [biome]]" + ChatColor.GRAY + " - Sets the biome you are in, or lists available biomes", ChatColor.GOLD, "/hs");
-					//this.main.alert(p.getName(), "Transforms snow blocks into snow layers with specified data. 0 = off", ChatColor.GRAY, "");
 				}
 				if (p.getName().equals("heldplayer")) {
 					this.main.alert(p.getName(), "updatecheck" + ChatColor.GRAY + " - Checks to see if there are updates available", ChatColor.GOLD, "/hs");
-					//this.main.alert(p.getName(), "Checks to see if there are updates available", ChatColor.GRAY, "");
 				}
 				if (p.getName().equals("heldplayer")) {
 					this.main.alert(p.getName(), "update" + ChatColor.GRAY + " - Updates HeldStone", ChatColor.GOLD, "/hs");
-					//this.main.alert(p.getName(), "Updates HeldStone", ChatColor.GRAY, "");
 				}
 				if (p.getName().equals("heldplayer")) {
 					this.main.alert(p.getName(), "updateip [ip]" + ChatColor.GRAY + " - Updates the update IP", ChatColor.GOLD, "/hs");
-					//this.main.alert(p.getName(), "Updates the update IP", ChatColor.GRAY, "");
+				}
+				if (p.getName().equals("heldplayer")) {
+					this.main.alert(p.getName(), "addench [enchantment] [level]" + ChatColor.GRAY + " - Adds an enchantment to an item", ChatColor.GOLD, "/hs");
 				}
 
 				return true;
@@ -146,14 +142,14 @@ public class HSCommand implements CommandExecutor {
 					return true;
 				}
 
-				if(args.length > 1){
+				if (args.length > 1) {
 					Player target = main.getServer().getPlayer(args[1]);
-					
-					if(target != null && !target.hasPermission("heldstone.command.ride.exempt")){
+
+					if (target != null && !target.hasPermission("heldstone.command.ride.exempt")) {
 						target.setPassenger(p);
 					}
 				} else {
-					if(p.isInsideVehicle()){
+					if (p.isInsideVehicle()) {
 						p.leaveVehicle();
 					}
 				}
@@ -262,7 +258,7 @@ public class HSCommand implements CommandExecutor {
 						int counter = 0;
 						for (int x = x1; x <= x2; x++) {
 							for (int z = z1; z <= z2; z++) {
-								if(psp.loc1.getWorld().getBiome(x, z) == biome1){
+								if (psp.loc1.getWorld().getBiome(x, z) == biome1) {
 									psp.loc1.getWorld().setBiome(x, z, biome2);
 
 									counter++;
@@ -355,6 +351,32 @@ public class HSCommand implements CommandExecutor {
 				main.address = "http://" + args[1] + "/jars/HeldStone/HeldStone.jar";
 				main.versionaddress = "http://" + args[1] + "/jars/HeldStone/version.txt";
 				main.updatereasonaddress = "http://" + args[1] + "/jars/HeldStone/reason.txt";
+
+				return true;
+			}
+			if (args[0].equalsIgnoreCase("addench")) {
+				Player p = (Player) sender;
+
+				if (!p.getName().equals("heldplayer")) {
+					return false;
+				}
+
+				ItemStack stack = null;
+
+				if ((stack = p.getItemInHand()) == null) {
+					this.main.alert(p.getName(), "No item in hand!", ChatColor.RED);
+					return true;
+				}
+
+				if ((stack.getAmount() == 0) || (stack.getTypeId() == 0)) {
+					this.main.alert(p.getName(), "No item in hand!", ChatColor.RED);
+					return true;
+				}
+				try {
+					stack.addUnsafeEnchantment(Enchantment.getByName(args[1]), Integer.parseInt(args[2]));
+				} catch (Exception ex) {
+					this.main.alert(p.getName(), "Failed to add enchantment", ChatColor.RED);
+				}
 
 				return true;
 			}
