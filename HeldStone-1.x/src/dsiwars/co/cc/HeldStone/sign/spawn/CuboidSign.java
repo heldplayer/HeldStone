@@ -61,8 +61,8 @@ public class CuboidSign extends HeldSign {
 	}
 
 	NBTTagCompound data;
-	int x1, y1, z1, x2, y2, z2, lmat, hmat = 0;
-	byte ldat, hdat = (byte) 0;
+	int x1, y1, z1, x2, y2, z2, lmat, hmat;
+	byte ldat, hdat;
 
 	@Override
 	protected boolean declare(boolean reload, SignChangeEvent event) {
