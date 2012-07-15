@@ -288,6 +288,10 @@ public class Functions {
 			}
 		}
 
+		if (!type.isSpawnable()) {
+			return null;
+		}
+
 		if (type == EntityType.ARROW) {
 			return null;
 		}
