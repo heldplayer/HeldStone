@@ -4,33 +4,8 @@ import org.bukkit.Effect;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Blaze;
-import org.bukkit.entity.CaveSpider;
-import org.bukkit.entity.Chicken;
-import org.bukkit.entity.Cow;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.EnderDragon;
-import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Ghast;
-import org.bukkit.entity.Giant;
-import org.bukkit.entity.IronGolem;
-import org.bukkit.entity.MagmaCube;
-import org.bukkit.entity.MushroomCow;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.entity.Pig;
-import org.bukkit.entity.PigZombie;
-import org.bukkit.entity.Sheep;
-import org.bukkit.entity.Silverfish;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Slime;
-import org.bukkit.entity.Snowman;
-import org.bukkit.entity.Spider;
-import org.bukkit.entity.Squid;
-import org.bukkit.entity.Villager;
-import org.bukkit.entity.Wolf;
-import org.bukkit.entity.Zombie;
 
 public class Functions {
 
@@ -240,50 +215,50 @@ public class Functions {
 		//case 6: // Sapling
 		case 12: // Sand
 		case 13: // Gravel
-		case 23: // Dispenser
+			//case 23: // Dispenser
 		case 25: // Note block
-		//case 31: // Tall grass
-		//case 32: // Dead bush
-		case 36: // Block moved by piston
-		//case 37: // Dandelion
-		//case 38: // Rose
-		//case 39: // Brown mushroom
-		//case 40: // Red mushroom
-		case 46: // TNT
-		//case 50: // Torch
+			//case 31: // Tall grass
+			//case 32: // Dead bush
+			//case 36: // Block moved by piston
+			//case 37: // Dandelion
+			//case 38: // Rose
+			//case 39: // Brown mushroom
+			//case 40: // Red mushroom
+			//case 46: // TNT
+			//case 50: // Torch
 		case 51: // Fire
 		case 52: // Monster spawner
 		case 54: // Chest
-		//case 55: // Redstone wire
-		//case 59: // Wheat block
+			//case 55: // Redstone wire
+			//case 59: // Wheat block
 		case 61: // Furnace
 		case 62: // Burning furnace
 		case 63: // Sign post
-		//case 64: // Wood door
-		//case 65: // Ladders
-		//case 66: // Rails
+			//case 64: // Wood door
+			//case 65: // Ladders
+			//case 66: // Rails
 		case 68: // Wall sign
-		//case 69: // Lever
-		//case 70: // Stone pressure plate
-		//case 71: // Iron door
-		//case 72: // Wood pressure plate
-		//case 75: // Redstone torch off
-		//case 76: // Redstone torch on
-		//case 77: // Stone button
-		//case 78: // Snow cover
-		//case 83: // Sugar cane block
+			//case 69: // Lever
+			//case 70: // Stone pressure plate
+			//case 71: // Iron door
+			//case 72: // Wood pressure plate
+			//case 75: // Redstone torch off
+			//case 76: // Redstone torch on
+			//case 77: // Stone button
+			//case 78: // Snow cover
+			//case 83: // Sugar cane block
 		case 84: // Jukebox
-		//case 92: // Cake block
-		//case 93: // Redstone repeater off
-		//case 94: // Redstone repeater on
-		//case 96: // Trapdoor
-		//case 104: // Pumpkin stem
-		//case 105: // Melon stem
-		//case 111: // Lily pad
-		//case 115: // Nether wart
-		//case 116: // Enchantment table
+			//case 92: // Cake block
+			//case 93: // Redstone repeater off
+			//case 94: // Redstone repeater on
+			//case 96: // Trapdoor
+			//case 104: // Pumpkin stem
+			//case 105: // Melon stem
+			//case 111: // Lily pad
+			//case 115: // Nether wart
+			//case 116: // Enchantment table
 		case 117: // Brewing stand
-		//case 118: // Cauldron
+			//case 118: // Cauldron
 		case 119: // End portal
 		case 120: // End portal frame
 		case 122: // Dragon egg
@@ -294,179 +269,87 @@ public class Functions {
 	}
 
 	public static EntityType getCreature(Entity e) {
-		if (e instanceof Blaze) {
-			return EntityType.BLAZE;
-		}
-		if (e instanceof CaveSpider) {
-			return EntityType.CAVE_SPIDER;
-		}
-		if (e instanceof Chicken) {
-			return EntityType.CHICKEN;
-		}
-		if (e instanceof Cow) {
-			return EntityType.COW;
-		}
-		if (e instanceof Creeper) {
-			return EntityType.CREEPER;
-		}
-		if (e instanceof EnderDragon) {
-			return EntityType.ENDER_DRAGON;
-		}
-		if (e instanceof Enderman) {
-			return EntityType.ENDERMAN;
-		}
-		if (e instanceof Ghast) {
-			return EntityType.GHAST;
-		}
-		if (e instanceof Giant) {
-			return EntityType.GIANT;
-		}
-		if (e instanceof IronGolem) {
-			return EntityType.IRON_GOLEM;
-		}
-		if (e instanceof MagmaCube) {
-			return EntityType.MAGMA_CUBE;
-		}
-		if (e instanceof MushroomCow) {
-			return EntityType.MUSHROOM_COW;
-		}
-		if (e instanceof Ocelot) {
-			return EntityType.OCELOT;
-		}
-		if (e instanceof Pig) {
-			return EntityType.PIG;
-		}
-		if (e instanceof PigZombie) {
-			return EntityType.PIG_ZOMBIE;
-		}
-		if (e instanceof Sheep) {
-			return EntityType.SHEEP;
-		}
-		if (e instanceof Silverfish) {
-			return EntityType.SILVERFISH;
-		}
-		if (e instanceof Skeleton) {
-			return EntityType.SKELETON;
-		}
-		if (e instanceof Slime) {
-			return EntityType.SLIME;
-		}
-		if (e instanceof Snowman) {
-			return EntityType.SNOWMAN;
-		}
-		if (e instanceof Spider) {
-			return EntityType.SPIDER;
-		}
-		if (e instanceof Squid) {
-			return EntityType.SQUID;
-		}
-		if (e instanceof Villager) {
-			return EntityType.VILLAGER;
-		}
-		if (e instanceof Wolf) {
-			return EntityType.WOLF;
-		}
-		if (e instanceof Zombie) {
-			return EntityType.ZOMBIE;
-		}
-		return null;
+		return getCreature(e.getType().getTypeId() + "");
 	}
 
 	public static EntityType getCreature(String str) {
-		if (str.equalsIgnoreCase("BLAZE")) {
-			return EntityType.BLAZE;
+		EntityType type = null;
+		try {
+			short typeShort = Short.parseShort(str);
+
+			if ((type = EntityType.fromId(typeShort)) == null) {
+				if ((type = EntityType.fromName(str)) == null) {
+					return null;
+				}
+			}
+		} catch (NumberFormatException ex) {
+			if ((type = EntityType.fromName(str)) == null) {
+				return null;
+			}
 		}
-		if (str.equalsIgnoreCase("CAVE_SPIDER")) {
-			return EntityType.CAVE_SPIDER;
+
+		if (type == EntityType.ARROW) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("CAVESPIDER")) {
-			return EntityType.CAVE_SPIDER;
+		if (type == EntityType.COMPLEX_PART) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("CHICKEN")) {
-			return EntityType.CHICKEN;
+		if (type == EntityType.DROPPED_ITEM) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("COW")) {
-			return EntityType.COW;
+		if (type == EntityType.EGG) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("CREEPER")) {
-			return EntityType.CREEPER;
+		if (type == EntityType.ENDER_PEARL) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("ENDER_DRAGON")) {
-			return EntityType.ENDER_DRAGON;
+		if (type == EntityType.ENDER_SIGNAL) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("ENDERDRAGON")) {
-			return EntityType.ENDER_DRAGON;
+		if (type == EntityType.EXPERIENCE_ORB) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("ENDERMAN")) {
-			return EntityType.ENDERMAN;
+		if (type == EntityType.FALLING_BLOCK) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("GHAST")) {
-			return EntityType.GHAST;
+		if (type == EntityType.FIREBALL) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("GIANT")) {
-			return EntityType.GIANT;
+		if (type == EntityType.FISHING_HOOK) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("IRON_GOLEM")) {
-			return EntityType.IRON_GOLEM;
+		if (type == EntityType.LIGHTNING) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("MAGMA_CUBE")) {
-			return EntityType.MAGMA_CUBE;
+		if (type == EntityType.PAINTING) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("MAGMACUBE")) {
-			return EntityType.MAGMA_CUBE;
+		if (type == EntityType.PLAYER) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("MUSHROOM_COW")) {
-			return EntityType.MUSHROOM_COW;
+		if (type == EntityType.PRIMED_TNT) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("MUSHROOMCOW")) {
-			return EntityType.MUSHROOM_COW;
+		if (type == EntityType.SMALL_FIREBALL) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("MOOSHROOM")) {
-			return EntityType.MUSHROOM_COW;
+		if (type == EntityType.SNOWBALL) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("OCELOT")) {
-			return EntityType.OCELOT;
+		if (type == EntityType.SPLASH_POTION) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("PIG")) {
-			return EntityType.PIG;
+		if (type == EntityType.THROWN_EXP_BOTTLE) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("PIG_ZOMBIE")) {
-			return EntityType.PIG_ZOMBIE;
+		if (type == EntityType.UNKNOWN) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("PIGZOMBIE")) {
-			return EntityType.PIG_ZOMBIE;
+		if (type == EntityType.WEATHER) {
+			return null;
 		}
-		if (str.equalsIgnoreCase("SHEEP")) {
-			return EntityType.SHEEP;
-		}
-		if (str.equalsIgnoreCase("SILVERFISH")) {
-			return EntityType.SILVERFISH;
-		}
-		if (str.equalsIgnoreCase("SKELETON")) {
-			return EntityType.SKELETON;
-		}
-		if (str.equalsIgnoreCase("SLIME")) {
-			return EntityType.SLIME;
-		}
-		if (str.equalsIgnoreCase("SNOWMAN")) {
-			return EntityType.SNOWMAN;
-		}
-		if (str.equalsIgnoreCase("SPIDER")) {
-			return EntityType.SPIDER;
-		}
-		if (str.equalsIgnoreCase("SQUID")) {
-			return EntityType.SQUID;
-		}
-		if (str.equalsIgnoreCase("VILLAGER")) {
-			return EntityType.VILLAGER;
-		}
-		if (str.equalsIgnoreCase("WOLF")) {
-			return EntityType.WOLF;
-		}
-		if (str.equalsIgnoreCase("ZOMBIE")) {
-			return EntityType.ZOMBIE;
-		}
-		return null;
+
+		return type;
 	}
 
 	public static boolean validBiome(Biome biome) {
