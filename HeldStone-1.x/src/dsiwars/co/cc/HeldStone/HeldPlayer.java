@@ -35,7 +35,7 @@ public class HeldPlayer {
 	public HeldPlayer(String name, HeldStone main) {
 		this.name = name;
 		this.main = main;
-		this.main.i("Created new player tracker for " + name + ".");
+		//this.main.i("Created new player tracker for " + name + ".");
 	}
 
 	public String getName() {
