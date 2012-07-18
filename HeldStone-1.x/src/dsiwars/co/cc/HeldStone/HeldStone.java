@@ -49,7 +49,7 @@ public class HeldStone extends JavaPlugin {
 	public boolean cfgDebug;
 	public boolean enabled = false;
 	public HashSet<Entity> explodingList;
-	static final Logger log = Logger.getLogger("HeldStone");
+	static Logger log;
 	// Update manager
 	Update upd = new Update(this);
 	public String address = "";
@@ -64,10 +64,14 @@ public class HeldStone extends JavaPlugin {
 		this.cfg.save();
 		i("Heldstone is now disabled.");
 		this.enabled = false;
+
+		ConsoleLogManager.exit();
 	}
 
 	@Override
 	public void onEnable() {
+		log = getLogger();
+
 		ConsoleLogManager.init();
 
 		this.dataPath = getDataFolder().getAbsolutePath();
@@ -75,8 +79,6 @@ public class HeldStone extends JavaPlugin {
 		this.explodingList = new HashSet<Entity>();
 
 		this.pdf = getDescription();
-
-		i("Enabling " + this.pdf.getName());
 
 		this.pm = getServer().getPluginManager();
 
@@ -136,11 +138,11 @@ public class HeldStone extends JavaPlugin {
 	}
 
 	public void i(String message) {
-		log.log(Level.INFO, "[" + this.pdf.getName() + "] " + message);
+		log.log(Level.INFO, message);
 	}
 
 	public void e(String message) {
-		log.log(Level.WARNING, "[" + this.pdf.getName() + "] " + message);
+		log.log(Level.WARNING, message);
 	}
 
 	public void d(String message) {

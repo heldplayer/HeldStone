@@ -11,17 +11,17 @@ public class ConsoleLogManager {
 		try {
 			FileHandler filehandler = new FileHandler("plugins/HeldStone/log.txt", true);
 			filehandler.setFormatter(consolelogformatter);
-			Handler[] handlers = HeldStone.log.getHandlers();
-			for (Handler handler : handlers) {
-				if (handler instanceof FileHandler) {
-					if (handler.equals(filehandler)) {
-						return;
-					}
-				}
-			}
 			HeldStone.log.addHandler(filehandler);
 		} catch (Exception exception) {
 			HeldStone.log.log(Level.WARNING, "Failed to log to log.txt", exception);
+		}
+	}
+
+	public static void exit() {
+		Handler[] handlers = HeldStone.log.getHandlers();
+		for (Handler handler : handlers) {
+			HeldStone.log.removeHandler(handler);
+			handler.close();
 		}
 	}
 }
