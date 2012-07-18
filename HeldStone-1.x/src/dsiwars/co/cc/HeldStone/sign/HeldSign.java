@@ -54,6 +54,7 @@ import dsiwars.co.cc.HeldStone.sign.logic.LogicSign;
 import dsiwars.co.cc.HeldStone.sign.logic.RandSign;
 import dsiwars.co.cc.HeldStone.sign.logic.ToggleSign;
 import dsiwars.co.cc.HeldStone.sign.logic.TriggerSign;
+import dsiwars.co.cc.HeldStone.sign.minecart.CartLockSign;
 import dsiwars.co.cc.HeldStone.sign.minecart.SpeedSign;
 import dsiwars.co.cc.HeldStone.sign.sensor.ISensorSign;
 import dsiwars.co.cc.HeldStone.sign.sensor.LaSensorSign;
@@ -560,6 +561,9 @@ public abstract class HeldSign {
 			break;
 		case SPEED:
 			newSign = new SpeedSign();
+			break;
+		case CartLock:
+			newSign = new CartLockSign();
 			break;
 		}
 

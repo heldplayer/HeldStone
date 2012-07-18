@@ -24,6 +24,7 @@ public enum SignType {
 	TRIGGER("logic"),
 	// Minecart
 	SPEED("speed"),
+	CartLock("cartlock"),
 	// Sensor
 	ISENSOR("sensor"),
 	LaSENSOR("sensor"),

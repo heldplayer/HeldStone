@@ -21,6 +21,7 @@ package dsiwars.co.cc.HeldStone;
  */
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 
 public class HeldPlayer {
@@ -31,6 +32,7 @@ public class HeldPlayer {
 	public String message = null;
 	private final HeldStone main;
 	public int snow = 0;
+	public Minecart ridingCart = null;
 
 	public HeldPlayer(String name, HeldStone main) {
 		this.name = name;
