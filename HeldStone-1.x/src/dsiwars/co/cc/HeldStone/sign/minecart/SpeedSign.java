@@ -54,7 +54,7 @@ public class SpeedSign extends HeldSign {
 
 						cart.setMaxSpeed(this.speed);
 
-						break;
+						continue;
 					}
 				}
 			} catch (Exception ex) {
