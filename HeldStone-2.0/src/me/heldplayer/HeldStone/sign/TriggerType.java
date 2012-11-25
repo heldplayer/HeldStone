@@ -1,5 +1,6 @@
+
 package me.heldplayer.HeldStone.sign;
 
 public enum TriggerType {
-	PING, VALID_CHECK, REDSTONE_CHANGE, COMMAND
+    PING, VALID_CHECK, REDSTONE_CHANGE, COMMAND
 }

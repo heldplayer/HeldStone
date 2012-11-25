@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign.functional;
 
 /*
@@ -31,84 +32,86 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class BoltSign extends HeldSign {
 
-	private boolean lastState = false;
+    private boolean lastState = false;
 
-	@Override
-	protected void triggersign(TriggerType type, Object args) {
-		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
+    @Override
+    protected void triggersign(TriggerType type, Object args) {
+        InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
-		if (is != InputState.HIGH) {
-			this.lastState = false;
-			return;
-		} else {
-			if (this.lastState == true) {
-				return;
-			}
-			this.lastState = true;
-		}
+        if (is != InputState.HIGH) {
+            this.lastState = false;
+            return;
+        }
+        else {
+            if (this.lastState == true) {
+                return;
+            }
+            this.lastState = true;
+        }
 
-		Location strikeTarget = getHostLocation().clone();
-		strikeTarget.setY(127);
+        Location strikeTarget = getHostLocation().clone();
+        strikeTarget.setY(127);
 
-		for (int y = 127; y > 0; y--) {
-			if (strikeTarget.getBlock().getType() != Material.AIR) {
-				break;
-			}
-			strikeTarget.setY(y);
-		}
+        for (int y = 127; y > 0; y--) {
+            if (strikeTarget.getBlock().getType() != Material.AIR) {
+                break;
+            }
+            strikeTarget.setY(y);
+        }
 
-		if (!this.isEffect) {
-			getWorld().strikeLightning(strikeTarget);
-		} else {
-			getWorld().strikeLightningEffect(strikeTarget);
-		}
-	}
+        if (!this.isEffect) {
+            getWorld().strikeLightning(strikeTarget);
+        }
+        else {
+            getWorld().strikeLightningEffect(strikeTarget);
+        }
+    }
 
-	@Override
-	protected void setNBTData(NBTBase tag) {
-	}
+    @Override
+    protected void setNBTData(NBTBase tag) {}
 
-	@Override
-	public NBTBase getNBTData() {
-		return new NBTTagInt(0);
-	}
+    @Override
+    public NBTBase getNBTData() {
+        return new NBTTagInt(0);
+    }
 
-	boolean isEffect = true;
+    boolean isEffect = true;
 
-	@Override
-	protected boolean declare(boolean reload, SignChangeEvent event) {
+    @Override
+    protected boolean declare(boolean reload, SignChangeEvent event) {
 
-		String type = this.getLines(event)[1];
+        String type = this.getLines(event)[1];
 
-		if (type.equalsIgnoreCase("REAL")) {
-			this.isEffect = false;
-		} else if (type.equalsIgnoreCase("FAKE")) {
-			this.isEffect = true;
-		} else {
-		}
+        if (type.equalsIgnoreCase("REAL")) {
+            this.isEffect = false;
+        }
+        else if (type.equalsIgnoreCase("FAKE")) {
+            this.isEffect = true;
+        }
+        else {}
 
-		if (!reload) {
-			this.clearArgLines(event);
-			if (this.isEffect) {
-				this.setLine(1, "FAKE", event);
-			} else {
-				this.setLine(1, "REAL", event);
-			}
-		}
+        if (!reload) {
+            this.clearArgLines(event);
+            if (this.isEffect) {
+                this.setLine(1, "FAKE", event);
+            }
+            else {
+                this.setLine(1, "REAL", event);
+            }
+        }
 
-		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
-		if (!reload) {
-			init("Bolt sign accepted.");
-		}
-		return true;
-	}
+        this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+        if (!reload) {
+            init("Bolt sign accepted.");
+        }
+        return true;
+    }
 
-	@Override
-	public void invalidate() {
-	}
+    @Override
+    public void invalidate() {}
 
-	@Override
-	public String getTriggerTypesString() {
-		return TriggerType.REDSTONE_CHANGE.name();
-	}
+    @Override
+    public String getTriggerTypesString() {
+        return TriggerType.REDSTONE_CHANGE.name();
+    }
 }

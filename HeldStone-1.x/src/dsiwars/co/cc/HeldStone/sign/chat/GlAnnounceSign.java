@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign.chat;
 
 /*
@@ -30,77 +31,79 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class GlAnnounceSign extends HeldSign {
 
-	private boolean lastState = false;
+    private boolean lastState = false;
 
-	@Override
-	protected void triggersign(TriggerType type, Object args) {
-		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
+    @Override
+    protected void triggersign(TriggerType type, Object args) {
+        InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
-		if (is != InputState.HIGH) {
-			this.lastState = false;
-			return;
-		} else {
-			if (this.lastState == true) {
-				return;
-			}
-			this.lastState = true;
-		}
+        if (is != InputState.HIGH) {
+            this.lastState = false;
+            return;
+        }
+        else {
+            if (this.lastState == true) {
+                return;
+            }
+            this.lastState = true;
+        }
 
-		this.main.getServer().broadcastMessage(this.color + "[HeldStone] " + this.message);
-	}
+        this.main.getServer().broadcastMessage(this.color + "[HeldStone] " + this.message);
+    }
 
-	@Override
-	protected void setNBTData(NBTBase tag) {
-		this.message = ((NBTTagString) tag).value;
-	}
+    @Override
+    protected void setNBTData(NBTBase tag) {
+        this.message = ((NBTTagString) tag).value;
+    }
 
-	@Override
-	public NBTBase getNBTData() {
-		return new NBTTagString(this.message);
-	}
+    @Override
+    public NBTBase getNBTData() {
+        return new NBTTagString(this.message);
+    }
 
-	String message = null;
-	ChatColor color = ChatColor.WHITE;
+    String message = null;
+    ChatColor color = ChatColor.WHITE;
 
-	@Override
-	protected boolean declare(boolean reload, SignChangeEvent event) {
+    @Override
+    protected boolean declare(boolean reload, SignChangeEvent event) {
 
-		if (!reload) {
-			this.message = this.main.players.safelyGet(getOwnerName(), this.main).message;
-			if (this.message == null) {
-				this.main.alert(getOwnerName(), "You must set a message first. " + ChatColor.AQUA + "/hs msg <message>", ChatColor.RED);
-				return false;
-			}
-		}
+        if (!reload) {
+            this.message = this.main.players.safelyGet(getOwnerName(), this.main).message;
+            if (this.message == null) {
+                this.main.alert(getOwnerName(), "You must set a message first. " + ChatColor.AQUA + "/hs msg <message>", ChatColor.RED);
+                return false;
+            }
+        }
 
-		try {
-			this.color = ChatColor.valueOf(this.getLines()[1].toUpperCase());
-		} catch (Exception ex) {
-			try {
-				this.color = ChatColor.getByChar(this.getLines()[1].charAt(0));
-			} catch (Exception ex2) {
-				this.color = ChatColor.WHITE;
-			}
-		}
+        try {
+            this.color = ChatColor.valueOf(this.getLines()[1].toUpperCase());
+        }
+        catch (Exception ex) {
+            try {
+                this.color = ChatColor.getByChar(this.getLines()[1].charAt(0));
+            }
+            catch (Exception ex2) {
+                this.color = ChatColor.WHITE;
+            }
+        }
 
-		if (!reload) {
-			this.clearArgLines(event);
-			this.setLine(1, this.color.name(), event);
-		}
+        if (!reload) {
+            this.clearArgLines(event);
+            this.setLine(1, this.color.name(), event);
+        }
 
-		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
-		if (!reload) {
-			init("GlAnnounce sign accepted.");
-		}
-		return true;
-	}
+        this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+        if (!reload) {
+            init("GlAnnounce sign accepted.");
+        }
+        return true;
+    }
 
-	@Override
-	public void invalidate() {
-	}
+    @Override
+    public void invalidate() {}
 
-	@Override
-	public String getTriggerTypesString() {
-		return TriggerType.REDSTONE_CHANGE.name();
-	}
+    @Override
+    public String getTriggerTypesString() {
+        return TriggerType.REDSTONE_CHANGE.name();
+    }
 }

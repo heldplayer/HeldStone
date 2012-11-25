@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign.logic;
 
 /*
@@ -31,101 +32,102 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class TriggerSign extends HeldSign {
 
-	@Override
-	protected void triggersign(TriggerType type, Object args) {
-		if (type == TriggerType.TRIGGER_COMMAND) {
-			CommandArgWrapper command = (CommandArgWrapper) args;
+    @Override
+    protected void triggersign(TriggerType type, Object args) {
+        if (type == TriggerType.TRIGGER_COMMAND) {
+            CommandArgWrapper command = (CommandArgWrapper) args;
 
-			if (command.args.length >= 1) {
-				String id = command.args[0];
-				if (this.command.equalsIgnoreCase(id)) {
-					if (this.player.equalsIgnoreCase("@")) {
-						this.state = !this.state;
-					} else if (command.commandSender instanceof Player) {
-						Player p = (Player) command.commandSender;
-						boolean isNamed = this.player.equalsIgnoreCase(p.getName());
-						if (isNamed) {
-							this.state = !this.state;
-						}
-					}
-				}
-			}
-		}
+            if (command.args.length >= 1) {
+                String id = command.args[0];
+                if (this.command.equalsIgnoreCase(id)) {
+                    if (this.player.equalsIgnoreCase("@")) {
+                        this.state = !this.state;
+                    }
+                    else if (command.commandSender instanceof Player) {
+                        Player p = (Player) command.commandSender;
+                        boolean isNamed = this.player.equalsIgnoreCase(p.getName());
+                        if (isNamed) {
+                            this.state = !this.state;
+                        }
+                    }
+                }
+            }
+        }
 
-		if (isLoaded()) {
-			setOutput(this.state);
-		}
-	}
+        if (isLoaded()) {
+            setOutput(this.state);
+        }
+    }
 
-	@Override
-	protected void setNBTData(NBTBase tag) {
-		NBTTagString TagString = (NBTTagString) tag;
+    @Override
+    protected void setNBTData(NBTBase tag) {
+        NBTTagString TagString = (NBTTagString) tag;
 
-		String data = TagString.value;
+        String data = TagString.value;
 
-		if (data != null && (!data.equals(""))) {
-			if (data.equals("H")) {
-				this.state = true;
-			}
-		}
-	}
+        if (data != null && (!data.equals(""))) {
+            if (data.equals("H")) {
+                this.state = true;
+            }
+        }
+    }
 
-	@Override
-	public NBTBase getNBTData() {
-		if (this.state) {
-			return new NBTTagString("H");
-		} else {
-			return new NBTTagString("L");
-		}
-	}
+    @Override
+    public NBTBase getNBTData() {
+        if (this.state) {
+            return new NBTTagString("H");
+        }
+        else {
+            return new NBTTagString("L");
+        }
+    }
 
-	boolean state = false;
-	String command, player;
+    boolean state = false;
+    String command, player;
 
-	@Override
-	protected boolean declare(boolean reload, SignChangeEvent event) {
-		String nullCmd = getOwnerName().trim();
+    @Override
+    protected boolean declare(boolean reload, SignChangeEvent event) {
+        String nullCmd = getOwnerName().trim();
 
-		this.command = this.getLines(event)[1].replace("/", "");
-		this.player = this.getLines(event)[2];
+        this.command = this.getLines(event)[1].replace("/", "");
+        this.player = this.getLines(event)[2];
 
-		if (this.player == null || this.player.equals("")) {
-			this.player = "@";
-			if (!reload) {
-				this.main.alert(getOwnerName(), "Player name defaulted to \"@\" because you did not specify a name.", ChatColor.AQUA);
-				this.main.alert(getOwnerName(), "This sign will be triggerable by anyone.", ChatColor.AQUA);
-			}
-		}
+        if (this.player == null || this.player.equals("")) {
+            this.player = "@";
+            if (!reload) {
+                this.main.alert(getOwnerName(), "Player name defaulted to \"@\" because you did not specify a name.", ChatColor.AQUA);
+                this.main.alert(getOwnerName(), "This sign will be triggerable by anyone.", ChatColor.AQUA);
+            }
+        }
 
-		if (this.command == null || this.command.equals("")) {
-			this.command = nullCmd;
-			if (!reload) {
-				this.main.alert(getOwnerName(), "Trigger identifier defaulted to your name because you did not specify your own.", ChatColor.AQUA);
-			}
-		}
+        if (this.command == null || this.command.equals("")) {
+            this.command = nullCmd;
+            if (!reload) {
+                this.main.alert(getOwnerName(), "Trigger identifier defaulted to your name because you did not specify your own.", ChatColor.AQUA);
+            }
+        }
 
-		if (!reload) {
-			this.clearArgLines(event);
-			this.setLine(1, this.command, event);
-			this.setLine(2, this.player, event);
-		}
+        if (!reload) {
+            this.clearArgLines(event);
+            this.setLine(1, this.command, event);
+            this.setLine(2, this.player, event);
+        }
 
-		this.main.sgc.register(this, TriggerType.TRIGGER_COMMAND);
-		this.main.sgc.register(this, TriggerType.TIMER_SECOND);
+        this.main.sgc.register(this, TriggerType.TRIGGER_COMMAND);
+        this.main.sgc.register(this, TriggerType.TIMER_SECOND);
 
-		if (!reload) {
-			init("Trigger sign accepted.");
-		}
+        if (!reload) {
+            init("Trigger sign accepted.");
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void invalidate() {
-	}
+    @Override
+    public void invalidate() {}
 
-	@Override
-	public String getTriggerTypesString() {
-		return TriggerType.TRIGGER_COMMAND.name() + "; " + TriggerType.TIMER_SECOND.name();
-	}
+    @Override
+    public String getTriggerTypesString() {
+        return TriggerType.TRIGGER_COMMAND.name() + "; " + TriggerType.TIMER_SECOND.name();
+    }
 }

@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign.sensor;
 
 /*
@@ -31,69 +32,67 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class LoggedSign extends HeldSign {
 
-	private boolean isNew = true;
-	private boolean lastState = false;
+    private boolean isNew = true;
+    private boolean lastState = false;
 
-	@Override
-	protected void triggersign(TriggerType type, Object args) {
-		Iterator<Player> i = getWorld().getPlayers().iterator();
-		boolean inWorld = false;
-		while (i.hasNext()) {
-			if (i.next().getName().equalsIgnoreCase(this.playerName)) {
-				inWorld = true;
-			}
-		}
+    @Override
+    protected void triggersign(TriggerType type, Object args) {
+        Iterator<Player> i = getWorld().getPlayers().iterator();
+        boolean inWorld = false;
+        while (i.hasNext()) {
+            if (i.next().getName().equalsIgnoreCase(this.playerName)) {
+                inWorld = true;
+            }
+        }
 
-		if (this.lastState != inWorld || this.isNew) {
-			this.isNew = false;
-			this.lastState = inWorld;
-			setOutput(inWorld);
-		}
-	}
+        if (this.lastState != inWorld || this.isNew) {
+            this.isNew = false;
+            this.lastState = inWorld;
+            setOutput(inWorld);
+        }
+    }
 
-	@Override
-	protected void setNBTData(NBTBase tag) {
-	}
+    @Override
+    protected void setNBTData(NBTBase tag) {}
 
-	@Override
-	public NBTBase getNBTData() {
-		return new NBTTagInt(0);
-	}
+    @Override
+    public NBTBase getNBTData() {
+        return new NBTTagInt(0);
+    }
 
-	private String playerName;
+    private String playerName;
 
-	@Override
-	protected boolean declare(boolean reload, SignChangeEvent event) {
-		String playerLine = this.getLines(event)[1];
-		playerLine = playerLine.trim();
-		playerLine = playerLine.substring(0, Math.min(16, playerLine.length()));
+    @Override
+    protected boolean declare(boolean reload, SignChangeEvent event) {
+        String playerLine = this.getLines(event)[1];
+        playerLine = playerLine.trim();
+        playerLine = playerLine.substring(0, Math.min(16, playerLine.length()));
 
-		if (playerLine.length() < 1) {
-			playerLine = getOwnerName();
-		}
+        if (playerLine.length() < 1) {
+            playerLine = getOwnerName();
+        }
 
-		if (!reload) {
-			this.clearArgLines(event);
-			this.setLine(1, playerLine, event);
-		}
+        if (!reload) {
+            this.clearArgLines(event);
+            this.setLine(1, playerLine, event);
+        }
 
-		this.playerName = playerLine;
+        this.playerName = playerLine;
 
-		this.main.sgc.register(this, TriggerType.TIMER_SECOND);
+        this.main.sgc.register(this, TriggerType.TIMER_SECOND);
 
-		if (!reload) {
-			init("Logged sign accepted.");
-		}
+        if (!reload) {
+            init("Logged sign accepted.");
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void invalidate() {
-	}
+    @Override
+    public void invalidate() {}
 
-	@Override
-	public String getTriggerTypesString() {
-		return TriggerType.TIMER_SECOND.name();
-	}
+    @Override
+    public String getTriggerTypesString() {
+        return TriggerType.TIMER_SECOND.name();
+    }
 }

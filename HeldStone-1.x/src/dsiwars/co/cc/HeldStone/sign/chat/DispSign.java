@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign.chat;
 
 /*
@@ -31,93 +32,95 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class DispSign extends HeldSign {
 
-	private boolean lastState = false;
+    private boolean lastState = false;
 
-	@Override
-	protected void triggersign(TriggerType type, Object args) {
-		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
+    @Override
+    protected void triggersign(TriggerType type, Object args) {
+        InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
-		if (is != InputState.HIGH) {
-			this.lastState = false;
-			return;
-		} else {
-			if (this.lastState == true) {
-				return;
-			}
-			this.lastState = true;
-		}
+        if (is != InputState.HIGH) {
+            this.lastState = false;
+            return;
+        }
+        else {
+            if (this.lastState == true) {
+                return;
+            }
+            this.lastState = true;
+        }
 
-		Player[] players = this.main.getServer().getOnlinePlayers();
-		for (Player p : players) {
-			if (p.getName().equalsIgnoreCase(this.player)) {
-				this.main.alert(p.getName(), this.message, this.color);
-				break;
-			}
-		}
-	}
+        Player[] players = this.main.getServer().getOnlinePlayers();
+        for (Player p : players) {
+            if (p.getName().equalsIgnoreCase(this.player)) {
+                this.main.alert(p.getName(), this.message, this.color);
+                break;
+            }
+        }
+    }
 
-	@Override
-	protected void setNBTData(NBTBase tag) {
-		this.message = ((NBTTagString) tag).value;
-	}
+    @Override
+    protected void setNBTData(NBTBase tag) {
+        this.message = ((NBTTagString) tag).value;
+    }
 
-	@Override
-	public NBTBase getNBTData() {
-		return new NBTTagString(this.message);
-	}
+    @Override
+    public NBTBase getNBTData() {
+        return new NBTTagString(this.message);
+    }
 
-	String message = null;
-	String player;
-	ChatColor color = ChatColor.WHITE;
+    String message = null;
+    String player;
+    ChatColor color = ChatColor.WHITE;
 
-	@Override
-	protected boolean declare(boolean reload, SignChangeEvent event) {
+    @Override
+    protected boolean declare(boolean reload, SignChangeEvent event) {
 
-		if (!reload) {
-			this.message = this.main.players.safelyGet(getOwnerName(), this.main).message;
-			if (this.message == null) {
-				this.main.alert(getOwnerName(), "You must set a message first. " + org.bukkit.ChatColor.AQUA + "/hs msg <message>", ChatColor.RED);
-				return false;
-			}
-		}
+        if (!reload) {
+            this.message = this.main.players.safelyGet(getOwnerName(), this.main).message;
+            if (this.message == null) {
+                this.main.alert(getOwnerName(), "You must set a message first. " + org.bukkit.ChatColor.AQUA + "/hs msg <message>", ChatColor.RED);
+                return false;
+            }
+        }
 
-		this.player = this.getLines(event)[1];
+        this.player = this.getLines(event)[1];
 
-		if (!reload && (this.player == null || this.player.equals(""))) {
-			this.player = getOwnerName();
-			this.setLine(1, this.player, event);
-		}
+        if (!reload && (this.player == null || this.player.equals(""))) {
+            this.player = getOwnerName();
+            this.setLine(1, this.player, event);
+        }
 
-		try {
-			this.color = ChatColor.valueOf(this.getLines()[2].toUpperCase());
-		} catch (Exception ex) {
-			try {
-				this.color = ChatColor.getByChar(this.getLines()[2].charAt(0));
-			} catch (Exception ex2) {
-				this.color = ChatColor.WHITE;
-			}
-		}
+        try {
+            this.color = ChatColor.valueOf(this.getLines()[2].toUpperCase());
+        }
+        catch (Exception ex) {
+            try {
+                this.color = ChatColor.getByChar(this.getLines()[2].charAt(0));
+            }
+            catch (Exception ex2) {
+                this.color = ChatColor.WHITE;
+            }
+        }
 
-		if (!reload) {
-			this.clearArgLines(event);
-			this.setLine(1, this.player, event);
-			this.setLine(2, this.color.name(), event);
-		}
+        if (!reload) {
+            this.clearArgLines(event);
+            this.setLine(1, this.player, event);
+            this.setLine(2, this.color.name(), event);
+        }
 
-		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
-		if (!reload) {
-			init("Disp sign accepted.");
-		}
+        this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+        if (!reload) {
+            init("Disp sign accepted.");
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void invalidate() {
-	}
+    @Override
+    public void invalidate() {}
 
-	@Override
-	public String getTriggerTypesString() {
-		return TriggerType.REDSTONE_CHANGE.name();
-	}
+    @Override
+    public String getTriggerTypesString() {
+        return TriggerType.REDSTONE_CHANGE.name();
+    }
 }

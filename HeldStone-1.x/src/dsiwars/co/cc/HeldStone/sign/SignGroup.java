@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign;
 
 /*
@@ -29,65 +30,68 @@ import dsiwars.co.cc.HeldStone.sign.HeldSign.ValidationState;
 
 public class SignGroup {
 
-	private final TriggerType type;
-	private final ArrayList<HeldSign> signs;
-	private final HeldStone main;
+    private final TriggerType type;
+    private final ArrayList<HeldSign> signs;
+    private final HeldStone main;
 
-	public SignGroup(TriggerType type, HeldStone main) {
-		this.type = type;
-		this.signs = new ArrayList<HeldSign>();
-		this.main = main;
-	}
+    public SignGroup(TriggerType type, HeldStone main) {
+        this.type = type;
+        this.signs = new ArrayList<HeldSign>();
+        this.main = main;
+    }
 
-	public TriggerType getType() {
-		return this.type;
-	}
+    public TriggerType getType() {
+        return this.type;
+    }
 
-	public boolean isType(TriggerType ctype) {
-		return (getType() == ctype);
-	}
+    public boolean isType(TriggerType ctype) {
+        return (getType() == ctype);
+    }
 
-	public void add(HeldSign sign) {
-		this.signs.add(sign);
-	}
+    public void add(HeldSign sign) {
+        this.signs.add(sign);
+    }
 
-	public void invalidate(HeldSign sign) {
-		this.signs.remove(sign);
-	}
+    public void invalidate(HeldSign sign) {
+        this.signs.remove(sign);
+    }
 
-	public ArrayList<HeldSign> getSigns() {
-		return this.signs;
-	}
+    public ArrayList<HeldSign> getSigns() {
+        return this.signs;
+    }
 
-	public void trigger(Object args) {
-		for (int i = 0; i < this.signs.size(); i++) {
-			HeldSign toTrigger = this.signs.get(i);
-			ValidationState valid = toTrigger.isValid();
-			if (valid == ValidationState.INVALID) {
-				this.main.sgc.invalidate(toTrigger, "Sign was either gone or had different text.");
-			} else if (valid == ValidationState.BLANK) {
-				if (this.main.cfgWipeProtection) {
-					if (this.type == TriggerType.PING) {
-						return;
-					}
+    public void trigger(Object args) {
+        for (int i = 0; i < this.signs.size(); i++) {
+            HeldSign toTrigger = this.signs.get(i);
+            ValidationState valid = toTrigger.isValid();
+            if (valid == ValidationState.INVALID) {
+                this.main.sgc.invalidate(toTrigger, "Sign was either gone or had different text.");
+            }
+            else if (valid == ValidationState.BLANK) {
+                if (this.main.cfgWipeProtection) {
+                    if (this.type == TriggerType.PING) {
+                        return;
+                    }
 
-					this.main.e("Sign lost its text, repairing...");
+                    this.main.e("Sign lost its text, repairing...");
 
-					this.main.alert(toTrigger.getOwnerName(), "Sign lost text! Repairing...", ChatColor.RED);
+                    this.main.alert(toTrigger.getOwnerName(), "Sign lost text! Repairing...", ChatColor.RED);
 
-					Sign s = (Sign) (toTrigger.getBlock().getState());
-					String[] knownLines = toTrigger.getLines();
-					for (int j = 0; j < 4; j++) {
-						s.setLine(j, knownLines[j]);
-					}
-					s.update();
+                    Sign s = (Sign) (toTrigger.getBlock().getState());
+                    String[] knownLines = toTrigger.getLines();
+                    for (int j = 0; j < 4; j++) {
+                        s.setLine(j, knownLines[j]);
+                    }
+                    s.update();
 
-				} else {
-					this.main.sgc.invalidate(toTrigger, "Sign was blank. (wipe-protection is off)");
-				}
-			} else if (valid == ValidationState.VALID) {
-				toTrigger.trigger(this.type, args);
-			}
-		}
-	}
+                }
+                else {
+                    this.main.sgc.invalidate(toTrigger, "Sign was blank. (wipe-protection is off)");
+                }
+            }
+            else if (valid == ValidationState.VALID) {
+                toTrigger.trigger(this.type, args);
+            }
+        }
+    }
 }

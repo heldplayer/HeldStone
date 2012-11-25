@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone;
 
 /*
@@ -23,42 +24,43 @@ import java.util.ArrayList;
 
 public class HeldPlayers {
 
-	public final ArrayList<HeldPlayer> players;
+    public final ArrayList<HeldPlayer> players;
 
-	public HeldPlayers() {
-		this.players = new ArrayList<HeldPlayer>();
-	}
+    public HeldPlayers() {
+        this.players = new ArrayList<HeldPlayer>();
+    }
 
-	public void add(HeldPlayer p) {
-		if (!exists(p.getName())) {
-			this.players.add(p);
-		}
-	}
+    public void add(HeldPlayer p) {
+        if (!exists(p.getName())) {
+            this.players.add(p);
+        }
+    }
 
-	public boolean exists(String name) {
-		for (int i = 0; i < this.players.size(); i++) {
-			if (this.players.get(i).getName().equalsIgnoreCase(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public boolean exists(String name) {
+        for (int i = 0; i < this.players.size(); i++) {
+            if (this.players.get(i).getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public HeldPlayer get(String name) {
-		for (int i = 0; i < this.players.size(); i++) {
-			if (this.players.get(i).getName().equalsIgnoreCase(name)) {
-				return this.players.get(i);
-			}
-		}
-		return null;
-	}
+    public HeldPlayer get(String name) {
+        for (int i = 0; i < this.players.size(); i++) {
+            if (this.players.get(i).getName().equalsIgnoreCase(name)) {
+                return this.players.get(i);
+            }
+        }
+        return null;
+    }
 
-	public HeldPlayer safelyGet(String name, HeldStone main) {
-		if (exists(name)) {
-			return get(name);
-		} else {
-			add(new HeldPlayer(name, main));
-			return get(name);
-		}
-	}
+    public HeldPlayer safelyGet(String name, HeldStone main) {
+        if (exists(name)) {
+            return get(name);
+        }
+        else {
+            add(new HeldPlayer(name, main));
+            return get(name);
+        }
+    }
 }

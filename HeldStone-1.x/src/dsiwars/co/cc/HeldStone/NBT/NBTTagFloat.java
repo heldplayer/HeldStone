@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.NBT;
 
 import java.io.DataInput;
@@ -8,40 +9,41 @@ import java.util.logging.Logger;
 
 public class NBTTagFloat extends NBTBase {
 
-	public float value;
+    public float value;
 
-	public NBTTagFloat() {
-	}
+    public NBTTagFloat() {}
 
-	public NBTTagFloat(float value) {
-		this.value = value;
-	}
+    public NBTTagFloat(float value) {
+        this.value = value;
+    }
 
-	@Override
-	void save(DataOutput Output) {
-		try {
-			Output.writeFloat(this.value);
-		} catch (IOException ex) {
-			Logger.getLogger(NBTTagFloat.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
+    @Override
+    void save(DataOutput Output) {
+        try {
+            Output.writeFloat(this.value);
+        }
+        catch (IOException ex) {
+            Logger.getLogger(NBTTagFloat.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
-	@Override
-	void load(DataInput Input) {
-		try {
-			this.value = Input.readFloat();
-		} catch (IOException ex) {
-			Logger.getLogger(NBTTagFloat.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
+    @Override
+    void load(DataInput Input) {
+        try {
+            this.value = Input.readFloat();
+        }
+        catch (IOException ex) {
+            Logger.getLogger(NBTTagFloat.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
-	@Override
-	public byte getTypeID() {
-		return 5;
-	}
+    @Override
+    public byte getTypeID() {
+        return 5;
+    }
 
-	@Override
-	public String toString() {
-		return "" + this.value;
-	}
+    @Override
+    public String toString() {
+        return "" + this.value;
+    }
 }

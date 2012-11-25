@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone;
 
 /*
@@ -24,17 +25,17 @@ import org.bukkit.command.CommandSender;
 
 public class CommandArgWrapper {
 
-	public CommandSender commandSender;
-	public Command command;
-	public String label;
-	public String[] args;
+    public CommandSender commandSender;
+    public Command command;
+    public String label;
+    public String[] args;
 
-	public CommandArgWrapper(CommandSender arg0, Command arg1, String label, String[] args) {
+    public CommandArgWrapper(CommandSender arg0, Command arg1, String label, String[] args) {
 
-		this.commandSender = arg0;
-		this.command = arg1;
-		this.label = label;
-		this.args = args;
+        this.commandSender = arg0;
+        this.command = arg1;
+        this.label = label;
+        this.args = args;
 
-	}
+    }
 }

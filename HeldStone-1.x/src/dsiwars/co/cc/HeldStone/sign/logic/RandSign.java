@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign.logic;
 
 /*
@@ -32,84 +33,84 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class RandSign extends HeldSign {
 
-	private boolean lastState = false;
-	private Random rnd = new Random();
+    private boolean lastState = false;
+    private Random rnd = new Random();
 
-	@Override
-	protected void triggersign(TriggerType type, Object args) {
-		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
+    @Override
+    protected void triggersign(TriggerType type, Object args) {
+        InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
-		if (is == InputState.HIGH && !this.lastState) {
-			this.lastState = true;
-			randomize();
-		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && this.lastState) {
-			this.lastState = false;
-			setOutput(false);
-		}
-	}
+        if (is == InputState.HIGH && !this.lastState) {
+            this.lastState = true;
+            randomize();
+        }
+        else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && this.lastState) {
+            this.lastState = false;
+            setOutput(false);
+        }
+    }
 
-	public void randomize() {
-		setOutput((this.rnd.nextInt(100) <= this.chance ? true : false));
-	}
+    public void randomize() {
+        setOutput((this.rnd.nextInt(100) <= this.chance ? true : false));
+    }
 
-	@Override
-	protected void setNBTData(NBTBase tag) {
-	}
+    @Override
+    protected void setNBTData(NBTBase tag) {}
 
-	@Override
-	public NBTBase getNBTData() {
-		return new NBTTagInt(0);
-	}
+    @Override
+    public NBTBase getNBTData() {
+        return new NBTTagInt(0);
+    }
 
-	int chance = 0;
+    int chance = 0;
 
-	@Override
-	protected boolean declare(boolean reload, SignChangeEvent event) {
-		try {
-			this.chance = Integer.parseInt(this.getLines()[1]);
-		} catch (Exception ex) {
-			if (!reload) {
-				this.main.alert(getOwnerName(), "The entered chance was not a number!", ChatColor.RED);
-				event.setCancelled(true);
-			}
-			return false;
-		}
+    @Override
+    protected boolean declare(boolean reload, SignChangeEvent event) {
+        try {
+            this.chance = Integer.parseInt(this.getLines()[1]);
+        }
+        catch (Exception ex) {
+            if (!reload) {
+                this.main.alert(getOwnerName(), "The entered chance was not a number!", ChatColor.RED);
+                event.setCancelled(true);
+            }
+            return false;
+        }
 
-		if (this.chance <= 0) {
-			if (!reload) {
-				this.main.alert(getOwnerName(), "The entered chance was too small.", ChatColor.RED);
-				event.setCancelled(true);
-			}
-			return false;
-		}
+        if (this.chance <= 0) {
+            if (!reload) {
+                this.main.alert(getOwnerName(), "The entered chance was too small.", ChatColor.RED);
+                event.setCancelled(true);
+            }
+            return false;
+        }
 
-		if (this.chance >= 100) {
-			if (!reload) {
-				this.main.alert(getOwnerName(), "The entered chance was too big.", ChatColor.RED);
-				event.setCancelled(true);
-			}
-			return false;
-		}
+        if (this.chance >= 100) {
+            if (!reload) {
+                this.main.alert(getOwnerName(), "The entered chance was too big.", ChatColor.RED);
+                event.setCancelled(true);
+            }
+            return false;
+        }
 
-		if (!reload) {
-			this.clearArgLines();
-			this.setLine(1, this.chance + "", event);
-		}
+        if (!reload) {
+            this.clearArgLines();
+            this.setLine(1, this.chance + "", event);
+        }
 
-		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
-		if (!reload) {
-			init("Rand sign accepted.");
-		}
+        this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+        if (!reload) {
+            init("Rand sign accepted.");
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void invalidate() {
-	}
+    @Override
+    public void invalidate() {}
 
-	@Override
-	public String getTriggerTypesString() {
-		return TriggerType.REDSTONE_CHANGE.name();
-	}
+    @Override
+    public String getTriggerTypesString() {
+        return TriggerType.REDSTONE_CHANGE.name();
+    }
 }

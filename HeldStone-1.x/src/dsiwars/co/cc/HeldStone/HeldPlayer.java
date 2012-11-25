@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone;
 
 /*
@@ -26,58 +27,59 @@ import org.bukkit.entity.Player;
 
 public class HeldPlayer {
 
-	public final String name;
-	public Location loc1, loc2, loc3;
-	public boolean l1 = true;
-	public String message = null;
-	private final HeldStone main;
-	public int snow = 0;
-	public Minecart ridingCart = null;
+    public final String name;
+    public Location loc1, loc2, loc3;
+    public boolean l1 = true;
+    public String message = null;
+    private final HeldStone main;
+    public int snow = 0;
+    public Minecart ridingCart = null;
 
-	public HeldPlayer(String name, HeldStone main) {
-		this.name = name;
-		this.main = main;
-		//this.main.i("Created new player tracker for " + name + ".");
-	}
+    public HeldPlayer(String name, HeldStone main) {
+        this.name = name;
+        this.main = main;
+        //this.main.i("Created new player tracker for " + name + ".");
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public Player getPlayer() {
-		return this.main.getServer().getPlayer(this.name);
-	}
+    public Player getPlayer() {
+        return this.main.getServer().getPlayer(this.name);
+    }
 
-	public boolean isOnline() {
-		return getPlayer() != null;
-	}
+    public boolean isOnline() {
+        return getPlayer() != null;
+    }
 
-	public void setLoc1(Location l) {
-		this.main.alert(getName(), "Set point one.", ChatColor.GREEN);
-		this.loc1 = l;
-		this.l1 = false;
-	}
+    public void setLoc1(Location l) {
+        this.main.alert(getName(), "Set point one.", ChatColor.GREEN);
+        this.loc1 = l;
+        this.l1 = false;
+    }
 
-	public void setLoc2(Location l) {
-		this.main.alert(getName(), "Set point two.", ChatColor.GREEN);
-		this.loc2 = l;
-		this.l1 = true;
-	}
+    public void setLoc2(Location l) {
+        this.main.alert(getName(), "Set point two.", ChatColor.GREEN);
+        this.loc2 = l;
+        this.l1 = true;
+    }
 
-	public void setLoc(Location l) {
-		if (this.l1) {
-			setLoc1(l);
-		} else {
-			setLoc2(l);
-		}
-	}
+    public void setLoc(Location l) {
+        if (this.l1) {
+            setLoc1(l);
+        }
+        else {
+            setLoc2(l);
+        }
+    }
 
-	public void setLoc3(Location l) {
-		this.main.alert(getName(), "Set block location.", ChatColor.GREEN);
-		this.loc3 = l;
-	}
+    public void setLoc3(Location l) {
+        this.main.alert(getName(), "Set block location.", ChatColor.GREEN);
+        this.loc3 = l;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

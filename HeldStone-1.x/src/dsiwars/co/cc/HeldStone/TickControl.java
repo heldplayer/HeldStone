@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone;
 
 /*
@@ -26,39 +27,39 @@ import dsiwars.co.cc.HeldStone.sign.HeldSign;
 
 public class TickControl implements Runnable {
 
-	private volatile ArrayList<HeldSign> nextTick;
-	private ArrayList<HeldSign> thisTick;
-	private ArrayList<HeldSign> kill;
-	@SuppressWarnings("unused")
-	private final HeldStone main;
+    private volatile ArrayList<HeldSign> nextTick;
+    private ArrayList<HeldSign> thisTick;
+    private ArrayList<HeldSign> kill;
+    @SuppressWarnings("unused")
+    private final HeldStone main;
 
-	public TickControl(HeldStone main) {
-		this.nextTick = new ArrayList<HeldSign>();
-		this.kill = new ArrayList<HeldSign>();
-		this.main = main;
-	}
+    public TickControl(HeldStone main) {
+        this.nextTick = new ArrayList<HeldSign>();
+        this.kill = new ArrayList<HeldSign>();
+        this.main = main;
+    }
 
-	public void register(HeldSign sign) {
-		this.nextTick.add(sign);
-	}
+    public void register(HeldSign sign) {
+        this.nextTick.add(sign);
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-		this.thisTick = this.nextTick;
-		this.nextTick = new ArrayList<HeldSign>();
+        this.thisTick = this.nextTick;
+        this.nextTick = new ArrayList<HeldSign>();
 
-		Iterator<HeldSign> i = this.thisTick.iterator();
-		HeldSign csign = null;
-		while (i.hasNext()) {
-			csign = i.next();
-			if ((!this.kill.contains(csign)) && csign.tick()) {
-				register(csign);
-			}
-		}
-	}
+        Iterator<HeldSign> i = this.thisTick.iterator();
+        HeldSign csign = null;
+        while (i.hasNext()) {
+            csign = i.next();
+            if ((!this.kill.contains(csign)) && csign.tick()) {
+                register(csign);
+            }
+        }
+    }
 
-	public synchronized void purge(HeldSign sign) {
-		this.kill.add(sign);
-	}
+    public synchronized void purge(HeldSign sign) {
+        this.kill.add(sign);
+    }
 }

@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign;
 
 /*
@@ -21,21 +22,21 @@ package dsiwars.co.cc.HeldStone.sign;
  */
 public class WirelessPacket {
 
-	public final String band;
-	public final String channel;
-	private final boolean state;
+    public final String band;
+    public final String channel;
+    private final boolean state;
 
-	public WirelessPacket(String band, String channel, boolean state) {
-		this.band = band;
-		this.channel = channel;
-		this.state = state;
-	}
+    public WirelessPacket(String band, String channel, boolean state) {
+        this.band = band;
+        this.channel = channel;
+        this.state = state;
+    }
 
-	public boolean sameChannel(WirelessPacket id) {
-		return this.band.equals(id.band) && this.channel.equals(id.channel);
-	}
+    public boolean sameChannel(WirelessPacket id) {
+        return this.band.equals(id.band) && this.channel.equals(id.channel);
+    }
 
-	public boolean getState() {
-		return this.state;
-	}
+    public boolean getState() {
+        return this.state;
+    }
 }

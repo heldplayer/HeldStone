@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign;
 
 /*
@@ -27,21 +28,21 @@ import dsiwars.co.cc.HeldStone.CommandArgWrapper;
 
 public class SignCommand implements CommandExecutor {
 
-	private final SignController sh;
-	private final TriggerType t;
+    private final SignController sh;
+    private final TriggerType t;
 
-	public SignCommand(SignController sh, TriggerType t) {
+    public SignCommand(SignController sh, TriggerType t) {
 
-		this.sh = sh;
-		this.t = t;
+        this.sh = sh;
+        this.t = t;
 
-	}
+    }
 
-	@Override
-	public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
+    @Override
+    public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
 
-		this.sh.trigger(this.t, new CommandArgWrapper(arg0, arg1, arg2, arg3));
+        this.sh.trigger(this.t, new CommandArgWrapper(arg0, arg1, arg2, arg3));
 
-		return true;
-	}
+        return true;
+    }
 }

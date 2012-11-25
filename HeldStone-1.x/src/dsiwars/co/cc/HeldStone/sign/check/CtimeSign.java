@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign.check;
 
 /*
@@ -28,139 +29,146 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class CtimeSign extends HeldSign {
 
-	@Override
-	protected void triggersign(TriggerType type, Object args) {
-		int ctime = (int) getWorld().getTime();
+    @Override
+    protected void triggersign(TriggerType type, Object args) {
+        int ctime = (int) getWorld().getTime();
 
-		boolean ncurrent = false;
+        boolean ncurrent = false;
 
-		if (ctime <= this.highTime && ctime >= this.lowTime) {
-			ncurrent = this.betweenState;
-		} else {
-			ncurrent = !this.betweenState;
-		}
+        if (ctime <= this.highTime && ctime >= this.lowTime) {
+            ncurrent = this.betweenState;
+        }
+        else {
+            ncurrent = !this.betweenState;
+        }
 
-		if (ncurrent) {
-			setOutput(true);
-			this.current = true;
-		} else {
-			setOutput(false);
-			this.current = false;
-		}
-	}
+        if (ncurrent) {
+            setOutput(true);
+            this.current = true;
+        }
+        else {
+            setOutput(false);
+            this.current = false;
+        }
+    }
 
-	@Override
-	protected void setNBTData(NBTBase tag) {
-	}
+    @Override
+    protected void setNBTData(NBTBase tag) {}
 
-	@Override
-	public NBTBase getNBTData() {
-		return new NBTTagInt(0);
-	}
+    @Override
+    public NBTBase getNBTData() {
+        return new NBTTagInt(0);
+    }
 
-	boolean betweenState;
-	int lowTime, highTime;
-	boolean current = false;
-	boolean autoTrigger = false;
+    boolean betweenState;
+    int lowTime, highTime;
+    boolean current = false;
+    boolean autoTrigger = false;
 
-	@Override
-	protected boolean declare(boolean reload, SignChangeEvent event) {
-		int l1, l2;
-		String autoTriggerline;
+    @Override
+    protected boolean declare(boolean reload, SignChangeEvent event) {
+        int l1, l2;
+        String autoTriggerline;
 
-		String[] lines = this.getLines(event);
+        String[] lines = this.getLines(event);
 
-		autoTriggerline = lines[3];
+        autoTriggerline = lines[3];
 
-		if (lines[1].equals("") && lines[2].equals("")) {
-			this.lowTime = 0;
-			l1 = this.lowTime;
-			this.highTime = 12000;
-			l2 = this.highTime;
-			this.betweenState = true;
-		} else {
-			l1 = fixTime(parseTime(lines[1]));
-			l2 = fixTime(parseTime(lines[2]));
+        if (lines[1].equals("") && lines[2].equals("")) {
+            this.lowTime = 0;
+            l1 = this.lowTime;
+            this.highTime = 12000;
+            l2 = this.highTime;
+            this.betweenState = true;
+        }
+        else {
+            l1 = fixTime(parseTime(lines[1]));
+            l2 = fixTime(parseTime(lines[2]));
 
-			if (l1 <= l2) {
-				this.betweenState = true;
-				this.highTime = l2;
-				this.lowTime = l1;
-			} else {
+            if (l1 <= l2) {
+                this.betweenState = true;
+                this.highTime = l2;
+                this.lowTime = l1;
+            }
+            else {
 
-				this.betweenState = false;
-				this.highTime = l1;
-				this.lowTime = l2;
-			}
-		}
+                this.betweenState = false;
+                this.highTime = l1;
+                this.lowTime = l2;
+            }
+        }
 
-		if (autoTriggerline.equalsIgnoreCase("FALSE")) {
-			autoTriggerline = "FALSE";
-			this.autoTrigger = false;
-		} else {
-			autoTriggerline = "TRUE";
-			this.autoTrigger = true;
-		}
+        if (autoTriggerline.equalsIgnoreCase("FALSE")) {
+            autoTriggerline = "FALSE";
+            this.autoTrigger = false;
+        }
+        else {
+            autoTriggerline = "TRUE";
+            this.autoTrigger = true;
+        }
 
-		if (!reload) {
-			this.clearArgLines(event);
-			this.setLine(1, "" + l1, event);
-			this.setLine(2, "" + l2, event);
-			this.setLine(3, autoTriggerline, event);
-		}
+        if (!reload) {
+            this.clearArgLines(event);
+            this.setLine(1, "" + l1, event);
+            this.setLine(2, "" + l2, event);
+            this.setLine(3, autoTriggerline, event);
+        }
 
-		if (this.autoTrigger) {
-			this.main.sgc.register(this, TriggerType.TIMER_SECOND);
-		} else {
-			this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
-		}
+        if (this.autoTrigger) {
+            this.main.sgc.register(this, TriggerType.TIMER_SECOND);
+        }
+        else {
+            this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+        }
 
-		if (!reload) {
-			init("ctime sign accepted.");
-		}
+        if (!reload) {
+            init("ctime sign accepted.");
+        }
 
-		triggersign(null, null);
+        triggersign(null, null);
 
-		return true;
-	}
+        return true;
+    }
 
-	private int parseTime(String ts) {
-		if (isInteger(ts)) {
-			return Integer.parseInt(ts);
-		} else {
-			return 0;
-		}
-	}
+    private int parseTime(String ts) {
+        if (isInteger(ts)) {
+            return Integer.parseInt(ts);
+        }
+        else {
+            return 0;
+        }
+    }
 
-	public boolean isInteger(String input) {
-		try {
-			Integer.parseInt(input);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
+    public boolean isInteger(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
 
-	private int fixTime(int time) {
-		if (time > 24000) {
-			time = 24000;
-		}
-		if (time < 0) {
-			time = 0;
-		}
-		return time;
-	}
+    private int fixTime(int time) {
+        if (time > 24000) {
+            time = 24000;
+        }
+        if (time < 0) {
+            time = 0;
+        }
+        return time;
+    }
 
-	@Override
-	public void invalidate() {
-	}
+    @Override
+    public void invalidate() {}
 
-	@Override
-	public String getTriggerTypesString() {
-		if (this.autoTrigger) {
-			return TriggerType.TIMER_SECOND.name();
-		} else {
-			return TriggerType.REDSTONE_CHANGE.name();
-		}
-	}
+    @Override
+    public String getTriggerTypesString() {
+        if (this.autoTrigger) {
+            return TriggerType.TIMER_SECOND.name();
+        }
+        else {
+            return TriggerType.REDSTONE_CHANGE.name();
+        }
+    }
 }

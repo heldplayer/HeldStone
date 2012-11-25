@@ -1,3 +1,4 @@
+
 package com.mojang.NBT;
 
 import java.io.DataInput;
@@ -8,36 +9,37 @@ import java.util.logging.Logger;
 
 public class NBTTagLong extends NBTBase {
 
-	public long value;
+    public long value;
 
-	public NBTTagLong() {
-	}
+    public NBTTagLong() {}
 
-	public NBTTagLong(long value) {
-		this.value = value;
-	}
+    public NBTTagLong(long value) {
+        this.value = value;
+    }
 
-	void save(DataOutput Output) {
-		try {
-			Output.writeLong(this.value);
-		} catch (IOException ex) {
-			Logger.getLogger(NBTTagLong.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
+    void save(DataOutput Output) {
+        try {
+            Output.writeLong(this.value);
+        }
+        catch (IOException ex) {
+            Logger.getLogger(NBTTagLong.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
-	void load(DataInput Input) {
-		try {
-			this.value = Input.readLong();
-		} catch (IOException ex) {
-			Logger.getLogger(NBTTagLong.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
+    void load(DataInput Input) {
+        try {
+            this.value = Input.readLong();
+        }
+        catch (IOException ex) {
+            Logger.getLogger(NBTTagLong.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
-	public byte getTypeID() {
-		return 4;
-	}
+    public byte getTypeID() {
+        return 4;
+    }
 
-	public String toString() {
-		return "" + this.value;
-	}
+    public String toString() {
+        return "" + this.value;
+    }
 }

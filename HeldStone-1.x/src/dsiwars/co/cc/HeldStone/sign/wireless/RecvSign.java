@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign.wireless;
 
 /*
@@ -29,68 +30,68 @@ import dsiwars.co.cc.HeldStone.sign.WirelessPacket;
 
 public class RecvSign extends HeldSign {
 
-	@Override
-	protected void triggersign(TriggerType type, Object args) {
-		if (type == TriggerType.SEND_DATA) {
-			WirelessPacket p = (WirelessPacket) args;
+    @Override
+    protected void triggersign(TriggerType type, Object args) {
+        if (type == TriggerType.SEND_DATA) {
+            WirelessPacket p = (WirelessPacket) args;
 
-			if (this.p.sameChannel(p)) {
-				setOutput(p.getState());
-			}
-		}
-	}
+            if (this.p.sameChannel(p)) {
+                setOutput(p.getState());
+            }
+        }
+    }
 
-	@Override
-	protected void setNBTData(NBTBase tag) {
-	}
+    @Override
+    protected void setNBTData(NBTBase tag) {}
 
-	@Override
-	public NBTBase getNBTData() {
-		return new NBTTagInt(0);
-	}
+    @Override
+    public NBTBase getNBTData() {
+        return new NBTTagInt(0);
+    }
 
-	private WirelessPacket p;
+    private WirelessPacket p;
 
-	@Override
-	protected boolean declare(boolean reload, SignChangeEvent event) {
+    @Override
+    protected boolean declare(boolean reload, SignChangeEvent event) {
 
-		String band = this.getLines()[2];
-		String channel = this.getLines()[1];
+        String band = this.getLines()[2];
+        String channel = this.getLines()[1];
 
-		if (!reload) {
+        if (!reload) {
 
-			if (band.trim().equals("")) {
-				band = getOwnerName();
-			} else if (!band.equalsIgnoreCase(getOwnerName())) {
-				if (band.charAt(0) == '$') {
-					// GOOD!
-				} else {
-					band = "$" + band;
-				}
-			}
+            if (band.trim().equals("")) {
+                band = getOwnerName();
+            }
+            else if (!band.equalsIgnoreCase(getOwnerName())) {
+                if (band.charAt(0) == '$') {
+                    // GOOD!
+                }
+                else {
+                    band = "$" + band;
+                }
+            }
 
-			this.clearArgLines(event);
-			this.setLine(1, channel, event);
-			this.setLine(2, band, event);
+            this.clearArgLines(event);
+            this.setLine(1, channel, event);
+            this.setLine(2, band, event);
 
-		}
+        }
 
-		this.p = new WirelessPacket(band, channel, false);
+        this.p = new WirelessPacket(band, channel, false);
 
-		this.main.sgc.register(this, TriggerType.SEND_DATA);
-		if (!reload) {
-			init("Recv sign accepted.");
-		}
+        this.main.sgc.register(this, TriggerType.SEND_DATA);
+        if (!reload) {
+            init("Recv sign accepted.");
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void invalidate() {
-	}
+    @Override
+    public void invalidate() {}
 
-	@Override
-	public String getTriggerTypesString() {
-		return TriggerType.SEND_DATA.name();
-	}
+    @Override
+    public String getTriggerTypesString() {
+        return TriggerType.SEND_DATA.name();
+    }
 }

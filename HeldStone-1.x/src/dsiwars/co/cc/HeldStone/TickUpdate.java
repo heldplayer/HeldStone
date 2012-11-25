@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone;
 
 /*
@@ -24,16 +25,16 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class TickUpdate implements Runnable {
 
-	private TriggerType type;
-	private SignController handler;
+    private TriggerType type;
+    private SignController handler;
 
-	public TickUpdate(TriggerType type, SignController handler) {
-		this.type = type;
-		this.handler = handler;
-	}
+    public TickUpdate(TriggerType type, SignController handler) {
+        this.type = type;
+        this.handler = handler;
+    }
 
-	@Override
-	public void run() {
-		this.handler.trigger(this.type, null);
-	}
+    @Override
+    public void run() {
+        this.handler.trigger(this.type, null);
+    }
 }

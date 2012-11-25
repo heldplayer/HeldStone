@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign.logic;
 
 /*
@@ -30,115 +31,117 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class DelaySign extends HeldSign {
 
-	private boolean lastState;
-	private boolean out = false;
-	private boolean ticking = false;
+    private boolean lastState;
+    private boolean out = false;
+    private boolean ticking = false;
 
-	@Override
-	protected void triggersign(TriggerType type, Object args) {
-		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
+    @Override
+    protected void triggersign(TriggerType type, Object args) {
+        InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
-		if (is == InputState.HIGH && !this.lastState) {
-			this.lastState = true;
-			if (!this.ticking) {
-				startTicking();
-			}
-			this.ticking = true;
-		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && this.lastState) {
-			this.lastState = false;
-			if (!this.ticking) {
-				startTicking();
-			}
-			this.ticking = true;
-		} else {
-			return;
-		}
+        if (is == InputState.HIGH && !this.lastState) {
+            this.lastState = true;
+            if (!this.ticking) {
+                startTicking();
+            }
+            this.ticking = true;
+        }
+        else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && this.lastState) {
+            this.lastState = false;
+            if (!this.ticking) {
+                startTicking();
+            }
+            this.ticking = true;
+        }
+        else {
+            return;
+        }
 
-	}
+    }
 
-	private boolean[] states;
+    private boolean[] states;
 
-	@Override
-	public boolean tick() {
-		short sum = 0;
-		for (int i = 0; i < (this.states.length - 1); i++) {
-			this.states[i] = this.states[i + 1];
-			sum += this.states[i] ? 1 : -1;
-		}
+    @Override
+    public boolean tick() {
+        short sum = 0;
+        for (int i = 0; i < (this.states.length - 1); i++) {
+            this.states[i] = this.states[i + 1];
+            sum += this.states[i] ? 1 : -1;
+        }
 
-		this.states[this.states.length - 1] = this.lastState;
-		sum += this.lastState ? 1 : -1;
+        this.states[this.states.length - 1] = this.lastState;
+        sum += this.lastState ? 1 : -1;
 
-		if (this.out != this.states[0]) {
-			setOutput(this.states[0]);
-			this.out = this.states[0];
-		}
+        if (this.out != this.states[0]) {
+            setOutput(this.states[0]);
+            this.out = this.states[0];
+        }
 
-		if (Math.abs(sum) == this.period) {
-			this.ticking = false;
-			return false;
-		}
-		return true;
-	}
+        if (Math.abs(sum) == this.period) {
+            this.ticking = false;
+            return false;
+        }
+        return true;
+    }
 
-	@Override
-	protected void setNBTData(NBTBase tag) {
-	}
+    @Override
+    protected void setNBTData(NBTBase tag) {}
 
-	@Override
-	public NBTBase getNBTData() {
-		return new NBTTagInt(0);
-	}
+    @Override
+    public NBTBase getNBTData() {
+        return new NBTTagInt(0);
+    }
 
-	private int period = 20;
+    private int period = 20;
 
-	@Override
-	protected boolean declare(boolean reload, SignChangeEvent event) {
-		String periodLine = this.getLines(event)[1].trim();
+    @Override
+    protected boolean declare(boolean reload, SignChangeEvent event) {
+        String periodLine = this.getLines(event)[1].trim();
 
-		if (periodLine.length() > 0) {
-			try {
-				this.period = Integer.parseInt(periodLine);
-			} catch (Exception e) {
-				if (!reload) {
-					this.main.alert(getOwnerName(), "Could not understand period, defaulting to 20. (1sec)", ChatColor.RED);
-				}
-				this.period = 20;
-			}
-			if (this.period > 500 || this.period <= 0) {
-				this.period = 20;
-				if (!reload) {
-					this.main.alert(getOwnerName(), "The period was either too long or too short. Allowed: 1-500", ChatColor.RED);
-				}
-			}
-		} else {
-			this.period = 20;
-		}
+        if (periodLine.length() > 0) {
+            try {
+                this.period = Integer.parseInt(periodLine);
+            }
+            catch (Exception e) {
+                if (!reload) {
+                    this.main.alert(getOwnerName(), "Could not understand period, defaulting to 20. (1sec)", ChatColor.RED);
+                }
+                this.period = 20;
+            }
+            if (this.period > 500 || this.period <= 0) {
+                this.period = 20;
+                if (!reload) {
+                    this.main.alert(getOwnerName(), "The period was either too long or too short. Allowed: 1-500", ChatColor.RED);
+                }
+            }
+        }
+        else {
+            this.period = 20;
+        }
 
-		if (!reload) {
-			this.clearArgLines(event);
-			this.setLine(1, Integer.toString(this.period), event);
-		}
+        if (!reload) {
+            this.clearArgLines(event);
+            this.setLine(1, Integer.toString(this.period), event);
+        }
 
-		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
-		if (!reload) {
-			init("Delay sign accepted.");
-		}
+        this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+        if (!reload) {
+            init("Delay sign accepted.");
+        }
 
-		this.states = new boolean[this.period];
-		for (int i = 0; i < this.states.length; i++) {
-			this.states[i] = false;
-		}
+        this.states = new boolean[this.period];
+        for (int i = 0; i < this.states.length; i++) {
+            this.states[i] = false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void invalidate() {
-	}
+    @Override
+    public void invalidate() {}
 
-	@Override
-	public String getTriggerTypesString() {
-		return TriggerType.REDSTONE_CHANGE.name();
-	}
+    @Override
+    public String getTriggerTypesString() {
+        return TriggerType.REDSTONE_CHANGE.name();
+    }
 }

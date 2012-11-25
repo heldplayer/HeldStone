@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign.logic;
 
 /*
@@ -29,103 +30,105 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class ClockSign extends HeldSign {
 
-	private boolean ticking;
-	private int clock = 0;
-	private boolean clockState = false;
+    private boolean ticking;
+    private int clock = 0;
+    private boolean clockState = false;
 
-	@Override
-	protected void triggersign(TriggerType type, Object args) {
-		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
+    @Override
+    protected void triggersign(TriggerType type, Object args) {
+        InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
-		if (is == InputState.HIGH) {
-			startClock();
-		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED)) {
-			stopClock();
-			setOutput(false);
-		}
-	}
+        if (is == InputState.HIGH) {
+            startClock();
+        }
+        else if ((is == InputState.LOW || is == InputState.DISCONNECTED)) {
+            stopClock();
+            setOutput(false);
+        }
+    }
 
-	public void startClock() {
-		if (!this.ticking) {
-			startTicking();
-			this.ticking = true;
-			setOutput(true);
-			this.clockState = true;
-			this.clock = this.onTime;
-		}
-	}
+    public void startClock() {
+        if (!this.ticking) {
+            startTicking();
+            this.ticking = true;
+            setOutput(true);
+            this.clockState = true;
+            this.clock = this.onTime;
+        }
+    }
 
-	public void stopClock() {
-		this.ticking = false;
-	}
+    public void stopClock() {
+        this.ticking = false;
+    }
 
-	@Override
-	public boolean tick() {
-		if (this.ticking) {
-			this.clock--;
-			if (this.clock <= 0) {
-				this.clock = this.clockState ? this.offTime : this.onTime;
-				this.clockState = !this.clockState;
-				setOutput(this.clockState);
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public boolean tick() {
+        if (this.ticking) {
+            this.clock--;
+            if (this.clock <= 0) {
+                this.clock = this.clockState ? this.offTime : this.onTime;
+                this.clockState = !this.clockState;
+                setOutput(this.clockState);
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
-	@Override
-	protected void setNBTData(NBTBase tag) {
-	}
+    @Override
+    protected void setNBTData(NBTBase tag) {}
 
-	@Override
-	public NBTBase getNBTData() {
-		return new NBTTagInt(0);
-	}
+    @Override
+    public NBTBase getNBTData() {
+        return new NBTTagInt(0);
+    }
 
-	private int onTime, offTime;
+    private int onTime, offTime;
 
-	@Override
-	protected boolean declare(boolean reload, SignChangeEvent event) {
+    @Override
+    protected boolean declare(boolean reload, SignChangeEvent event) {
 
-		String onLine = this.getLines(event)[1].trim();
-		String offLine = this.getLines(event)[2].trim();
+        String onLine = this.getLines(event)[1].trim();
+        String offLine = this.getLines(event)[2].trim();
 
-		try {
-			this.onTime = Integer.parseInt(onLine);
-		} catch (Exception e) {
-			this.onTime = 20;
-		}
+        try {
+            this.onTime = Integer.parseInt(onLine);
+        }
+        catch (Exception e) {
+            this.onTime = 20;
+        }
 
-		try {
-			this.offTime = Integer.parseInt(offLine);
-		} catch (Exception e) {
-			this.offTime = this.onTime;
-		}
+        try {
+            this.offTime = Integer.parseInt(offLine);
+        }
+        catch (Exception e) {
+            this.offTime = this.onTime;
+        }
 
-		this.onTime = (this.onTime > 0) ? this.onTime : 20;
-		this.offTime = (this.offTime > 0) ? this.offTime : 20;
+        this.onTime = (this.onTime > 0) ? this.onTime : 20;
+        this.offTime = (this.offTime > 0) ? this.offTime : 20;
 
-		if (!reload) {
-			this.clearArgLines(event);
-			this.setLine(1, Integer.toString(this.onTime), event);
-			this.setLine(2, Integer.toString(this.offTime), event);
-		}
+        if (!reload) {
+            this.clearArgLines(event);
+            this.setLine(1, Integer.toString(this.onTime), event);
+            this.setLine(2, Integer.toString(this.offTime), event);
+        }
 
-		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
-		if (!reload) {
-			init("Clock sign accepted.");
-		}
+        this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+        if (!reload) {
+            init("Clock sign accepted.");
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void invalidate() {
-	}
+    @Override
+    public void invalidate() {}
 
-	@Override
-	public String getTriggerTypesString() {
-		return TriggerType.REDSTONE_CHANGE.name();
-	}
+    @Override
+    public String getTriggerTypesString() {
+        return TriggerType.REDSTONE_CHANGE.name();
+    }
 }

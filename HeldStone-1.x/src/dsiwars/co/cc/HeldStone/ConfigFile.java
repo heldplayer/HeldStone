@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone;
 
 /*
@@ -29,135 +30,146 @@ import java.util.ArrayList;
 
 public class ConfigFile {
 
-	private final HeldStone main;
-	private File cfg;
-	ArrayList<ConfigKey> keys = new ArrayList<ConfigKey>();
-	private final String separator = System.getProperty("line.separator");
+    private final HeldStone main;
+    private File cfg;
+    ArrayList<ConfigKey> keys = new ArrayList<ConfigKey>();
+    private final String separator = System.getProperty("line.separator");
 
-	public ConfigFile(HeldStone main, File cfg) {
-		this.main = main;
-		this.cfg = cfg;
-	}
+    public ConfigFile(HeldStone main, File cfg) {
+        this.main = main;
+        this.cfg = cfg;
+    }
 
-	public void load() {
-		this.keys.clear();
+    public void load() {
+        this.keys.clear();
 
-		if (this.cfg.isDirectory()) {
-			this.cfg = new File(this.cfg.getAbsolutePath() + "config.txt");
-		}
+        if (this.cfg.isDirectory()) {
+            this.cfg = new File(this.cfg.getAbsolutePath() + "config.txt");
+        }
 
-		if (!this.cfg.exists()) {
-			try {
-				this.cfg.createNewFile();
-			} catch (IOException e) {
-				this.main.e("Error while creating config file.");
-				this.main.e("File path: " + this.cfg.getAbsolutePath());
-				e.printStackTrace();
-			}
-		} else {
-			try {
-				BufferedReader in = new BufferedReader(new FileReader(this.cfg));
-				String line;
-				while ((line = in.readLine()) != null) {
-					line = line.trim();
-					if (line.charAt(0) != '#') {
-						if (line.contains("=")) {
-							String[] args = line.split("=");
-							String key = args[0].trim();
-							String value = args[1].trim();
-							this.keys.add(new ConfigKey(key, value));
-						}
-					}
-				}
-			} catch (Exception e) {
-				this.main.e("Error while updating config file.");
-				e.printStackTrace();
-			}
-		}
-	}
+        if (!this.cfg.exists()) {
+            try {
+                this.cfg.createNewFile();
+            }
+            catch (IOException e) {
+                this.main.e("Error while creating config file.");
+                this.main.e("File path: " + this.cfg.getAbsolutePath());
+                e.printStackTrace();
+            }
+        }
+        else {
+            BufferedReader in = null;
+            try {
+                in = new BufferedReader(new FileReader(this.cfg));
+                String line;
+                while ((line = in.readLine()) != null) {
+                    line = line.trim();
+                    if (line.charAt(0) != '#') {
+                        if (line.contains("=")) {
+                            String[] args = line.split("=");
+                            String key = args[0].trim();
+                            String value = args[1].trim();
+                            this.keys.add(new ConfigKey(key, value));
+                        }
+                    }
+                }
+            }
+            catch (Exception e) {
+                this.main.e("Error while updating config file.");
+                e.printStackTrace();
+            }
+            finally {
+                try {
+                    in.close();
+                }
+                catch (IOException e) {}
+            }
+        }
+    }
 
-	public void save() {
-		boolean changes = false;
-		for (int i = 0; i < this.keys.size(); i++) {
-			if (this.keys.get(i).isChanged()) {
-				changes = true;
-			}
-		}
-		if (changes) {
-			try {
-				PrintWriter out = new PrintWriter(new FileOutputStream(this.cfg));
-				for (int i = 0; i < this.keys.size(); i++) {
-					String line = "";
-					ConfigKey cc = this.keys.get(i);
-					line += cc.key;
-					line += " = ";
-					line += cc.value;
-					out.write(line + this.separator);
-				}
-				out.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-				this.main.e("Error while updating config file.");
-			}
-		}
-	}
+    public void save() {
+        boolean changes = false;
+        for (int i = 0; i < this.keys.size(); i++) {
+            if (this.keys.get(i).isChanged()) {
+                changes = true;
+            }
+        }
+        if (changes) {
+            try {
+                PrintWriter out = new PrintWriter(new FileOutputStream(this.cfg));
+                for (int i = 0; i < this.keys.size(); i++) {
+                    String line = "";
+                    ConfigKey cc = this.keys.get(i);
+                    line += cc.key;
+                    line += " = ";
+                    line += cc.value;
+                    out.write(line + this.separator);
+                }
+                out.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                this.main.e("Error while updating config file.");
+            }
+        }
+    }
 
-	public void announce() {
-		for (int i = 0; i < this.keys.size(); i++) {
-			ConfigKey k = this.keys.get(i);
-			this.main.d(k.getKey() + " is set to '" + k.getValue() + "'");
-		}
-	}
+    public void announce() {
+        for (int i = 0; i < this.keys.size(); i++) {
+            ConfigKey k = this.keys.get(i);
+            this.main.d(k.getKey() + " is set to '" + k.getValue() + "'");
+        }
+    }
 
-	public String getString(String key, String defaultValue) {
-		for (int i = 0; i < this.keys.size(); i++) {
-			ConfigKey k = this.keys.get(i);
-			if (key.equals(k.getKey())) {
-				return k.getValue();
-			}
-		}
-		ConfigKey nk = new ConfigKey(key, defaultValue);
-		nk.dirty();
-		this.keys.add(nk);
-		return nk.getValue();
-	}
+    public String getString(String key, String defaultValue) {
+        for (int i = 0; i < this.keys.size(); i++) {
+            ConfigKey k = this.keys.get(i);
+            if (key.equals(k.getKey())) {
+                return k.getValue();
+            }
+        }
+        ConfigKey nk = new ConfigKey(key, defaultValue);
+        nk.dirty();
+        this.keys.add(nk);
+        return nk.getValue();
+    }
 
-	public boolean getBoolean(String key, boolean defaultValue) {
-		String val = getString(key, Boolean.toString(defaultValue));
-		return Boolean.parseBoolean(val);
-	}
+    public boolean getBoolean(String key, boolean defaultValue) {
+        String val = getString(key, Boolean.toString(defaultValue));
+        return Boolean.parseBoolean(val);
+    }
 
-	public int getInt(String key, int defaultValue) {
-		String val = getString(key, Integer.toString(defaultValue));
-		return Integer.parseInt(val);
-	}
+    public int getInt(String key, int defaultValue) {
+        String val = getString(key, Integer.toString(defaultValue));
+        return Integer.parseInt(val);
+    }
 
-	private static class ConfigKey {
+    private static class ConfigKey {
 
-		private final String key;
-		private String value;
-		private boolean changed;
+        private final String key;
+        private String value;
+        private boolean changed;
 
-		public ConfigKey(String key, String value) {
-			this.key = key;
-			this.value = value;
-			this.changed = false;
-		}
+        public ConfigKey(String key, String value) {
+            this.key = key;
+            this.value = value;
+            this.changed = false;
+        }
 
-		public void dirty() {
-			this.changed = true;
-		}
+        public void dirty() {
+            this.changed = true;
+        }
 
-		public String getValue() {
-			return this.value;
-		}
+        public String getValue() {
+            return this.value;
+        }
 
-		public String getKey() {
-			return this.key;
-		}
+        public String getKey() {
+            return this.key;
+        }
 
-		public boolean isChanged() {
-			return this.changed;
-		}
-	}
+        public boolean isChanged() {
+            return this.changed;
+        }
+    }
 }

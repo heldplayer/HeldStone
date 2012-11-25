@@ -1,3 +1,4 @@
+
 package dsiwars.co.cc.HeldStone.sign.logic;
 
 /*
@@ -29,92 +30,97 @@ import dsiwars.co.cc.HeldStone.sign.TriggerType;
 
 public class ToggleSign extends HeldSign {
 
-	private boolean lastState = false;
-	private boolean out = false;
+    private boolean lastState = false;
+    private boolean out = false;
 
-	@Override
-	protected void triggersign(TriggerType type, Object args) {
-		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
+    @Override
+    protected void triggersign(TriggerType type, Object args) {
+        InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
-		if (is == InputState.HIGH && !this.lastState) {
-			this.lastState = true;
+        if (is == InputState.HIGH && !this.lastState) {
+            this.lastState = true;
 
-			if (this.rise) {
-				setOutput(!this.out);
-				this.out = !this.out;
-			}
+            if (this.rise) {
+                setOutput(!this.out);
+                this.out = !this.out;
+            }
 
-		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && this.lastState) {
-			this.lastState = false;
+        }
+        else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && this.lastState) {
+            this.lastState = false;
 
-			if (!this.rise) {
-				setOutput(!this.out);
-				this.out = !this.out;
-			}
+            if (!this.rise) {
+                setOutput(!this.out);
+                this.out = !this.out;
+            }
 
-		} else {
-			return;
-		}
-	}
+        }
+        else {
+            return;
+        }
+    }
 
-	@Override
-	protected void setNBTData(NBTBase tag) {
-		NBTTagString TagString = (NBTTagString) tag;
+    @Override
+    protected void setNBTData(NBTBase tag) {
+        NBTTagString TagString = (NBTTagString) tag;
 
-		String data = TagString.value;
+        String data = TagString.value;
 
-		if (data == null || data.length() <= 0) {
-			return;
-		}
-		String[] dataArgs = data.split("-");
-		if (dataArgs.length == 2) {
-			this.lastState = Boolean.parseBoolean(dataArgs[0]);
-			this.out = Boolean.parseBoolean(dataArgs[1]);
-		}
-	}
+        if (data == null || data.length() <= 0) {
+            return;
+        }
+        String[] dataArgs = data.split("-");
+        if (dataArgs.length == 2) {
+            this.lastState = Boolean.parseBoolean(dataArgs[0]);
+            this.out = Boolean.parseBoolean(dataArgs[1]);
+        }
+    }
 
-	@Override
-	public NBTBase getNBTData() {
-		return new NBTTagString(Boolean.toString(this.lastState) + "-" + Boolean.toString(this.out));
-	}
+    @Override
+    public NBTBase getNBTData() {
+        return new NBTTagString(Boolean.toString(this.lastState) + "-" + Boolean.toString(this.out));
+    }
 
-	private boolean rise = true;
+    private boolean rise = true;
 
-	@Override
-	protected boolean declare(boolean reload, SignChangeEvent event) {
-		String typeLine = this.getLines(event)[1].trim();
+    @Override
+    protected boolean declare(boolean reload, SignChangeEvent event) {
+        String typeLine = this.getLines(event)[1].trim();
 
-		if (typeLine.equalsIgnoreCase("RISING")) {
-			this.rise = true;
-		} else if (typeLine.equalsIgnoreCase("ON")) {
-			this.rise = true;
-		} else if (typeLine.equalsIgnoreCase("FALLING")) {
-			this.rise = false;
-		} else if (typeLine.equalsIgnoreCase("OFF")) {
-			this.rise = false;
-		} else {
-			this.rise = true;
-		}
+        if (typeLine.equalsIgnoreCase("RISING")) {
+            this.rise = true;
+        }
+        else if (typeLine.equalsIgnoreCase("ON")) {
+            this.rise = true;
+        }
+        else if (typeLine.equalsIgnoreCase("FALLING")) {
+            this.rise = false;
+        }
+        else if (typeLine.equalsIgnoreCase("OFF")) {
+            this.rise = false;
+        }
+        else {
+            this.rise = true;
+        }
 
-		if (!reload) {
-			this.clearArgLines();
-			this.setLine(1, this.rise ? "RISING" : "FALLING", event);
-		}
+        if (!reload) {
+            this.clearArgLines();
+            this.setLine(1, this.rise ? "RISING" : "FALLING", event);
+        }
 
-		this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
-		if (!reload) {
-			init("Toggle sign accepted.");
-		}
+        this.main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+        if (!reload) {
+            init("Toggle sign accepted.");
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void invalidate() {
-	}
+    @Override
+    public void invalidate() {}
 
-	@Override
-	public String getTriggerTypesString() {
-		return TriggerType.REDSTONE_CHANGE.name();
-	}
+    @Override
+    public String getTriggerTypesString() {
+        return TriggerType.REDSTONE_CHANGE.name();
+    }
 }
