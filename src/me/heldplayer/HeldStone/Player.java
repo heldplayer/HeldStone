@@ -8,7 +8,7 @@ public class Player {
     public Location primaryLoc, secondaryLoc, singleLoc;
     public boolean locationsSet = false;
     public String message = null;
-    private final HeldStone main;
+    private HeldStone main;
     public int snowHeight = 0;
     protected long lastAccess = 0;
 
@@ -82,14 +82,18 @@ public class Player {
      * Prepares this tracker for deletion
      */
     public void purge() {
-        if (primaryLoc != null)
+        if (primaryLoc != null) {
             primaryLoc.zero();
-        if (secondaryLoc != null)
+        }
+        if (secondaryLoc != null) {
             secondaryLoc.zero();
-        if (singleLoc != null)
+        }
+        if (singleLoc != null) {
             singleLoc.zero();
+        }
         locationsSet = false;
         message = null;
         snowHeight = 0;
+        main = null;
     }
 }
