@@ -71,8 +71,8 @@ public class HeldStone extends JavaPlugin {
         mainListener = new MainListener(this);
         playerListener = new PlayerListener(this);
 
-        getServer().getScheduler().scheduleAsyncRepeatingTask(this, new PlayerTimedCleanup(this), 1200, 1200);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, scheduler = new ActionScheduler(this), 1, 1);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, new PlayerTimedCleanup(this), 1200, 1200);
+        getServer().getScheduler().runTaskTimer(this, scheduler = new ActionScheduler(this), 1, 1);
 
         getCommand("heldstone").setExecutor(new HeldStoneCommand(this));
 
